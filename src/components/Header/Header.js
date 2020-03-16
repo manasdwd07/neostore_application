@@ -37,11 +37,11 @@ class Header extends Component {
                             </div>
                         </form>
                         <div className="nav navbar-nav">
-                            <button className="btn top_header_cartButton">
+                            <Link to="/cart" className="btn top_header_cartButton">
                                 <i className="fa fa-shopping-cart"></i>&nbsp;
                                 <span ><sup className="top_header_cart_count">{this.state.count}</sup></span>
                                 <span>Cart</span>
-                            </button>
+                            </Link>
                         </div>
                         <div className="dropdown nav top_header_right">
                             <button className="btn top_header_userButton dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton">

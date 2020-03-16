@@ -1,4 +1,5 @@
 import React from 'react';
+import './App.css';
 import Homepage from './components/Homepage/Homepage';
 import {BrowserRouter as Router} from 'react-router-dom';
 import {Switch,Route} from 'react-router-dom';
@@ -8,6 +9,7 @@ import LoginPage from './components/LoginPage/LoginPage';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import ProductPage from './components/ProductPage/ProductPage';
+import Cart from './components/Cart/Cart';
 
 function App() {
   return (
@@ -24,6 +26,7 @@ function App() {
           <Route path="/login" component={LoginPage}/>
           <Route path="/register" component={RegisterPage}/>
           <Route path="/products" component={ProductPage}/>
+          <Route path="/cart" component={Cart}/>
         </Switch>
         <Footer/>
       </Router>

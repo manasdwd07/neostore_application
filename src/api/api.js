@@ -26,3 +26,11 @@ export const getAllCategories=()=>{
 export const getAllColors=()=>{
     return axios.get(`${URL}getAllColors`);
 }
+
+export const checkLogin=(data)=>{
+    return axios.post(`${URL}login`,data);
+}
+
+export const registerUser=(data)=>{
+    return axios.post(`${URL}register`,data);
+}
