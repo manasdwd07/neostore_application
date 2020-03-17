@@ -89,13 +89,13 @@ export class RegisterPage extends Component {
                 <div className="row">
                     <div className="col-lg-6 ">
                         <button className="btn-danger mt-2" style={{ marginLeft: "40%" }}>
-                            <GoogleLogin
+                            {/* <GoogleLogin
                                 clientId="206257001886-huhdn3bomsbobi025n76vo8qf6gdn8tk.apps.googleusercontent.com"
                                 
                                 
                                 
                                 cookiePolicy={'single_host_origin'}
-                            />,
+                            />, */}
                        </button>
                     </div>
                     <div className="col-lg-6">

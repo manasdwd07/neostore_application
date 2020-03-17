@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Header.css';
 import {Link} from 'react-router-dom';
+import { getAllProducts } from '../../api/api';
 
 
 class Header extends Component {
@@ -10,6 +11,7 @@ class Header extends Component {
             count: 0
         }
     }
+  
     render() {
         return (
             <header className="top_header">
@@ -22,7 +24,7 @@ class Header extends Component {
                             <ul className="navbar-nav">
                                 <Link to="/" className="btn top_header_buttons">Home</Link>
                                 <Link to="/products" className="btn top_header_buttons">Products</Link>
-                                <button className="btn top_header_buttons">Orders</button>
+                                <Link to="/order" className="btn top_header_buttons">Orders</Link>
                             </ul>
 
                         </div>

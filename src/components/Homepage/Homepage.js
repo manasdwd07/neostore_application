@@ -22,7 +22,7 @@ class Homepage extends Component {
         this.setState({
             carouselImages:images.data.category_details
         })
-        console.log("first image",this.state.carouselImages[0].product_image);
+        
         
 
         const data = await getPopularProducts();

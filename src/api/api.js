@@ -34,3 +34,11 @@ export const checkLogin=(data)=>{
 export const registerUser=(data)=>{
     return axios.post(`${URL}register`,data);
 }
+
+export const getProductByCategory=(data)=>{
+    return axios.get(`${URL}getProductByCateg/${data}`)
+}
+
+export const getProductByColor=(data)=>{
+    return axios.get(`${URL}getProductBycolor/${data}`)
+}

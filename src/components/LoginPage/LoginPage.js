@@ -30,7 +30,7 @@ export class LoginPage extends Component {
         
         const result = await checkLogin(userInfo)
         .then((res)=>{
-            
+                localStorage.setItem('loginUserData',JSON.stringify(res.data))
                 console.log('response in login',res);
                 
                 sweetalert2.fire({
