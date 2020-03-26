@@ -37,7 +37,7 @@ class Homepage extends Component {
 
         return (
             <div>
-                
+                <Header login={localStorage.getItem('loginUserData') ? 'true':'false'}/>
                 <br/>
                 <br/>
                 <CarouselSlider data={this.state.carouselImages}/>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import GoogleLogin from 'react-google-login';
 import { Form, Field } from 'react-final-form';
 import TextField from '@material-ui/core/TextField';
+import FormHelperText from "@material-ui/core/FormHelperText";
 import {
     Button,
     RadioGroup,
@@ -22,6 +23,7 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { mergeClasses } from '@material-ui/styles';
 import sweetalert2 from 'sweetalert2';
 import { registerUser } from '../../api/api';
+import Header from '../Header/Header';
 
 export class RegisterPage extends Component {
     constructor(props) {
@@ -36,6 +38,13 @@ export class RegisterPage extends Component {
             gender: '',
             register: false,
             showPassword: false,
+            firstNameErrorText: '',
+            lastNameErrorText: '',
+            emailErrorText: '',
+            passwordErrorText: '',
+            confirmPassErrorText: '',
+            phoneNoErrorText: '',
+            genderErrorText: ''
         }
     }
 
@@ -43,6 +52,8 @@ export class RegisterPage extends Component {
 
     handleRegister = async (e) => {
         e.preventDefault();
+        
+        if(this.state.firstNameErrorText==""&&this.state.lastNameErrorText==""&&this.state.emailErrorText==""&&this.state.passwordErrorText==''&&this.state.confirmPassErrorText==''&&this.state.phoneNoErrorText==''&&this.state.genderErrorText==""){
         let userInfo = {
             'first_name': `${this.state.first_name}`,
             'last_name': `${this.state.last_name}`,
@@ -70,7 +81,44 @@ export class RegisterPage extends Component {
                     'icon': 'warning'
                 })
             })
+        }
+        else
+        {
+            sweetalert2.fire({
+                "title": 'OOPS... Not a validated form',
+                'text': 'Please check the fields again',
+                "icon": 'error'
+            })
+        }
     }
+
+    handleChangeInput = (e) => {
+        switch (e.target.name) {
+            case 'first_name': this.setState({ first_name: e.target.value })
+                this.handleFirstNameError(e);
+                break;
+            case 'last_name': this.setState({ last_name: e.target.value })
+                this.handleLastNameError(e);
+                break;
+            case 'email': this.setState({ email: e.target.value })
+                this.handleEmailError(e);
+                break;
+            case 'password': this.setState({ pass: e.target.value })
+                this.handlePasswordError(e);
+                break;
+            case 'confirmPass': this.setState({ confirmPass: e.target.value })
+                this.handleConfirmPasswordError(e);
+                break;
+            case 'mobile_no': this.setState({ phone_no: e.target.value })
+                this.handlePhoneNoError(e);
+                break;
+            case 'gender1': this.setState({ gender: e.target.value })
+                this.handleGenderError(e);
+                break;
+        }
+
+    }
+
     handleClickShowPassword = (e) => {
         this.setState({
             showPassword: !this.state.showPassword
@@ -82,10 +130,104 @@ export class RegisterPage extends Component {
         })
     }
 
+    handleFirstNameError = (e) => {
+        const nameformat = /[^a-zA-z]/gi;
+        if (e.target.value=="") {
+            this.setState({ firstNameErrorText: 'Please enter name' })
+        }
+        else if (e.target.value.match(nameformat) !== null) {
+            this.setState({ firstNameErrorText: 'Please Enter alphabets only' })
+        }
+        else {
+            this.setState({ firstNameErrorText: '' })
+        }
+    }
+
+    handleLastNameError = (e) => {
+        const nameformat = /[^a-zA-z]/gi;
+        if (e.target.value == "") {
+            this.setState({ lastNameErrorText: 'Please enter name' })
+        }
+        else if (e.target.value.match(nameformat) !== null) {
+            this.setState({ lastNameErrorText: 'Please Enter alphabets only' })
+        }
+        else {
+            this.setState({ lastNameErrorText: '' })
+        }
+    }
+
+    handleEmailError = (e) => {
+        const mailformat = /^([a-zA-Z])+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+        if (e.target.value == "") {
+            this.setState({ emailErrorText: 'Please enter email id' })
+        }
+        else if ((e.target.value.match(mailformat)) == null) {
+            this.setState({ emailErrorText: 'Invalid email... try again' })
+        }
+
+        else {
+            this.setState({ emailErrorText: '' })
+        }
+
+    }
+
+    handlePasswordError = (e) => {
+        
+        if (e.target.value == "") {
+            this.setState({ passwordErrorText: 'Please enter your password' })
+        }
+        else {
+            this.setState({ passwordErrorText: '' })
+        }
+    }
+
+    handleConfirmPasswordError=(e)=>{
+        const passwordFormat = /^[A-Za-z]\w{7,11}$/;
+        if(this.state.pass=="" && e.target.value==""){
+            this.setState({confirmPassErrorText:'Please enter password first'})
+        }
+        else if (this.state.pass!==""&&e.target.value == "") {
+            this.setState({confirmPassErrorText: 'Please enter your password again' })
+        }
+        else if ((e.target.value.match(passwordFormat)) == null) {
+            this.setState({confirmPassErrorText: 'Password should be between 8-12 characters containing only alphanumeric values' })
+        }
+        else if(this.state.pass!==this.state.confirmPass){
+            this.setState({confirmPassErrorText:'Confirm Password and password should be same'})
+        }
+        else {
+            this.setState({confirmPassErrorText: '' })
+        }
+    }
+
+    handlePhoneNoError=(e)=>{
+        const numberFormat = /[^0-9]/gi;
+        if (e.target.value == "") {
+            this.setState({phoneNoErrorText:'Please Enter your 10 digit phone number'})
+        }
+        else if(e.target.value.match(numberFormat)!==null){
+            this.setState({phoneNoErrorText:'Enter numbers only'})
+        }
+    
+        else if (e.target.value < 1000000000 || e.target.value > 9999999999) {
+            this.setState({phoneNoErrorText:'Phone number should be exact 10 digits'})
+        }
+        else if (e.target.value != "" && !isNaN(e.target.value) && !(e.target.value < 1000000000 || e.target.value > 9999999999)) {
+            this.setState({phoneNoErrorText:''})
+        }
+    }
+
+    handleGenderError=(e)=>{
+        if(e.target.value==''){
+            this.setState({genderErrorText:'Please select your gender'})
+        }
+    }
+
     render() {
         return (
             <div>
-
+                <Header login={localStorage.getItem('loginUserData') ? 'true' : 'false'} />/>
                 <div className="row">
                     <div className="col-lg-6 ">
                         <button className="btn-danger mt-2" style={{ marginLeft: "40%" }}>
@@ -96,7 +238,7 @@ export class RegisterPage extends Component {
                                 
                                 cookiePolicy={'single_host_origin'}
                             />, */}
-                       </button>
+                        </button>
                     </div>
                     <div className="col-lg-6">
                         <button className="btn" style={{ width: "50px" }}>
@@ -114,13 +256,14 @@ export class RegisterPage extends Component {
                         <div className="card-body container">
                             <h2>Register to NeoSTORE</h2><br /><br />
 
-                            <FormControl className="mb-3" variant="outlined" fullWidth onChange={(e) => { { this.setState({ first_name: e.target.value }) } }}>
-                                <InputLabel>Name</InputLabel>
+                            <FormControl className="mb-3" variant="outlined" error={this.state.firstNameErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
+                                <InputLabel>First Name</InputLabel>
                                 <OutlinedInput
                                     id="outlined-adornment-email"
                                     type="text"
                                     name="first_name"
-                                    onChange={this.handleChange}
+                                    autoComplete="off"
+
                                     // value={this.state.password}
 
                                     endAdornment={
@@ -135,14 +278,15 @@ export class RegisterPage extends Component {
                                     }
                                     labelWidth={70}
                                 />
+                                <FormHelperText id="component-error-text">{this.state.firstNameErrorText}</FormHelperText>
                             </FormControl>
-                            <FormControl className="mb-3" variant="outlined" fullWidth onChange={(e) => { { this.setState({ last_name: e.target.value }) } }}>
+                            <FormControl className="mb-3" variant="outlined" error={this.state.lastNameErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
                                 <InputLabel>Last Name</InputLabel>
                                 <OutlinedInput
                                     id="outlined-adornment-email"
                                     type="text"
                                     name="last_name"
-                                    onChange={this.handleChange}
+                                    autoComplete="off"
                                     // value={this.state.password}
 
                                     endAdornment={
@@ -157,15 +301,17 @@ export class RegisterPage extends Component {
                                     }
                                     labelWidth={100}
                                 />
+                            <FormHelperText id="component-error-text">{this.state.lastNameErrorText}</FormHelperText>
                             </FormControl>
 
-                            <FormControl className="mb-3" variant="outlined" fullWidth onChange={(e) => { { this.setState({ email: e.target.value }) } }}>
+                            <FormControl className="mb-3" variant="outlined" error={this.state.emailErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
                                 <InputLabel>Email Address</InputLabel>
                                 <OutlinedInput
                                     id="outlined-adornment-email"
                                     type="text"
                                     name="email"
                                     onChange={this.handleChange}
+                                    
                                     // value={this.state.password}
 
                                     endAdornment={
@@ -180,13 +326,14 @@ export class RegisterPage extends Component {
                                     }
                                     labelWidth={100}
                                 />
+                                <FormHelperText id="component-error-text">{this.state.emailErrorText}</FormHelperText>
                             </FormControl>
 
-                            <FormControl className="mb-3" variant="outlined" fullWidth onChange={(e) => { { this.setState({ pass: e.target.value }) } }}>
+                            <FormControl className="mb-3" variant="outlined" error={this.state.passwordErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
                                 <InputLabel>Password</InputLabel>
                                 <OutlinedInput
                                     id="outlined-adornment-password"
-                                    
+
                                     name="password"
                                     type={this.state.showPassword ? 'text' : 'password'}
                                     onChange={this.handleChange}
@@ -206,9 +353,10 @@ export class RegisterPage extends Component {
                                     }
                                     labelWidth={100}
                                 />
+                                <FormHelperText id="component-error-text">{this.state.passwordErrorText}</FormHelperText>
                             </FormControl>
 
-                            <FormControl className="mb-3" variant="outlined" fullWidth onChange={(e) => { { this.setState({ confirmPass: e.target.value }) } }}>
+                            <FormControl className="mb-3" variant="outlined" error={this.state.confirmPassErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
                                 <InputLabel>Confirm Password</InputLabel>
                                 <OutlinedInput
                                     id="outlined-adornment-email"
@@ -231,15 +379,17 @@ export class RegisterPage extends Component {
                                     }
                                     labelWidth={200}
                                 />
+                            <FormHelperText id="component-error-text">{this.state.confirmPassErrorText}</FormHelperText>
                             </FormControl>
 
-                            <FormControl className="mb-3" variant="outlined" fullWidth onChange={(e) => { { this.setState({ phone_no: e.target.value }) } }}>
+                            <FormControl className="mb-3" variant="outlined" error={this.state.phoneNoErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
                                 <InputLabel>Mobile Number</InputLabel>
                                 <OutlinedInput
                                     id="outlined-adornment-password"
                                     type="text"
                                     name="mobile_no"
                                     onChange={this.handleChange}
+
                                     // value={this.state.password}
 
                                     endAdornment={
@@ -254,6 +404,7 @@ export class RegisterPage extends Component {
                                     }
                                     labelWidth={150}
                                 />
+                                <FormHelperText id="component-error-text">{this.state.phoneNoErrorText}</FormHelperText>
                             </FormControl>
 
 
@@ -264,13 +415,15 @@ export class RegisterPage extends Component {
 
 
 
-                            <FormControl className="mb-3">
+                            <FormControl className="mb-3" error={this.state.genderErrorText ? true : false} onBlur={this.handleGenderError}>
                                 <FormLabel component="legend">Gender</FormLabel>
-                                <RadioGroup aria-label="gender" name="gender1" onChange={(e) => { { this.setState({ gender: e.target.value }) } }}>
+                                <RadioGroup aria-label="gender" name="gender1" onChange={this.handleChangeInput}>
                                     <FormControlLabel value="female" control={<Radio />} label="Female" />
                                     <FormControlLabel value="male" control={<Radio />} label="Male" />
                                 </RadioGroup><br />
+                                <FormHelperText id="component-error-text">{this.state.genderErrorText}</FormHelperText>
                                 <Button color="primary" variant="contained" onClick={this.handleRegister}>Register</Button>
+                                
                             </FormControl>
                             {/* </form> */}
                         </div>

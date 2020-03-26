@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { URL } from '../../api/api';
 import StarRatingComponent from 'react-star-rating-component';
+import {Link} from 'react-router-dom';
 
 
 
@@ -18,7 +19,7 @@ export const PopularProducts = (props) => {
             {console.log("Product data  getting", productData)}
             <h4 className="text-center">Popular Products</h4>
             <div className="text-center">
-                <button className="btn">View All</button>
+                <Link to="/products" className="btn">View All</Link>
             </div>
             <br/>
 

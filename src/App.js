@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import Homepage from './components/Homepage/Homepage';
 import {BrowserRouter as Router} from 'react-router-dom';
@@ -14,20 +14,26 @@ import OrderPage from './components/OrderPage/OrderPage';
 import UserProfile from './components/UserProfile/UserProfile';
 import UserAddress from './components/UserAddress/UserAddress';
 import ChangePassword from './components/ChangePassword/ChangePassword';
+import SpecificProduct from './components/SpecificProduct/SpecificProduct';
+import AddAddress from './components/AddAddress/AddAddress';
 
 function App() {
+  const data1 = localStorage.getItem('loginUserData');
+  const userData = JSON.parse(data1);
+  
+
   return (
     <div style={{overflow:"hidden"}}>
       
       
 
       <Router>
-      <Header/>
+      
         <Switch>
           
           <Route exact path="/" component={Homepage}/>
           <Route path="/contactForm" component={ContactForm}/>
-          <Route path="/login" component={LoginPage}/>
+          <Route path="/login" component={LoginPage} props={userData ? 'true':'false'}/>
           <Route path="/register" component={RegisterPage}/>
           <Route path="/products" component={ProductPage}/>
           <Route path="/cart" component={Cart}/>
@@ -35,7 +41,8 @@ function App() {
           <Route path="/profile" component={UserProfile}/>
           <Route path="/address" component={UserAddress}/>
           <Route path="/changePassword" component={ChangePassword}/>
-          
+          <Route path="/specificProduct" component={SpecificProduct}/>
+          <Route path="/addAddress" component={AddAddress}/>
         </Switch>
         <Footer/>
       </Router>

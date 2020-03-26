@@ -1,0 +1,46 @@
+
+  {
+    "data": [
+      {
+        "success": true,
+        "status_code": 200,
+        "customer_address": [
+          {
+            "address_id": 289,
+            "customer_id": 170,
+            "address": "At neosoft technology",
+            "pincode": 908765,
+            "city": "mumbai",
+            "state": "maharastra",
+            "country": "india",
+            "isDeliveryAddress": true,
+            "createdAt": "2019-11-15T04:48:48.717Z",
+            "updatedAt": "2019-11-25T04:55:17.381Z"
+          },{
+            "address_id": 289,
+            "customer_id": 170,
+            "address": "At neosoft technology",
+            "pincode": 908765,
+            "city": "mumbai",
+            "state": "maharastra",
+            "country": "india",
+            "isDeliveryAddress": true,
+            "createdAt": "2019-11-15T04:48:48.717Z",
+            "updatedAt": "2019-11-25T04:55:17.381Z"
+          },{
+            "address_id": 289,
+            "customer_id": 170,
+            "address": "At neosoft technology",
+            "pincode": 908765,
+            "city": "mumbai",
+            "state": "maharastra",
+            "country": "india",
+            "isDeliveryAddress": true,
+            "createdAt": "2019-11-15T04:48:48.717Z",
+            "updatedAt": "2019-11-25T04:55:17.381Z"
+          }
+        ]
+      }
+    ]
+  }
+

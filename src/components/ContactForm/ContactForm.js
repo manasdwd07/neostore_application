@@ -8,7 +8,7 @@ export class ContactForm extends Component {
     render() {
         return (
             <div>
-                
+                <Header login={localStorage.getItem('loginUserData') ? 'true' : 'false'} />/>
                 <div className="card text-center" style={{width:"40%",marginLeft:"30%",marginTop:"5%",marginBottom:"5%",backgroundColor:"#EEEEEE"}}>
                     <div className="card-body">
                         <h2 style={{marginBottom:"10%"}}>Contact Form</h2>

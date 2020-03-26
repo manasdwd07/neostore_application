@@ -1,36 +1,70 @@
 import React,{Component} from 'react';
 import { URL } from '../../api/api';
 import StarRatingComponent from 'react-star-rating-component';
+import {addToCartApi} from '../../api/api';
+import {Link} from 'react-router-dom';
+import sweetalert2 from 'sweetalert2';
+
 
 class AllProducts extends Component{
     constructor(props){
         super(props);
-        this.state={}
+        this.state={
+            id:''
+        }
     }
-    openSpecificProduct=(data)=>{
+    
+    
+    specificProduct=(id)=>{
+        console.log('productIdChipkaya:-',id);
+        this.setState({
+            id:id
+        })
+       localStorage.setItem('specificProductId',id);
         
     }
+
+    addToCart=async (id)=>{
+        const postData={
+            'product_id':`${id}`,
+            'quantity':`1`
+        }
+        const data=await addToCartApi(postData)
+        .then((res)=>{
+            sweetalert2.fire({
+                "title": 'Added to cart',
+                'text': 'Item added to cart successfully',
+                "icon": 'success'
+            })
+        })
+        .catch((err)=>{
+            sweetalert2.fire({
+                "title": 'Action denied',
+                'text': 'Item already added to cart',
+                "icon": 'warning'
+            })
+        })
+
+    }
+   
     render(){
         const images = this.props.data
 
         return (
             <div className="container">
-                <div className="row" style={{ width: "100%" }}>
-                    <h2 style={{ float: "left" }}>All Categories</h2>
-                    <h2 style={{ marginLeft: "40%" }}>Sort By</h2>
-                </div>
+                
 
                 <div className="row">
                     {images.map(el => {
-
+                        
                         return (
                             <div className="col-lg-4">
                                 <div className="card" style={{ marginBottom: "5%" }}>
                                     <div><img className="card-img-top" src={`${URL}${el.product_image}`} height="150px" /></div><br />
                                     <div className="card-body">
-                                        <div><a href="#" onClick={this.openSpecificProduct(el.product_id)} style={{ fontSize: 'smaller' }}>{el.product_name}</a></div><br />
+                                        <div onClick={(id)=>this.specificProduct(el._id)}><Link to="/specificProduct"  style={{ fontSize: 'smaller' }}>{el.product_name}</Link></div><br />
                                         <div><i className="fa fa-rupee"></i>&nbsp;<span><b>{el.product_cost}</b></span></div><br />
-                                        <div><button className="btn btn-danger">Add To Cart</button></div>
+                                        <div><button onClick={(id)=>this.addToCart(el._id)} className="btn btn-danger">Add To Cart</button></div>
                                         <div>
                                             <StarRatingComponent
                                                 value={el.product_rating}

@@ -7,15 +7,37 @@ import PersonIcon from '@material-ui/icons/Person';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import SyncAltIcon from '@material-ui/icons/SyncAlt';
 import UserProfile from '../UserProfile/UserProfile';
+import Header from '../Header/Header';
+import {getProfileData} from '../../api/api';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import EditIcon from '@material-ui/icons/Edit';
+
+
 
 export class OrderPage extends Component {
+    constructor(props){
+        super(props);
+        this.state={
+            userData:{}
+        }
+    }
+
+   componentDidMount(){
+        const profileData= getProfileData()
+        .then((res)=>{console.log(res.data.customer_proile);
+        
+            this.setState({
+                userData:res.data.customer_proile
+            })
+        })
+        
+    }
 
     render() {
-        const data1 = localStorage.getItem('loginUserData')
-        const userData = JSON.parse(data1);
+        
 
         return (
-            <div>
+            <div><Header login={localStorage.getItem('loginUserData') ? 'true' : 'false'} />
                 <div className="container m-4">
                     <div className="row">
                         <div className="col-12">
@@ -24,10 +46,11 @@ export class OrderPage extends Component {
 
 
                     </div><hr />
+                    {this.state.userData?
                     <div className="row">
                         <div className="col-6 text-center">
                             <img src={userIcon} alt="userIcon" height="30%" style={{ borderRadius: "100%" }} />
-                            <h4 className="text-danger mt-2">{userData.customer_details.first_name} {userData.customer_details.last_name}</h4>
+                            <h4 className="text-danger mt-2">{this.state.userData.first_name} {this.state.userData.last_name}</h4>
                             <div className="mb-2"><Link to ="/order"><Button variant="outlined" fullWidth><ReorderIcon /> &nbsp;Order</Button></Link></div>
                             <div className="mb-2"><Link to ="/profile"><Button variant="outlined" fullWidth><PersonIcon /> &nbsp; Profile</Button></Link></div>
                             <div className="mb-2"><Link to ="/address"><Button variant="outlined" fullWidth><MenuBookIcon /> &nbsp; Addresses</Button></Link></div>
@@ -51,12 +74,14 @@ export class OrderPage extends Component {
                                         </div>
                                         <div className='col-2'></div>
                                         <div className="col-6 mt-4 mb-4">
-                                            <p>{userData.customer_details.first_name}</p>
-                                            <p>{userData.customer_details.last_name}</p>
-                                            <p>{userData.customer_details.gender}</p>
+                                            <p>{this.state.userData.first_name}</p>
+                                            <p>{this.state.userData.last_name}</p>
+                                            <p>{this.state.userData.gender}</p>
                                             <p>Invalid date</p>
-                                            <p>{userData.customer_details.phone_no}</p>
-                                            <p>{userData.customer_details.email}</p>
+                                            <p>{this.state.userData.phone_no}</p>
+                                            <p>{this.state.userData.email}</p>
+                                            <hr/>
+                                            <Link to="/editProfile" className="btn"><EditIcon/>&nbsp;Edit</Link>
                                         </div>
                                     </div>
 
@@ -64,7 +89,7 @@ export class OrderPage extends Component {
                             </div>
 
                         </div>
-                    </div>
+                    </div>:<div className="row container text-center m-5"><CircularProgress color="inherit"/></div>}
                 </div>
             </div>
         )

@@ -7,6 +7,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import SyncAltIcon from '@material-ui/icons/SyncAlt';
 import UserProfile from '../UserProfile/UserProfile';
+import Header from '../Header/Header';
 
 export class OrderPage extends Component {
     
@@ -16,6 +17,9 @@ export class OrderPage extends Component {
         
         return (
             <div>
+                
+                <Header login={localStorage.getItem('loginUserData') ? 'true' : 'false'} />
+                {userData ? 
                 <div className="container m-4">
                     <div className="row">
                         <div className="col-12">
@@ -35,12 +39,15 @@ export class OrderPage extends Component {
                         </div>
                         <div className="col-6 mt-2">
                             
-                            <div className="container card">
-                                {console.log("Cart Count",userData.cart_count)}
-                                {userData.cart_count<=0 ? 
+                            <div className="container">
+                                
+                                {userData.cart_count==0 ? 
                             <div>
-                                Sorry there are no items in your cart
-                                </div>:
+                                <div className="text-center">
+                                    <h1 className="font-weight-larger mb-5">No Orders Found</h1>
+                                    <Link to="/products" className="btn btn-info">Go to Product Page</Link>
+                                </div>
+                            </div>:
                                 <div>
                                     <p>Your orders are :</p>
                                 </div>}    
@@ -50,7 +57,13 @@ export class OrderPage extends Component {
                             
                         </div>
                     </div>
-                </div>
+                </div>:<div>
+                                <div className="container text-center mt-5 mb-5">
+                                    <h5>Hi guest, sorry but you are not logged in..</h5>
+                                    <h5>Please Login to continue to orders Page</h5>
+                                    <Link to="/login" className="btn btn-warning m-4">Go to Login Page</Link>
+                                </div>
+                    </div>}
             </div>
         )
     }
