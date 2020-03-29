@@ -8,7 +8,7 @@ import { Button } from '@material-ui/core/';
 import { getAllProducts } from '../../api/api';
 import AllProducts from '../AllProducts/AllProducts';
 import { getAllCategories } from '../../api/api';
-import { getAllColors,getSpecificProduct } from '../../api/api';
+import { getAllColors, getSpecificProduct } from '../../api/api';
 import Pagination from "react-js-pagination";
 import { getProductByCategory, getProductByColor } from '../../api/api';
 import Header from '../Header/Header';
@@ -16,7 +16,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import StarIcon from '@material-ui/icons/Star';
-import {getProductsByRating,getDescendingProducts,getAscendingProducts} from '../../api/api';
+import { getProductsByRating, getDescendingProducts, getAscendingProducts } from '../../api/api';
 
 
 
@@ -25,18 +25,24 @@ export class ProductPage extends Component {
         super(props);
         this.state = {
             allProducts: [],
+            tempProducts:[],
             categories: [],
             colors: [],
             activePage: 1,
             
+
         }
     }
 
 
 
     async componentDidMount() {
-        const allImages = await getAllProducts();
-        this.setState({ allProducts: allImages.data.product_details })
+        
+        let data=await getAllProducts()
+        this.setState({
+            tempProducts:data.data.product_details,
+            allProducts:data.data.product_details.slice(0,10)
+        })
 
         console.log('All products :- ', this.state.allProducts);
 
@@ -53,24 +59,24 @@ export class ProductPage extends Component {
         })
     }
 
-    starRatingHandler=async()=>{
-        const starRatingProducts=await getProductsByRating()
+    starRatingHandler = async () => {
+        const starRatingProducts = await getProductsByRating()
         this.setState({
-            allProducts:starRatingProducts.data.product_details
+            allProducts: starRatingProducts.data.product_details
         })
     }
 
-    highToLowHandler=async()=>{
-        const highToLowPriceProducts= await getDescendingProducts()
+    highToLowHandler = async () => {
+        const highToLowPriceProducts = await getDescendingProducts()
         this.setState({
-            allProducts:highToLowPriceProducts.data.product_details
+            allProducts: highToLowPriceProducts.data.product_details
         })
     }
 
-    lowToHighHandler=async()=>{
-        const lowToHighPriceProducts= await getAscendingProducts()
+    lowToHighHandler = async () => {
+        const lowToHighPriceProducts = await getAscendingProducts()
         this.setState({
-            allProducts:lowToHighPriceProducts.data.product_details
+            allProducts: lowToHighPriceProducts.data.product_details
         })
     }
 
@@ -99,6 +105,26 @@ export class ProductPage extends Component {
         const allImages = await getAllProducts();
         this.setState({ allProducts: allImages.data.product_details })
     }
+
+    handlePagination =  (Index) => {
+        // let tempAllProducts=this.state.AllProducts?this.state.AllProducts:[];
+        let productResult = this.state.tempProducts.slice(Index * 10 - 10, Index * 10);
+         this.setState({
+            allProducts: productResult
+        })
+    }
+    createPagination = () => {
+        let table = [];
+        let pageNumber=this.state.tempProducts.length/10
+        for (let i = 1; i <= pageNumber; i++) {
+            table.push(
+                <li className="page-item">
+                    <span className="page-link btn" onClick={() => this.handlePagination(i)}>{i}</span>
+                </li>
+            );
+        }
+        return table
+    };
 
 
     render() {
@@ -169,20 +195,23 @@ export class ProductPage extends Component {
                             <div className="row mb-2" style={{ width: "100%" }}>
                                 <h2 style={{ float: "left" }}>{}All Categories</h2>
                                 <p style={{ marginLeft: "40%" }}>Sort by</p>
-                                <button className="btn btn-light"><StarIcon onClick={this.starRatingHandler}/></button>
-                                <button className="btn btn-light"><ArrowUpwardIcon onClick={this.highToLowHandler}/></button>
-                                <button className="btn btn-light"><ArrowDownwardIcon onClick={this.lowToHighHandler}/></button>
+                                <button className="btn btn-light"><StarIcon onClick={this.starRatingHandler} /></button>
+                                <button className="btn btn-light"><ArrowUpwardIcon onClick={this.highToLowHandler} /></button>
+                                <button className="btn btn-light"><ArrowDownwardIcon onClick={this.lowToHighHandler} /></button>
                             </div>
                             <AllProducts page={this.state.activePage} data={this.state.allProducts} />
                             <div className="pagination" style={{ marginLeft: "35%" }}>
-                                <Pagination
+                                {/* <Pagination
                                     activePage={this.state.activePage}
                                     itemsCountPerPage={8}
                                     totalItemsCount={43}
                                     pageRangeDisplayed={5}
                                     onChange={this.handlePageChange.bind(this)}>
 
-                                </Pagination>
+                                </Pagination> */}
+                                <ul className="pagination">
+                                    {this.createPagination()}
+                                </ul>
                             </div></div> : <div className="container text-center mt-5"><CircularProgress color="inherit" /></div>}
                     </div>
                 </div>

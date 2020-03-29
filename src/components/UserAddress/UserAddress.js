@@ -9,37 +9,95 @@ import SyncAltIcon from '@material-ui/icons/SyncAlt';
 import UserProfile from '../UserProfile/UserProfile';
 import Header from '../Header/Header';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import { getCustomerAddress } from '../../api/api';
+import { getCustomerAddress, deleteAddress } from '../../api/api';
 import sweetalert2 from 'sweetalert2';
 
 export class OrderPage extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state={
-            userAddress:[],
-            
+        this.state = {
+            userAddress: [],
+
+
         }
     }
-    async componentDidMount(){
-        const result=await getCustomerAddress()
+    componentDidMount() {
+
+        const result = getCustomerAddress()
+            .then(res => {
+                res.data.customer_address ?
+                    this.setState({
+                        userAddress: res.data.customer_address,
+
+                    }) : this.setState({
+                        userAddress: []
+                    })
+
+            }).catch(err => {
+                sweetalert2.fire({
+                    'title': 'Oops.. no address found',
+                    'text': `You did not add any address, please add one ${err}`,
+                    'icon': 'warning'
+                })
+            })
+
+    }
+
+    componentDidUpdate(){
+        getCustomerAddress()
         .then(res=>{
             this.setState({
-                userAddress:res.data[0].customer_address,
-                
-            })
-            
-        }).catch(err=>{
-            sweetalert2.fire({
-                'title':'Error in getting Address Api',
-                'text':`${err}`,
-                'icon':'error'
+                userAddress:res.data.customer_address
             })
         })
+        
     }
 
-    deleteHandler=(id)=>{
+
+    deleteHandler = async (id) => {
+        getCustomerAddress()
+            .then(async res => {
+                if (this.state.userAddress.length > 0) {
+                    const result = await deleteAddress(id)
+                        .then(async res => {
+                            sweetalert2.fire({
+                                'title': 'Address deleted successfully',
+                                'icon': 'success'
+                            })
+
+                            const address = await getCustomerAddress()
+                                .then(res => {
+
+                                    res.data.customer_address.length ? this.setState({ userAddress: res.data.customer_address }) : this.setState({ userAddress: [] })
+                                })
+                        }).catch(err => {
+                            sweetalert2.fire({
+                                'title': 'OOps.. some error occured',
+                                'text': `Details of error: ${err}`,
+                                'icon': 'warning'
+                            })
+                            const address = getCustomerAddress()
+                                .then(res => {
+
+                                    res.data.customer_address.length ? this.setState({ userAddress: res.data.customer_address }) : this.setState({ userAddress: [] })
+                                })
+                        })
+                }
+                else {
+                    sweetalert2.fire({
+                        'title': 'Cannot delete single address',
+                        'text': 'Cannot delete single address try editing it'
+                    })
+                }
+            })
+
+
 
     }
+
+    
+    
+
     render() {
         const data1 = localStorage.getItem('loginUserData')
         const userData = JSON.parse(data1);
@@ -49,6 +107,7 @@ export class OrderPage extends Component {
 
                 <Header login={localStorage.getItem('loginUserData') ? 'true' : 'false'} />
                 {userData ?
+                        
                     <div className="container m-4">
                         <div className="row">
                             <div className="col-12">
@@ -72,39 +131,42 @@ export class OrderPage extends Component {
 
                                     <div className="mt-4 mb-4" style={{ border: "1px groove", borderRadius: "5px" }}>
                                         <div className="card-header"><h2>Addresses</h2></div>
-                                        {this.state.userAddress ? this.state.userAddress.map(el=>{return              <div className="">
-                                            <div className=" card-body m-2" style={{ border: "1px groove", borderRadius: "5px" }}>
-                                                <div className="row m-1">
-                                                    <div className="col-11">
-                                                        <span className="add">{el.address}
-                                                        </span>
+                                        {this.state.userAddress.length>0 ? this.state.userAddress.map(el => {
+                                            return <div className="">
+                                                <div className=" card-body m-2" style={{ border: "1px groove", borderRadius: "5px" }}>
+                                                    <div className="row m-1">
+                                                        <div className="col-11">
+                                                            <span className="add">{el.address}
+                                                            </span>
+                                                        </div>
+                                                        <div className="col-1">
+                                                            <div className="btn" onClick={(e) => this.deleteHandler(el.address_id)}><DeleteForeverIcon /></div>
+                                                        </div>
                                                     </div>
-                                                    <div className="col-1">
-                                                        <div onClick={this.deleteHandler()}><DeleteForeverIcon /></div>
+                                                    <div className="row m-1">
+                                                        <div className="col-11">
+                                                            <span className="city">{el.city}</span> <span className="pincode">{el.pincode}</span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div className="row m-1">
-                                                    <div className="col-11">
-                                                        <span className="city">{el.city}</span> <span className="pincode">{el.pincode}</span>
-                                                    </div>
-                                                </div>
-                                                <div className="row m-1">
-                                                    <div className="col-11">
-                                                        <span className="state">{el.state}</span> <span className="country">{el.country}</span>
-                                                    </div>
+                                                    <div className="row m-1">
+                                                        <div className="col-11">
+                                                            <span className="state">{el.state}</span> <span className="country">{el.country}</span>
+                                                        </div>
 
-                                                </div>
-                                                <div className="row m-1">
-                                                    <div className="col-11">
-                                                        <div className="btn btn-primary px-3">Edit</div>
                                                     </div>
+                                                    <div className="row m-1">
+                                                        <div className="col-11" >
+                                                            <Link to="/editAddress" onClick={localStorage.setItem('editAddress',JSON.stringify(el))} className="btn btn-primary px-3">Edit</Link>
+                                                        </div>
 
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>}):<div className="text-center">
-                                                <CircularProgress color="inherit"/>
+                                        }) : <div className="text-center">
+                                                <h2>No address found</h2>
+                                                
                                             </div>}
-                                        <div className="col-12 mb-2">
+                                        <div className="col-12 mt-3 mb-2">
                                             <Link to="/addAddress" className="btn btn-light">Add Address</Link>
                                         </div>
                                     </div>

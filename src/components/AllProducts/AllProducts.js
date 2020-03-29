@@ -10,7 +10,8 @@ class AllProducts extends Component{
     constructor(props){
         super(props);
         this.state={
-            id:''
+            id:'',
+            cartCount:0
         }
     }
     
@@ -25,17 +26,27 @@ class AllProducts extends Component{
     }
 
     addToCart=async (id)=>{
-        const postData={
+        const postData=[{
+            '_id':`${id}`,
             'product_id':`${id}`,
-            'quantity':`1`
-        }
+            'quantity':`1`},{
+            'flag':'logout'
+        }]
+
         const data=await addToCartApi(postData)
-        .then((res)=>{
+        .then(async (res)=>{
+            // this.setState({cartCount:this.state.cartCount+1});
+            // console.log(this.state.cartCount)
+            // localStorage.setItem('cart_count',this.state.cartCount)
             sweetalert2.fire({
                 "title": 'Added to cart',
                 'text': 'Item added to cart successfully',
                 "icon": 'success'
             })
+            this.setState({cartCount:this.state.cartCount+1});
+            console.log(this.state.cartCount)
+            localStorage.setItem('cart_count',this.state.cartCount)
+           
         })
         .catch((err)=>{
             sweetalert2.fire({
@@ -46,6 +57,8 @@ class AllProducts extends Component{
         })
 
     }
+
+    
    
     render(){
         const images = this.props.data

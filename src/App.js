@@ -16,6 +16,12 @@ import UserAddress from './components/UserAddress/UserAddress';
 import ChangePassword from './components/ChangePassword/ChangePassword';
 import SpecificProduct from './components/SpecificProduct/SpecificProduct';
 import AddAddress from './components/AddAddress/AddAddress';
+import EditProfile from './components/EditProfile/EditProfile';
+import EditAddress from './components/EditAddress/EditAddress';
+import SelectAddress from './components/SelectAddress/SelectAddress';
+import ThankYou from './components/ThankYou/ThankYou';
+import ForgotPassword from './components/ForgotPassword/ForgotPassword';
+import RecoverPassword from './components/RecoverPassword/RecoverPassword';
 
 function App() {
   const data1 = localStorage.getItem('loginUserData');
@@ -43,7 +49,13 @@ function App() {
           <Route path="/changePassword" component={ChangePassword}/>
           <Route path="/specificProduct" component={SpecificProduct}/>
           <Route path="/addAddress" component={AddAddress}/>
-        </Switch>
+          <Route path="/editProfile" component={EditProfile}/>
+          <Route path="/editAddress" component={EditAddress}/>
+          <Route path="/selectAddress" component={SelectAddress}/>
+          <Route path="/forgotPassword" component={ForgotPassword}/>
+          <Route path="/recoverPassword" component={RecoverPassword}/>
+          <Route path="/thanksPage" component={ThankYou}/>
+        </Switch> 
         <Footer/>
       </Router>
      

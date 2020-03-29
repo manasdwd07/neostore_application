@@ -157,6 +157,7 @@ export class RegisterPage extends Component {
     }
 
     handleEmailError = (e) => {
+            
         const mailformat = /^([a-zA-Z])+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
         if (e.target.value == "") {
@@ -256,156 +257,156 @@ export class RegisterPage extends Component {
                         <div className="card-body container">
                             <h2>Register to NeoSTORE</h2><br /><br />
 
-                            <FormControl className="mb-3" variant="outlined" error={this.state.firstNameErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
-                                <InputLabel>First Name</InputLabel>
-                                <OutlinedInput
-                                    id="outlined-adornment-email"
-                                    type="text"
-                                    name="first_name"
-                                    autoComplete="off"
+                                <FormControl className="mb-3" variant="outlined" error={this.state.firstNameErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
+                                    <InputLabel>First Name</InputLabel>
+                                    <OutlinedInput
+                                        id="outlined-adornment-email"
+                                        type="text"
+                                        name="first_name"
+                                        autoComplete="off"
 
-                                    // value={this.state.password}
+                                        // value={this.state.password}
 
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                            <Icon
-                                                aria-label="toggle email visibility"
+                                        endAdornment={
+                                            <InputAdornment position="end">
+                                                <Icon
+                                                    aria-label="toggle email visibility"
 
-                                            >
-                                                <TextFieldsIcon />
-                                            </Icon>
-                                        </InputAdornment>
-                                    }
-                                    labelWidth={70}
-                                />
-                                <FormHelperText id="component-error-text">{this.state.firstNameErrorText}</FormHelperText>
-                            </FormControl>
-                            <FormControl className="mb-3" variant="outlined" error={this.state.lastNameErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
-                                <InputLabel>Last Name</InputLabel>
-                                <OutlinedInput
-                                    id="outlined-adornment-email"
-                                    type="text"
-                                    name="last_name"
-                                    autoComplete="off"
-                                    // value={this.state.password}
+                                                >
+                                                    <TextFieldsIcon />
+                                                </Icon>
+                                            </InputAdornment>
+                                        }
+                                        labelWidth={70}
+                                    />
+                                    <FormHelperText id="component-error-text">{this.state.firstNameErrorText}</FormHelperText>
+                                </FormControl>
+                                <FormControl className="mb-3" variant="outlined" error={this.state.lastNameErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
+                                    <InputLabel>Last Name</InputLabel>
+                                    <OutlinedInput
+                                        id="outlined-adornment-email"
+                                        type="text"
+                                        name="last_name"
+                                        autoComplete="off"
+                                        // value={this.state.password}
 
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                            <Icon
-                                                aria-label="toggle email visibility"
+                                        endAdornment={
+                                            <InputAdornment position="end">
+                                                <Icon
+                                                    aria-label="toggle email visibility"
 
-                                            >
-                                                <TextFieldsIcon />
-                                            </Icon>
-                                        </InputAdornment>
-                                    }
-                                    labelWidth={100}
-                                />
-                            <FormHelperText id="component-error-text">{this.state.lastNameErrorText}</FormHelperText>
-                            </FormControl>
+                                                >
+                                                    <TextFieldsIcon />
+                                                </Icon>
+                                            </InputAdornment>
+                                        }
+                                        labelWidth={100}
+                                    />
+                                <FormHelperText id="component-error-text">{this.state.lastNameErrorText}</FormHelperText>
+                                </FormControl>
 
-                            <FormControl className="mb-3" variant="outlined" error={this.state.emailErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
-                                <InputLabel>Email Address</InputLabel>
-                                <OutlinedInput
-                                    id="outlined-adornment-email"
-                                    type="text"
-                                    name="email"
-                                    onChange={this.handleChange}
-                                    
-                                    // value={this.state.password}
+                                <FormControl className="mb-3" variant="outlined" error={this.state.emailErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
+                                    <InputLabel>Email Address</InputLabel>
+                                    <OutlinedInput
+                                        id="outlined-adornment-email"
+                                        type="text"
+                                        name="email"
+                                        onChange={this.handleChange}
+                                        
+                                        // value={this.state.password}
 
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                            <Icon
-                                                aria-label="toggle email visibility"
+                                        endAdornment={
+                                            <InputAdornment position="end">
+                                                <Icon
+                                                    aria-label="toggle email visibility"
 
-                                            >
-                                                <MailIcon />
-                                            </Icon>
-                                        </InputAdornment>
-                                    }
-                                    labelWidth={100}
-                                />
-                                <FormHelperText id="component-error-text">{this.state.emailErrorText}</FormHelperText>
-                            </FormControl>
+                                                >
+                                                    <MailIcon />
+                                                </Icon>
+                                            </InputAdornment>
+                                        }
+                                        labelWidth={100}
+                                    />
+                                    <FormHelperText id="component-error-text">{this.state.emailErrorText}</FormHelperText>
+                                </FormControl>
 
-                            <FormControl className="mb-3" variant="outlined" error={this.state.passwordErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
-                                <InputLabel>Password</InputLabel>
-                                <OutlinedInput
-                                    id="outlined-adornment-password"
+                                <FormControl className="mb-3" variant="outlined" error={this.state.passwordErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
+                                    <InputLabel>Password</InputLabel>
+                                    <OutlinedInput
+                                        id="outlined-adornment-password"
 
-                                    name="password"
-                                    type={this.state.showPassword ? 'text' : 'password'}
-                                    onChange={this.handleChange}
-                                    // value={this.state.password}
+                                        name="password"
+                                        type={this.state.showPassword ? 'text' : 'password'}
+                                        onChange={this.handleChange}
+                                        // value={this.state.password}
 
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                            <Icon
-                                                aria-label="toggle password visibility"
-                                                onClick={this.handleClickShowPassword}
-                                                onMouseDown={this.handleMouseDownPassword}
-                                                edge="end"
-                                            >
-                                                {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
-                                            </Icon>
-                                        </InputAdornment>
-                                    }
-                                    labelWidth={100}
-                                />
-                                <FormHelperText id="component-error-text">{this.state.passwordErrorText}</FormHelperText>
-                            </FormControl>
+                                        endAdornment={
+                                            <InputAdornment position="end">
+                                                <Icon
+                                                    aria-label="toggle password visibility"
+                                                    onClick={this.handleClickShowPassword}
+                                                    onMouseDown={this.handleMouseDownPassword}
+                                                    edge="end"
+                                                >
+                                                    {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
+                                                </Icon>
+                                            </InputAdornment>
+                                        }
+                                        labelWidth={100}
+                                    />
+                                    <FormHelperText id="component-error-text">{this.state.passwordErrorText}</FormHelperText>
+                                </FormControl>
 
-                            <FormControl className="mb-3" variant="outlined" error={this.state.confirmPassErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
-                                <InputLabel>Confirm Password</InputLabel>
-                                <OutlinedInput
-                                    id="outlined-adornment-email"
-                                    type={this.state.showPassword ? 'text' : 'password'}
-                                    name="confirmPass"
-                                    onChange={this.handleChange}
-                                    // value={this.state.password}
+                                <FormControl className="mb-3" variant="outlined" error={this.state.confirmPassErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
+                                    <InputLabel>Confirm Password</InputLabel>
+                                    <OutlinedInput
+                                        id="outlined-adornment-email"
+                                        type={this.state.showPassword ? 'text' : 'password'}
+                                        name="confirmPass"
+                                        onChange={this.handleChange}
+                                        // value={this.state.password}
 
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                            <Icon
-                                                aria-label="toggle password visibility"
-                                                onClick={this.handleClickShowPassword}
-                                                onMouseDown={this.handleMouseDownPassword}
-                                                edge="end"
-                                            >
-                                                {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
-                                            </Icon>
-                                        </InputAdornment>
-                                    }
-                                    labelWidth={200}
-                                />
-                            <FormHelperText id="component-error-text">{this.state.confirmPassErrorText}</FormHelperText>
-                            </FormControl>
+                                        endAdornment={
+                                            <InputAdornment position="end">
+                                                <Icon
+                                                    aria-label="toggle password visibility"
+                                                    onClick={this.handleClickShowPassword}
+                                                    onMouseDown={this.handleMouseDownPassword}
+                                                    edge="end"
+                                                >
+                                                    {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
+                                                </Icon>
+                                            </InputAdornment>
+                                        }
+                                        labelWidth={200}
+                                    />
+                                <FormHelperText id="component-error-text">{this.state.confirmPassErrorText}</FormHelperText>
+                                </FormControl>
 
-                            <FormControl className="mb-3" variant="outlined" error={this.state.phoneNoErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
-                                <InputLabel>Mobile Number</InputLabel>
-                                <OutlinedInput
-                                    id="outlined-adornment-password"
-                                    type="text"
-                                    name="mobile_no"
-                                    onChange={this.handleChange}
+                                <FormControl className="mb-3" variant="outlined" error={this.state.phoneNoErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
+                                    <InputLabel>Mobile Number</InputLabel>
+                                    <OutlinedInput
+                                        id="outlined-adornment-password"
+                                        type="text"
+                                        name="mobile_no"
+                                        onChange={this.handleChange}
 
-                                    // value={this.state.password}
+                                        // value={this.state.password}
 
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                            <Icon
-                                                aria-label="toggle email visibility"
+                                        endAdornment={
+                                            <InputAdornment position="end">
+                                                <Icon
+                                                    aria-label="toggle email visibility"
 
-                                            >
-                                                <TextFieldsIcon />
-                                            </Icon>
-                                        </InputAdornment>
-                                    }
-                                    labelWidth={150}
-                                />
-                                <FormHelperText id="component-error-text">{this.state.phoneNoErrorText}</FormHelperText>
-                            </FormControl>
+                                                >
+                                                    <TextFieldsIcon />
+                                                </Icon>
+                                            </InputAdornment>
+                                        }
+                                        labelWidth={150}
+                                    />
+                                    <FormHelperText id="component-error-text">{this.state.phoneNoErrorText}</FormHelperText>
+                                </FormControl>
 
 
 

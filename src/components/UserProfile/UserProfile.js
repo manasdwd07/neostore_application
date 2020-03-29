@@ -77,7 +77,7 @@ export class OrderPage extends Component {
                                             <p>{this.state.userData.first_name}</p>
                                             <p>{this.state.userData.last_name}</p>
                                             <p>{this.state.userData.gender}</p>
-                                            <p>Invalid date</p>
+                                            <p>{this.state.userData.dob}</p>
                                             <p>{this.state.userData.phone_no}</p>
                                             <p>{this.state.userData.email}</p>
                                             <hr/>

@@ -11,7 +11,7 @@ import Header from '../Header/Header';
 import { addCustomerAddress } from '../../api/api';
 import sweetalert2 from 'sweetalert2';
 
-export class OrderPage extends Component {
+export class AddAddress extends Component {
     constructor(props){
         super(props);
         this.state={
@@ -19,7 +19,8 @@ export class OrderPage extends Component {
             pincode:'',
             city:'',
             state:'',
-            country:''
+            country:'',
+            pincodeErrorMessage:''
         }
     }
     submitHandler=async(e)=>{
@@ -32,6 +33,16 @@ export class OrderPage extends Component {
         const country=this.state.country;
         
         if(address!==''&&pincode!==''&&city!==''&&state!==''&&country!==''){
+            if(pincode.length!==6|| isNaN(pincode)){
+               this.setState({
+                   pincodeErrorMessage:'Pincode should be exact 6 numeric digits'
+               }) 
+            }
+            
+            else{
+            this.setState({
+                pincodeErrorMessage:''
+            })
             const userData={
                 'address':`${address}`,
                 'pincode':`${pincode}`,
@@ -45,7 +56,8 @@ export class OrderPage extends Component {
                     "title": 'Address added successfully',
                     'text': 'Congratulations, your address has been added',
                     "icon": 'success'
-                })                
+                })
+                this.props.history.push('/address');                
 
             }).catch(err=>{
                 sweetalert2.fire({
@@ -53,7 +65,8 @@ export class OrderPage extends Component {
                     'text': `Please check the Error :- ${err}`,
                     "icon": 'error'
                 })
-            }) 
+            })
+        } 
          }
          else{
              sweetalert2.fire({
@@ -93,13 +106,7 @@ export class OrderPage extends Component {
                             
                             <div className="container">
                                 
-                                {userData.cart_count==0 ? 
-                            <div>
-                                <div className="text-center">
-                                    <h1 className="font-weight-larger mb-5">No Orders Found</h1>
-                                    <Link to="/products" className="btn btn-info">Go to Product Page</Link>
-                                </div>
-                            </div>:
+                             
                                 <div>
                                     <div className="container" style={{border:"1px solid grey",borderRadius:"7%"}}>
                                         <form>
@@ -110,6 +117,7 @@ export class OrderPage extends Component {
                                             <div className="form-group mt-3">
                                                 <label className="lead"> Enter Pincode</label>
                                                 <input className="form-control" onChange={(e)=>{this.setState({pincode:e.target.value})}}/>
+                                                <span className="text-danger">{this.state.pincodeErrorMessage}</span>
                                             </div>
                                             <div className="form-group mt-3">
                                                 <label className="lead"> Enter City Name</label>
@@ -128,7 +136,7 @@ export class OrderPage extends Component {
                                             </div>
                                         </form>
                                     </div>
-                                </div>}    
+                                </div>    
                             
                                 
                             </div>
@@ -147,4 +155,4 @@ export class OrderPage extends Component {
     }
 }
 
-export default OrderPage
+export default AddAddress

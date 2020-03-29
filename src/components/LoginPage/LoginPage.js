@@ -13,6 +13,8 @@ import {
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import MailIcon from '@material-ui/icons/Mail';
 import Header from '../Header/Header';
+import {Link} from 'react-router-dom';
+
 
 export class LoginPage extends Component {
     constructor(props) {
@@ -20,7 +22,8 @@ export class LoginPage extends Component {
         this.state = {
             email: '',
             password: '',
-            login: false
+            login: false,
+            showPassword:false
 
         }
     }
@@ -60,6 +63,16 @@ export class LoginPage extends Component {
 
                 }
             )
+    }
+    handleClickShowPassword = (e) => {
+        this.setState({
+            showPassword: !this.state.showPassword
+        })
+    }
+    handleMouseDownPassword = (e) => {
+        this.setState({
+            showPassword: true
+        })
     }
     render() {
         return (
@@ -142,12 +155,12 @@ export class LoginPage extends Component {
                     </div>
                     <div className="row mt-4">
                         <div className="col-6 text-right">
-                            <span><a href="#">Register Now </a></span>
+                            <span><Link to="/register" className="btn">Register Now</Link></span>
 
                         </div>
                         <span className="">|</span>
                         <div className="col-5">
-                            <a href="#">Forgotten</a>
+                            <Link to="/forgotPassword" className="btn">Forgot Password ?</Link>
                         </div>
                     </div>
                 </div>

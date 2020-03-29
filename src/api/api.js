@@ -58,11 +58,11 @@ export const getProductByColor=(data)=>{
 // Getting token value from localStorage
 const data1 = localStorage.getItem('loginUserData');
 const userData = JSON.parse(data1);
-const token=userData.token;
+const token=  userData ? userData.token:null;
 
-
+// For adding data to cart
 export const addToCartApi=(data)=>{
-    return axios.post(`${URL}addDataToCart`,data,{ headers: {"Authorization" : `Bearer ${token}`} })
+    return axios.post(`${URL}addProductToCartCheckout`,data,{ headers: {"Authorization" : `Bearer ${token}`} })
 }
 
 // For getting products by rating
@@ -85,13 +85,13 @@ export const getSpecificProduct=(id)=>{
     return axios.get(`${URL}getProductByProdId/${id}`)
 }
 
-// For adding to cart
+// For getting cart data
 export const getCartDataApi=()=>{
-    
+    return axios.get(`${URL}getCartData`,{headers:{"Authorization":`Bearer ${token}`}})
 }
 
 // For getting user profile data
-export const getProfileData=()=>{
+export const getProfileData=    ()=>{
     return axios.get(`${URL}getCustProfile`,{headers:{"Authorization":`Bearer ${token}`}})
 }
 
@@ -99,7 +99,7 @@ export const getProfileData=()=>{
 // For getting customer address
 export const getCustomerAddress=()=>{
     // return axios.get(`${URL}getCustAddress`)
-    return axios.get('http://localhost:5000/data',{headers:{"Authorization":`Bearer ${token}`}})
+    return axios.get(`${URL}getCustAddress`,{headers:{"Authorization":`Bearer ${token}`}})
 }
 
 // For adding address
@@ -113,8 +113,8 @@ export const resetPassword=(data)=>{
 }
 
 // For editing customer profile
-export const editProfile=(data)=>{
-    return axios.post(`${URL}profile`,data,{headers:{"Authorization":`Bearer ${token}`}})
+export const editUserProfile=(data)=>{
+    return axios.put(`${URL}profile`,data,{headers:{"Authorization":`Bearer ${token}`}})
 }
 
 // For getting user orders
@@ -122,3 +122,53 @@ export const getUserOrders=()=>{
     return axios.get(`${URL}getOrderDetails`,{headers:{"Authorization":`Bearer ${token}`}})
 }
 
+// For deleting address
+export const deleteAddress=(id)=>{
+    return axios.delete(`${URL}deladdress/${id}`,{headers:{"Authorization":`Bearer ${token}`}})
+}
+
+// For editing customer address
+export const editCustomerAddress=(data)=>{
+    return axios.put(`${URL}updateAddress`,data,{headers:{"Authorization":`Bearer ${token}`}})
+}
+
+// For updatind quantity in cart data
+export const updateCartQuantity=(data)=>{
+    return axios.post(`${URL}updateQuantityByCustId`,{headers:{"Authorization":`Bearer ${token}`}})
+}
+
+// For deleting cart data
+export const deleteCartData=(id)=>{
+    // return axios.delete(`${URL}deleteCustomerCart/${id}`,{headers:{"Authorization":`Bearer ${token}`}})
+    return axios.delete(`${URL}deleteCustomerCart/${id}`,{headers:{"Authorization":`Bearer ${token}`}})
+}
+
+// for forgot password
+export const forgotPassword=(email)=>{
+    return axios.post(`${URL}forgotPassword`,email,{headers:{"Authorization":`Bearer ${token}`}})
+}
+
+// For recover password
+export const recoverPassword=(data)=>{
+    return axios.post(`${URL}recoverPassword`,data,{headers:{"Authorization":`Bearer ${localStorage.getItem('token')}`}})
+}
+
+// Footer Contact Form
+export const  postContactForm=(data)=>{
+    return axios.post(`${URL}contactUs`,data)
+}
+
+// For updating address
+export const updateAddress=(data)=>{
+    return axios.put(`${URL}updateAddress`,data,{headers:{"Authorization":`Bearer ${localStorage.getItem('token')}`}})
+}
+
+// For getting order details
+export const getOrderDetails=()=>{
+    return axios.get(`${URL}getOrderDetails`,{headers:{"Authorization":`Bearer ${token}`}})
+}
+
+// For getting invoice of order
+export const getInvoiceOfOrder=(data)=>{
+    return axios.post(`${URL}getInvoiceOfOrder`,data,{headers:{"Authorization":`Bearer ${token}`}})
+}

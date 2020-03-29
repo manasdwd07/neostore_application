@@ -112,6 +112,7 @@ class ChangePassword extends Component {
                 'text': 'Password changed successfully',
                 "icon": 'success'
             })
+            this.props.history.push('/profile')
         }).catch(err=>{
             sweetalert2.fire({
                 "title": 'Error',
@@ -149,13 +150,8 @@ class ChangePassword extends Component {
 
                                 <div className="container">
 
-                                    {userData.cart_count == 0 ?
-                                        <div>
-                                            <div className="text-center">
-                                                <h1 className="font-weight-larger mb-5">No Orders Found</h1>
-                                                <Link to="/products" className="btn btn-info">Go to Product Page</Link>
-                                            </div>
-                                        </div> :
+                                    
+                                        
                                         <div>
 
                                             <div className="text-center " style={{ border: "1px groove", borderRadius: "5px" }}>
@@ -253,7 +249,7 @@ class ChangePassword extends Component {
                                                 </div>
                                                 <div className="btn btn-danger m-3" onClick={this.submitHandler}>Submit</div>
                                             </div>
-                                        </div>}
+                                        </div>
 
 
                                 </div>

@@ -9,13 +9,15 @@ class Header extends Component {
         super(props);
         this.state = {
             count: 0,
-            login:false
+            login:false,
+            searchText:''
         }
     }
     
     handleLogout=()=>{
         
         localStorage.clear();
+        
         this.setState({login:false})
        
         
@@ -32,6 +34,13 @@ class Header extends Component {
                 login:false
             })
         }
+    }
+
+    handleSearch=(e)=>{
+        this.setState({
+            searchText:e.target.value
+        })
+        
     }
     
     render() {
@@ -55,7 +64,7 @@ class Header extends Component {
                         </div>
                         <form className="navbar-form navbar-left top_header_searchBox">
                             <div className="input-group">
-                                <input type="text" className="form-control" placeholder="Search..." />
+                                <input type="text" className="form-control" placeholder="Search..." onChange={(e)=>this.handleSearch(e)}/>
                                 <span className="input-group-btn top_header_searchIcon">
                                     <button className="btn btn-default">
                                         <i className="fa fa-search" />
@@ -66,7 +75,9 @@ class Header extends Component {
                         <div className="nav navbar-nav">
                             <Link to="/cart" className="btn top_header_cartButton">
                                 <i className="fa fa-shopping-cart"></i>&nbsp;
-                                <span ><sup className="top_header_cart_count">{userData?userData.cart_count:this.state.count}</sup></span>
+                                {/* <span ><sup className="top_header_cart_count">{userData?userData.cart_count:this.state.count}</sup></span>
+                                 */}
+                                <span ><sup className="top_header_cart_count">{localStorage.getItem('cart_count')}</sup></span>
                                 <span>Cart</span>
                             </Link>
                         </div>
