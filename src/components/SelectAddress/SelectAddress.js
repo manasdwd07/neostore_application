@@ -3,13 +3,14 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Header from '../Header/Header';
-import { getCustomerAddress,updateAddress } from '../../api/api';
+import { getCustomerAddress,updateAddress, addToCartApi } from '../../api/api';
 import sweetalert2 from 'sweetalert2';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { Link } from 'react-router-dom';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Radio from '@material-ui/core/Radio';
 import { RadioGroup,FormControl } from '@material-ui/core';
+import { addToCart } from '../../actions/CartActions';
 
 
 export class SelectAddress extends Component {
@@ -58,10 +59,24 @@ export class SelectAddress extends Component {
         
         const result=updateAddress(data)
         .then(res=>{
-            alert('You can proceed to buy now')
+            // alert('You can proceed to buy now')
+            const data=localStorage.getItem('cart') ? localStorage.getItem('cart'):[];
+            console.log('data in cart' , JSON.parse(data))
+            
+            const data1=data ? [{...JSON.parse(data),flag:'checkout'}]:[]
+
+            const rest=addToCartApi(data1)
+            .then(result=>{
+                
+                alert('You can proceed to buy now')
+            }).catch(err=>{
+                alert(`OOps.. some error occured. Details: ${err}`)
+            })
         }).catch(err=>{
             alert(`Oops... some error occured. Details : ${err}`)
         })
+
+        
 
     }
 
@@ -73,6 +88,7 @@ export class SelectAddress extends Component {
     }
 
     proceedCheckout = (e) => {
+
 
     }
 

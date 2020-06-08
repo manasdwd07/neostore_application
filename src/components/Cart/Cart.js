@@ -12,6 +12,9 @@ import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import DeleteForeverSharpIcon from '@material-ui/icons/DeleteForeverSharp';
 import sweetalert2 from 'sweetalert2';
+import Swal from 'sweetalert2';
+import {connect} from 'react-redux';
+import {removeFromCart} from '../../actions/CartActions';
 
 
 export class Cart extends Component {
@@ -19,77 +22,122 @@ export class Cart extends Component {
         super(props);
         this.state = {
             cartData: [],
-            subtotalCost:0,
-            totalCost:0,
+            total_cost:"",
+            gst:"",
+            orderTotal:""
+            
             
         }
     }
 
-    async componentDidMount() {
-        const getCartData = await getCartDataApi()
-            .then(async res => {
-                 this.setState({
-                    cartData: res.data.product_details
-                })
-                if(res.data.product_details.length){let pc = res.data.product_details.map(item => {
-                    return item.total_productCost ;
-                  });
-                  let totalCost = pc.reduce(
-                    (value, nextvalue) => parseInt(value) + parseInt(nextvalue)
-                  );
-                  let gstCost=parseInt(totalCost*.05);
-                  let  orderTotal=parseInt(totalCost)+parseInt(gstCost)
-                  this.setState({
-                    subtotalCost: totalCost,
-                    gst:gstCost,
-                    totalCost:orderTotal
-                  });}
-            }).catch(err=>{
-                alert(`Error: ${err}`)
-            })
+    
+    async componentDidMount(){
+        try{
+            this.getCartData();
+        }catch(error){
+            alert('Error in getting data')
+        }
     }
 
-    subtractOne=async(id,quantity)=>{
-        const data={
-            'product_id':`${id}`,
-            'quantity':`${quantity>=1?quantity-1:quantity}`
+    // Getting cart products from local Storage
+
+    getCartData=()=>{
+        try{
+            let result=localStorage.getItem('cart')
+            ? JSON.parse(localStorage.getItem('cart'))
+            : null ;
+            this.setState({
+                cartData:result
+            });
+
+            let a =result.map((item=>{
+                return item.total_productCost*item.quantity;
+            }))
+
+            let totalCost=a.reduce((val,nextVal)=>parseInt(totalCost)+parseInt(gstCost));
+            let gstCost = parseInt(totalCost+0.05);
+            let orderTotal=parseInt(totalCost)+parseInt()
+            this.setState({
+                total_cost:totalCost,
+                gst:gstCost,
+                orderTotal:orderTotal
+            });
+        }catch(error){
+            // handle error here
         }
-        const result= await updateCartQuantity(data)
     }
 
-    addOne= async (id,quantity)=>{
-        const data={
-            'product_id':`${id}`,
-            'quantity':`${quantity>=1?quantity+1:quantity}`
-        }
-        const result=await updateCartQuantity(data)
-    }
+
+    // Handler for delete Item from cart
+   
 
     deleteItem=async (id)=>{
-        const result=await deleteCartData(id)
-        .then(async res=>{
-            
-            sweetalert2.fire({
-                'title':'Item deleted successfully',
-                'icon':'success'
-            })
-            localStorage.setItem('cart_count',localStorage.getItem('cart_count')-1)
-            // localStorage.getItem('cart_count')<=0 ? localStorage.setItem('cart_count',0):localStorage.getItem('cart_count')
-            getCartDataApi()
-            .then(res=>{
-                this.setState({
-                    cartData:res.data.product_details
+        try{
+            Swal.fire({
+                title:'Are you sure to delete this item ?',
+                text:'This item will be deleted from your cart',
+                icon:'warning',
+                confirmButtonText:'Yeah sure'
+            }).then(async(result)=>{
+
+                let data=localStorage.getItem('cart')
+                ? JSON.parse(localStorage.getItem('cart'))
+                :null;
+
+                let cart=data.filter((item)=>{
+                    return item._id!== id;
+
+                });
+
+                
+                localStorage.setItem('cart',JSON.stringify(cart));
+                this.props.removeFromCart(id);
+                this.getCartData();
+                Swal.fire({
+                    text:'Product has been deleted from cart'
                 })
             })
-            
-        }).catch(err=>{
-            sweetalert2.fire({
-                'title':'Some error occured',
-                'text':`Details of error ${err}`
-            })
-        })
+        } catch(error){
+            console.log(error)
+        }
     }
 
+    // For Handling updating quantities in local Storage
+    //   -------------------
+
+    addOne = (id) => {
+        const localCartData = JSON.parse(localStorage.getItem("cart"))
+        const index = localCartData.findIndex(res=>{ return res._id === id  })
+        if(localCartData[index].quantity>0 && localCartData[index].quantity<=9){
+        localCartData[index].quantity=localCartData[index].quantity+1;
+        localStorage.setItem('cart', JSON.stringify(localCartData));
+        this.setState({ cartData: JSON.parse(localStorage.getItem("cart")) })
+        
+        }
+    }
+
+    subtractOne = (id) => {
+        const localCartData = JSON.parse(localStorage.getItem("cart"))
+        const index = localCartData.findIndex(res=>{ return res._id === id  })
+        if(localCartData[index].quantity <= 1){
+            window.confirm("Are you sure,to remove this item from cart")
+            this.deleteItem(id);
+            this.props.removeFromCart(id);
+        }
+        else if(localCartData[index].quantity > 1 && localCartData[index].quantity<=10){
+            localCartData[index].quantity=localCartData[index].quantity-1;
+            localStorage.setItem('cart', JSON.stringify(localCartData));
+            this.setState({ cartData: JSON.parse(localStorage.getItem("cart")) })
+            
+        }
+        
+    }
+
+    //   -----------------
+
+    proceedToBuyHandler=()=>{
+        
+    }
 
 
 
@@ -99,6 +147,17 @@ export class Cart extends Component {
         const steps = ['Cart', 'Delivery Address'];    
         const data1 = localStorage.getItem('loginUserData');
 
+
+        // ------------------------------------
+        let orderTotal = 0
+        this.state.cartData ? orderTotal = this.state.cartData
+        .map(val => {return (val.product_cost * val.quantity)})
+        .reduce((sum, product_cost) => {return Number(sum) + Number(product_cost)}, 0) : orderTotal = 0;
+        
+        const gst = Math.round(orderTotal / 100 * 5);
+        const total = Number(gst) + Number(orderTotal) 
+
+        // -----------------------------------------
 
         return (
             <div><Header login={localStorage.getItem('loginUserData') ? 'true' : 'false'} />
@@ -118,7 +177,7 @@ export class Cart extends Component {
                         <div className="col-8">
 
                         
-                        {this.state.cartData ? this.state.cartData.map(el =>
+                        {this.state.cartData.length>0 ? this.state.cartData.map(el =>
                             <div className="container mt-3 mb-2">
                                 {/* <img src={`${URL}${el.product_id.product_image}`}/>
                                     <p>{el.product_id.product_desc}</p> */}
@@ -137,7 +196,7 @@ export class Cart extends Component {
                                                 </div>
                                                 <div className="col-3">Quantity
                                                     <br/><br/>
-                                                    <span style={{fontSize:"smaller"}}><RemoveIcon onClick={()=>this.subtractOne(el.product_id,el.quantity)} fontSize="small"/> {el.quantity} <AddIcon onClick={this.addOne(el.product_id,el.quantity)} fontSize="small"/></span>
+                                                    <span style={{fontSize:"smaller"}}><RemoveIcon onClick={()=>this.subtractOne(el._id)} fontSize="small"/> {el.quantity} <AddIcon onClick={()=>this.addOne(el._id)} fontSize="small"/></span>
                                                 </div>
                                                 <div className="col-2">Price
                                                 <br/><br/>
@@ -166,7 +225,7 @@ export class Cart extends Component {
                                     <img src={cart} alt="img" height="30%" />
                                     <div className="text-center mt-4">
                                         <h3>YOUR CART IS CURRENTLY EMPTY</h3>
-                                        <p>Before proceed to checkout you must add some products to you shopping cart.
+                                        <p>Before proceed to checkout you must add some products to your shopping cart.
                                         <br />You will find lots of intresting products on our products page</p>
                                         <Link to="/products" className="btn btn-primary">Return to product page</Link>
                                     </div>
@@ -183,7 +242,7 @@ export class Cart extends Component {
                                         <p>Subtotal</p>
                                     </div>
                                     <div className="col-6 text-right">
-                                        <p>{this.state.subtotalCost}</p>
+                                        <p>{orderTotal}</p>
                                     </div>
                                 </div>
                                 <hr/>
@@ -193,7 +252,7 @@ export class Cart extends Component {
                                         <p>GST(5%)</p>
                                     </div>
                                     <div className="col-6 text-right">
-                                        <p>{this.state.gst}</p>
+                                        <p>{gst}</p>
                                     </div>
                                 </div>
                                 <hr/>
@@ -203,7 +262,7 @@ export class Cart extends Component {
                                         <p>Order Total</p>
                                     </div>
                                     <div className="col-6 text-right">
-                                        <p>{this.state.totalCost}</p>
+                                        <p>{total}</p>
                                     </div>
                                 </div>
                                 <hr/>
@@ -220,4 +279,11 @@ export class Cart extends Component {
     }
 }
 
-export default Cart
+const mapDispatchToProps=(dispatch)=>{
+    return {
+        removeFromCart:(id) =>{
+            dispatch(removeFromCart(id))
+        }
+    }
+}
+export default connect(null,mapDispatchToProps)(Cart)

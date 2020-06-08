@@ -231,20 +231,17 @@ export class RegisterPage extends Component {
                 <Header login={localStorage.getItem('loginUserData') ? 'true' : 'false'} />/>
                 <div className="row">
                     <div className="col-lg-6 ">
-                        <button className="btn-danger mt-2" style={{ marginLeft: "40%" }}>
-                            {/* <GoogleLogin
+                        <div className="btn mt-2 text-center" style={{marginLeft:"50%"}}>
+                            <GoogleLogin
                                 clientId="206257001886-huhdn3bomsbobi025n76vo8qf6gdn8tk.apps.googleusercontent.com"
-                                
-                                
-                                
-                                cookiePolicy={'single_host_origin'}
-                            />, */}
-                        </button>
+                                 cookiePolicy={'single_host_origin'}
+                            />,
+                        </div>
                     </div>
-                    <div className="col-lg-6">
-                        <button className="btn" style={{ width: "50px" }}>
-                            Login with Fb
-                        </button>
+                    <div className="col-lg-6 mt-3">
+                        <div className="btn btn-primary">
+                            Sign in with Facebook
+                        </div>
                     </div>
 
 

@@ -22,18 +22,17 @@ export class OrderPage extends Component {
     }
 
 
-    componentDidMount = async () => {
-        try {
-            let result = await getOrderDetails();
-            if (result) {
+    componentDidMount =  () => {
+        
+            let result =  getOrderDetails().then(res=>{
+                console.log('res ',res.data.product_details)
                 this.setState({
-                    orderDetails: result.data.product_details,
+                    orderDetails: res.data.product_details,
                 })
-            }
-
-        } catch (error) {
-
-        }
+            }) 
+        .catch (error=> {
+            console.log('Error details : ',error)
+        })
     }
 
     handleDownloadInvoice = async (data) => {
@@ -46,14 +45,13 @@ export class OrderPage extends Component {
                 console.log('invoice error ',err);
                 
             })
-        
-
 
     }
 
     render() {
         const data1 = localStorage.getItem('loginUserData')
         const userData = JSON.parse(data1);
+        console.log(this.state.orderDetails)
 
         return (
             <div>
@@ -81,7 +79,7 @@ export class OrderPage extends Component {
 
                                 <div className="container">
 
-                                    {userData.cart_count == 0 ?
+                                    {this.state.orderDetails.length== 0 ?
                                         <div>
                                             <div className="text-center">
                                                 <h1 className="font-weight-larger mb-5">No Orders Found</h1>
@@ -89,7 +87,7 @@ export class OrderPage extends Component {
                                             </div>
                                         </div> :
                                         <div><h1 className="text-center">ORDERS</h1>
-                                            {this.state.orderDetails.length ? this.state.orderDetails.map(el =>
+                                            {this.state.orderDetails ? this.state.orderDetails.map(el =>
                                                 <div className="container card m-3">
                                                     
                                                     <div className="row m-2">

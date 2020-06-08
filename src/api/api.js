@@ -160,7 +160,7 @@ export const  postContactForm=(data)=>{
 
 // For updating address
 export const updateAddress=(data)=>{
-    return axios.put(`${URL}updateAddress`,data,{headers:{"Authorization":`Bearer ${localStorage.getItem('token')}`}})
+    return axios.put(`${URL}updateAddress`,data,{headers:{"Authorization":`Bearer ${token}`}})
 }
 
 // For getting order details
@@ -171,4 +171,9 @@ export const getOrderDetails=()=>{
 // For getting invoice of order
 export const getInvoiceOfOrder=(data)=>{
     return axios.post(`${URL}getInvoiceOfOrder`,data,{headers:{"Authorization":`Bearer ${token}`}})
+}
+
+// For getting products by search text
+export const getProductBySearchText=(text)=>{
+    return axios.get(`${URL}getProductBySearchText/${text}`)
 }

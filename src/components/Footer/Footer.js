@@ -1,9 +1,29 @@
 import React, { Component } from 'react';
-
 import {Link,BrowserRouter} from 'react-router-dom';
+import axios from 'axios';
+import {URL} from '../../api/api';
+import { CircularProgress } from '@material-ui/core';
 export class Footer extends Component {
     constructor(props){
         super(props);
+        this.state={
+            
+            footerData:[]
+        
+        }
+    }
+
+    componentDidMount(){
+        const data=axios.get(`${URL}getData`)
+        .then(res=>{
+            this.setState({
+                footerData:res.data.company_details
+            })
+            console.log(this.state.footerData)
+        })
+        .catch(err=>{
+            alert(`Error: ${err}`)
+        })
     }
 
     emailChangeHandler=()=>{
@@ -13,26 +33,46 @@ export class Footer extends Component {
     subscribeHandler=()=>{
 
     }
+    
+    termsAndConditions=(e)=>{
+        let result = axios.get(`${URL}getTermsAndConditions`)
+            .then(res=>{
+                window.open(`${URL}${res.data.termsAndConditions_details[0].fileName}`,'_blank')
+            }).catch(err=>{
+                console.log('invoice error ',err);
+                
+            })
+    }
+
+    guarentee=(e)=>{
+        let result = axios.get(`${URL}getGuarantee`)
+            .then(res=>{
+                window.open(`${URL}${res.data.guarantee_details[0].fileName}`,'_blank')
+            }).catch(err=>{
+                console.log('invoice error ',err);
+                
+            })
+    }
 
     render() {
         return (
             <div>
-                <footer style={{backgroundColor:"black",right:"0",left:"0",bottom:"0"}}>
+                {this.state.footerData.length? <footer style={{backgroundColor:"black",right:"0",left:"0",bottom:"0"}}>
                     <div className="row text-center" style={{ color: "white" }}>
                         <div className="col-lg-4" style={{marginTop:"3%"}}>
                             <h4>ABOUT COMPANY</h4>
                             <br/>
-                            <p>NeoSOFT Technologies is here at your quick and easy service for shopping.</p>
+                            <p>{this.state.footerData[0].about_company}</p>
                             <p>Contact Information</p>
-                            <p>Email: contact@neosofttech.com</p>
-                            <p>Phone: +91 0000000000</p>
-                            <p>MUMBAI, INDIA</p>
+                            <p>Email: {this.state.footerData[0].email}</p>
+                            <p>Phone: {this.state.footerData[0].phone_no}</p>
+                            <p>{this.state.footerData[0].address}</p>
                         </div>
                         <div className="col-lg-4"style={{marginTop:"3%"}}>
                             <h4>INFORMATION</h4>
                             <br/>
-                            <a href="http://180.149.241.208:3022/2019-06-28T06-10-29.263ZTerms_and_Conditions.pdf" target="_blank" style={{textDecoration:"none",color:"white"}}>Terms and conditions</a><br/>
-                            <a href="http://180.149.241.208:3022/2019-06-28T06-11-38.277ZGuarantee_ReturnPolicy.pdf" target="_blank" style={{textDecoration:"none",color:"white"}}>Guarantee and Return Policy</a><br/>
+                            <button className="btn" onClick={e=>this.termsAndConditions(e)} style={{textDecoration:"none",color:"white"}}>Terms and conditions</button><br/>
+                            <button className="btn" onClick={e=>this.guarentee(e)}  style={{textDecoration:"none",color:"white"}}>Guarantee and Return Policy</button><br/>
                             <Link to="/contactForm" style={{textDecoration:"none",color:"white"}}>Contact Us</Link><br/>
                             <a href="#" style={{textDecoration:"none",color:"white"}}>Privacy Policy</a><br/>
                             <a href="#" style={{textDecoration:"none",color:"white"}}>Locate Us</a>
@@ -50,7 +90,7 @@ export class Footer extends Component {
                             <pre className="text-center" style={{color:"grey"}}>Copyright 2020 NeoSOFT Technologies All rights reserved | Design By Manas Dwivedi | @manasdwd07</pre>
                         </div>
                     </div>
-                </footer>
+                </footer>:<CircularProgress color="inherit"/>}
             </div>
         )
     }

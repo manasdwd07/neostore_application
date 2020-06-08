@@ -10,14 +10,18 @@ import InstagramIcon from '@material-ui/icons/Instagram';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import EmailIcon from '@material-ui/icons/Email';
+import Swal from 'sweetalert2';
+import { addToCart, cartCount } from '../../actions/CartActions';
+import { connect } from 'react-redux';
 
 
 
-export class SpecificProduct extends Component {
+class SpecificProduct extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: {}
+            data: {},
+            cartCount:0
         }
     }
     async componentDidMount() {
@@ -31,6 +35,60 @@ export class SpecificProduct extends Component {
         console.log('specific product data:- ', this.state.data);
 
     }
+
+    addToCart = async (id, data) => {
+        this.props.addToCart(id);
+
+        try {
+            let finalData = {
+                _id: data._id,
+                product_id: data,
+                product_cost: data.product_cost,
+                total_productCost: data.product_cost,
+                quantity: 1
+            };
+            let cartData = localStorage.getItem("cart")
+                ? JSON.parse(localStorage.getItem("cart"))
+                : null;
+            if (cartData === null) {
+                let tempData = [];
+                tempData.push(finalData);
+                localStorage.setItem("cart", JSON.stringify(tempData));
+                Swal.fire({
+                    'title': 'Product added to cart successfully',
+                    "icon": 'success'
+                });
+                localStorage.getItem('cart'.length)
+            } else {
+                let existed_item = cartData.find(item => id === item._id);
+                if (existed_item) {
+                    Swal.fire({
+                        'title': 'Product already exists in cart',
+                        "icon": 'warning'
+                    });
+                } else {
+                    cartData.push(finalData);
+                    localStorage.setItem("cart", JSON.stringify(cartData));
+                    Swal.fire({
+                        'title': 'Product added to cart successfully',
+                        "icon": 'success'
+                    });
+                    localStorage.getItem('cart'.length)
+                    this.setState({ cartCount: this.state.cartCount + 1 })
+                }
+            }
+
+        } catch (error) {
+            Swal.fire({
+                title: "Already added to cart",
+                text: "Please check cart",
+                icon: "warning",
+                timer: 2000
+            });
+            console.log(error);
+        }
+    };
+
     render() {
         const productId = localStorage.getItem('specificProductId');
         const productData = this.state.data
@@ -61,15 +119,15 @@ export class SpecificProduct extends Component {
                                         <h6>Price :-  {productData.product_cost}</h6>
                                         <h6>Color :-  <span className="btn" style={{ backgroundColor: `${productData.color_id.color_code}` }}></span></h6>
                                         <h5 className="mt-3">Share&nbsp; <ShareIcon color="inherit" /></h5>
-                                        
-                                        <FacebookIcon color="primary"/>&nbsp;
-                                        <EmailIcon color="secondary"/>&nbsp;
-                                        <WhatsAppIcon color={"action "}/>&nbsp;
-                                        <TwitterIcon color="primary"/>&nbsp;
-                                        <InstagramIcon color={"error"}/>&nbsp;
-                                        
+
+                                        <FacebookIcon color="primary" />&nbsp;
+                                        <EmailIcon color="secondary" />&nbsp;
+                                        <WhatsAppIcon color={"action "} />&nbsp;
+                                        <TwitterIcon color="primary" />&nbsp;
+                                        <InstagramIcon color={"error"} />&nbsp;
+
                                         <div className="row mt-3" >
-                                            <div className="col-4"><button className="btn btn-info">ADD TO CART</button></div>
+                                            <div className="col-4"><button className="btn btn-info" onClick={() => this.addToCart(productData.product_id, productData)}>ADD TO CART</button></div>
                                             <div className="col-7"><button className="btn btn-warning">RATE PRODUCT</button></div>
 
                                         </div>
@@ -96,4 +154,12 @@ export class SpecificProduct extends Component {
     }
 }
 
-export default SpecificProduct
+const mapDispatchToProps = (dispatch) => {
+    return {
+        addToCart: (id) => {
+            dispatch(addToCart(id));
+        }
+    }
+}
+
+export default connect(null, mapDispatchToProps)(SpecificProduct)
