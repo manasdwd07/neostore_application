@@ -25,13 +25,13 @@ export class OrderPage extends Component {
     componentDidMount =  () => {
         
             let result =  getOrderDetails().then(res=>{
-                console.log('res ',res.data.product_details)
+                
                 this.setState({
                     orderDetails: res.data.product_details,
                 })
             }) 
         .catch (error=> {
-            console.log('Error details : ',error)
+            // alert('Error details : ',error)
         })
     }
 
@@ -42,7 +42,7 @@ export class OrderPage extends Component {
             .then(res=>{
                 window.open(`${URL}${res.data.receipt}`,'_blank')
             }).catch(err=>{
-                console.log('invoice error ',err);
+                alert('invoice error ',err);
                 
             })
 
@@ -51,8 +51,6 @@ export class OrderPage extends Component {
     render() {
         const data1 = localStorage.getItem('loginUserData')
         const userData = JSON.parse(data1);
-        console.log(this.state.orderDetails)
-
         return (
             <div>
 

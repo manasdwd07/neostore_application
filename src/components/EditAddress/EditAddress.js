@@ -24,11 +24,11 @@ export class EditAddress extends Component {
 
         }
     }
-   
+
+    // Handler for onClick for editing address
     editHandler = async (e) => {
         
         e.preventDefault();
-        // const [address,pincode,city,state,country]=this.state
         const address1 = this.state.address;
         const pincode = this.state.pincode;
         const city = this.state.city;
@@ -46,7 +46,6 @@ export class EditAddress extends Component {
                     pincodeErrorMessage: ''
                 })
                 const userAddress = localStorage.getItem('editAddress');
-                console.log('userAddress in editAddress', userAddress);
                 const address = JSON.parse(userAddress);
                 const userData = {
                     'address_id': `${address.address_id}`,

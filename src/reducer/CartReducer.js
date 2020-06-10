@@ -5,6 +5,8 @@ export const initialState={
     searchProductId:0
 }
 
+// cart Reducer for handling cart actions
+
 const cartReducer=(state=initialState,action)=>{
     switch(action.type){
         case 'ADD_TO_CART':

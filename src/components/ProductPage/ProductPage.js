@@ -25,11 +25,12 @@ export class ProductPage extends Component {
         super(props);
         this.state = {
             allProducts: [],
-            tempProducts:[],
+            tempProducts: [],
             categories: [],
             colors: [],
             activePage: 1,
-            
+            categoryName: ''
+
 
         }
     }
@@ -37,28 +38,28 @@ export class ProductPage extends Component {
 
 
     async componentDidMount() {
-        
-        let data=await getAllProducts()
-        this.setState({
-            tempProducts:data.data.product_details,
-            allProducts:data.data.product_details.slice(0,10)
-        })
+        const url = window.location.href;
+        const categoryId = url.slice(31, url.length);
+        const result = categoryId === "" ? await getAllProducts() : await getProductByCategory(categoryId);
 
-        console.log('All products :- ', this.state.allProducts);
+        let data = await getAllProducts()
+        this.setState({
+            tempProducts: data.data.product_details,
+            allProducts: result.data.product_details.slice(0, 10)
+        })
 
         const allCategories = await getAllCategories();
         this.setState({
             categories: allCategories.data.category_details
         })
-        console.log('All categories inside state', this.state.categories);
-
-
+        
         const allColors = await getAllColors();
         this.setState({
             colors: allColors.data.color_details
         })
     }
 
+    // For getting products by rating
     starRatingHandler = async () => {
         const starRatingProducts = await getProductsByRating()
         this.setState({
@@ -66,6 +67,7 @@ export class ProductPage extends Component {
         })
     }
 
+    // High to low price handler
     highToLowHandler = async () => {
         const highToLowPriceProducts = await getDescendingProducts()
         this.setState({
@@ -73,6 +75,7 @@ export class ProductPage extends Component {
         })
     }
 
+    // Low To High Price Handler
     lowToHighHandler = async () => {
         const lowToHighPriceProducts = await getAscendingProducts()
         this.setState({
@@ -80,20 +83,24 @@ export class ProductPage extends Component {
         })
     }
 
+    // Handler for page change
     handlePageChange = (pageNumber) => {
         this.setState({
             activePage: pageNumber
         })
     }
 
-    handleClick = async (el) => {
-        const categoryData = await getProductByCategory(el.category_id)
+    // For getting products according to category selected
+    handleClick = async (id, name) => {
+        const categoryData = await getProductByCategory(id)
         this.setState({
-            allProducts: categoryData.data.product_details
+            allProducts: categoryData.data.product_details,
+            categoryName: name
         })
 
     }
 
+    // For getting poducts according to color selected
     colorClick = async (el) => {
         const colorData = await getProductByColor(el.color_id)
         this.setState({
@@ -101,21 +108,25 @@ export class ProductPage extends Component {
         })
     }
 
+    // For getting all products
     handleAllProducts = async (el) => {
         const allImages = await getAllProducts();
-        this.setState({ allProducts: allImages.data.product_details })
+        this.setState({ allProducts: allImages.data.product_details ,
+        categoryName:'All Products'})
     }
 
-    handlePagination =  (Index) => {
-        // let tempAllProducts=this.state.AllProducts?this.state.AllProducts:[];
+    // Handler for pagination
+    handlePagination = (Index) => {
         let productResult = this.state.tempProducts.slice(Index * 10 - 10, Index * 10);
-         this.setState({
+        this.setState({
             allProducts: productResult
         })
     }
-    createPagination = () => {
+
+    // Below method for creating pagination
+    initiatePagination = () => {
         let table = [];
-        let pageNumber=this.state.tempProducts.length/10
+        let pageNumber = this.state.tempProducts.length / 10
         for (let i = 1; i <= pageNumber; i++) {
             table.push(
                 <li className="page-item">
@@ -130,6 +141,7 @@ export class ProductPage extends Component {
     render() {
         const categories = this.state.categories;
         const colors = this.state.colors;
+
 
         return (
             <div><Header login={localStorage.getItem('loginUserData') ? 'true' : 'false'} />
@@ -160,7 +172,8 @@ export class ProductPage extends Component {
                                     <div className="row">
                                         {categories.map(el => {
                                             return (
-                                                <div className="col-12 btn" onClick={() => { this.handleClick(el) }}>{el.category_name}<hr /></div>
+
+                                                <div className="col-12 btn" onClick={() => { this.handleClick(el.category_id, el.category_name) }}>{el.category_name}<hr /></div>
                                             )
                                         })}
                                     </div>
@@ -193,24 +206,18 @@ export class ProductPage extends Component {
 
                         {this.state.allProducts.length ? <div>
                             <div className="row mb-2" style={{ width: "100%" }}>
-                                <h2 style={{ float: "left" }}>{}All Categories</h2>
+                        <h2 style={{ float: "left" }}>{this.state.categoryName? this.state.categoryName:<h2>All Products</h2>}</h2>
                                 <p style={{ marginLeft: "40%" }}>Sort by</p>
                                 <button className="btn btn-light"><StarIcon onClick={this.starRatingHandler} /></button>
                                 <button className="btn btn-light"><ArrowUpwardIcon onClick={this.highToLowHandler} /></button>
                                 <button className="btn btn-light"><ArrowDownwardIcon onClick={this.lowToHighHandler} /></button>
                             </div>
-                            <AllProducts page={this.state.activePage} data={this.state.allProducts} />
-                            <div className="pagination" style={{ marginLeft: "35%" }}>
-                                {/* <Pagination
-                                    activePage={this.state.activePage}
-                                    itemsCountPerPage={8}
-                                    totalItemsCount={43}
-                                    pageRangeDisplayed={5}
-                                    onChange={this.handlePageChange.bind(this)}>
+                            
 
-                                </Pagination> */}
+                            <AllProducts page={this.state.activePage} data={this.state.allProducts} categories={this.state.categories}/>
+                            <div className="pagination" style={{ marginLeft: "35%" }}>
                                 <ul className="pagination">
-                                    {this.createPagination()}
+                                    {this.initiatePagination()}
                                 </ul>
                             </div></div> : <div className="container text-center mt-5"><CircularProgress color="inherit" /></div>}
                     </div>

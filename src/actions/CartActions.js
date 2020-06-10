@@ -1,3 +1,4 @@
+// Initiate Cart Count with 0
 export const cartCount=cartCount=>{
     return {
         type:'INITIAL_CART_COUNT',
@@ -13,7 +14,7 @@ export const addToCart=()=>{
     };
 };
 
-// Action Creator for Removing Item from cart
+// For Removing Item from cart
 export const removeFromCart = () =>{
     return {
         type: 'REMOVE_FROM_CART'

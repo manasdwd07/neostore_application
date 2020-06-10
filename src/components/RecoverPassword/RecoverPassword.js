@@ -29,6 +29,7 @@ export class RecoverPassword extends Component {
         }
     }
 
+    // Below Handlers for showing/hiding password in input field
     handleClickShowPassword = (e) => {
         this.setState({
             showPassword: !this.state.showPassword
@@ -40,6 +41,7 @@ export class RecoverPassword extends Component {
         })
     }
 
+    // Submit handler for onClick event 
     handleSubmit = async (e) => {
         e.preventDefault();
         if (isNaN(this.state.authCode)) {
@@ -136,9 +138,6 @@ export class RecoverPassword extends Component {
                                     id="outlined-adornment-password"
                                     type="text"
                                     name="password"
-                                    // onChange={this.handleChange}
-                                    // value={this.state.password}
-                                    // type={this.state.showPassword ? 'text' : 'password'}
                                     type="text"
                                     endAdornment={<InputAdornment position="end">
                                         <Icon
@@ -166,8 +165,6 @@ export class RecoverPassword extends Component {
                                     id="outlined-adornment-password"
                                     type="text"
                                     name="password"
-                                    // onChange={this.handleChange}
-                                    // value={this.state.password}
                                     type={this.state.showPassword ? 'text' : 'password'}
 
                                     endAdornment={
@@ -194,8 +191,6 @@ export class RecoverPassword extends Component {
                                     id="outlined-adornment-password"
                                     type="text"
                                     name="password"
-                                    // onChange={this.handleChange}
-                                    // value={this.state.password}
                                     type={this.state.showPassword ? 'text' : 'password'}
 
                                     endAdornment={

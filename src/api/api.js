@@ -1,7 +1,7 @@
 
 import axios from 'axios';
 
-import React from 'react';
+
 
 // For getting Carousel Images on homepage
 export const CarouselImages=()=> {

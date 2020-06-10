@@ -13,13 +13,14 @@ export class Footer extends Component {
         }
     }
 
+    // Getting footer data on component mount
     componentDidMount(){
         const data=axios.get(`${URL}getData`)
         .then(res=>{
             this.setState({
                 footerData:res.data.company_details
             })
-            console.log(this.state.footerData)
+            
         })
         .catch(err=>{
             alert(`Error: ${err}`)
@@ -34,22 +35,24 @@ export class Footer extends Component {
 
     }
     
+    // Below Handler for opening terms and conditions in blank tab
     termsAndConditions=(e)=>{
         let result = axios.get(`${URL}getTermsAndConditions`)
             .then(res=>{
                 window.open(`${URL}${res.data.termsAndConditions_details[0].fileName}`,'_blank')
             }).catch(err=>{
-                console.log('invoice error ',err);
+                alert('invoice error ',err);
                 
             })
     }
 
+    // Below handler for opening guarentee details in blank tab
     guarentee=(e)=>{
         let result = axios.get(`${URL}getGuarantee`)
             .then(res=>{
                 window.open(`${URL}${res.data.guarantee_details[0].fileName}`,'_blank')
             }).catch(err=>{
-                console.log('invoice error ',err);
+                alert('invoice error ',err);
                 
             })
     }

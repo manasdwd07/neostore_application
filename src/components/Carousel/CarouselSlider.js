@@ -2,12 +2,17 @@ import React from 'react';
 import {URL} from '../../api/api';
 import Carousel from 'react-bootstrap/Carousel';
 import sweetalert2 from 'sweetalert2';
+import {withRouter} from 'react-router-dom';
 
+// Functional Component which obtains the carousel slides
 const CarouselSlider = props => {
+   
     return (
+        
         <Carousel>
             {props.data.map((item, i) => {
                 return (
+                    
                     <Carousel.Item>
                         <img
                             className="d-block w-100"
@@ -21,8 +26,9 @@ const CarouselSlider = props => {
                                     'icon':'success'
                                 });
                                 setTimeout(()=>{
-                                    window.location=('/products')
-                                },2000) 
+                                    props.history.push(`/products/${item.category_id}`)
+                                    // props.history.push(`/products/${item.category_id}`)
+                                },1000) 
                             }
                             }
 
@@ -34,5 +40,5 @@ const CarouselSlider = props => {
     );
 };
 
-export default CarouselSlider;
+export default withRouter(CarouselSlider) ;
 

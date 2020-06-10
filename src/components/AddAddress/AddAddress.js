@@ -23,9 +23,10 @@ export class AddAddress extends Component {
             pincodeErrorMessage:''
         }
     }
+
+    // Submit Handler for onClick Event
     submitHandler=async(e)=>{
         e.preventDefault();
-        // const [address,pincode,city,state,country]=this.state
         const address=this.state.address;
         const pincode=this.state.pincode;
         const city=this.state.city;

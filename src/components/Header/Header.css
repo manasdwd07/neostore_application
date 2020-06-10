@@ -11,8 +11,12 @@
 .top_header_buttons{
     color: white;
     font-size: 20px;
+    text-decoration: none;
     
     
+}
+.top_header_buttons:hover{
+    color:white
 }
 .top_header_searchBox{
     background-color: white;

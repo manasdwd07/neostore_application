@@ -14,13 +14,15 @@ export class ForgotPassword extends Component {
 
     }
 
+    // onChange Handler for Forgot Password
     changeHandler = (e) => {
         this.setState({
             email: e.target.value
         })
-        console.log(`email:${this.state.email}`)
+        
     }
 
+    // onSubmit Handler for forgot password
     submitHandler = async (e) => {
         const mailformat = /^([a-zA-Z])+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         e.preventDefault();
@@ -67,7 +69,7 @@ export class ForgotPassword extends Component {
                     <div className="card-header"><h1 className="text-center">Recover Password</h1></div>
                     <hr />
                     <div className="card-body">
-                        {/* <FormControl error={this.state.emailErr?true:false}> */}
+                        
                             <input type="text" className="form-control" placeholder="Enter your email" onChange={(e) => this.changeHandler(e)} />
                             <span className="form-helper-text text-danger">{this.state.emailErr}</span><br/>
                             <button type="submit" onClick={(e) => this.submitHandler(e)} className="btn btn-primary m-3">Submit</button>

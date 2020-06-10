@@ -16,6 +16,7 @@ export class ContactForm extends Component {
 
     }
 
+    // Submit Handler for onClick Event in Contact form submit
     submitHandler = (e) => {
         e.preventDefault();
 

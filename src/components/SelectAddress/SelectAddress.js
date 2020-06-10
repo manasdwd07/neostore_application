@@ -20,11 +20,13 @@ export class SelectAddress extends Component {
         this.state = {
             userAddress: [],
             checked: false,
-            id: ''
+            id: '',
+            show:false
         }
 
     }
 
+    // For getting address details on component mount
     componentDidMount() {
         const result = getCustomerAddress()
             .then(res => {
@@ -45,6 +47,7 @@ export class SelectAddress extends Component {
             })
     }
 
+    // For handling select address from selected address
     selectAddress = (el) => {
         const data={
             'address':`${el.address}`,
@@ -56,29 +59,20 @@ export class SelectAddress extends Component {
             'pincode':`${el.pincode}`,
 
         }
-        
         const result=updateAddress(data)
         .then(res=>{
-            // alert('You can proceed to buy now')
-            const data=localStorage.getItem('cart') ? localStorage.getItem('cart'):[];
-            console.log('data in cart' , JSON.parse(data))
-            
-            const data1=data ? [{...JSON.parse(data),flag:'checkout'}]:[]
-
-            const rest=addToCartApi(data1)
-            .then(result=>{
-                
-                alert('You can proceed to buy now')
-            }).catch(err=>{
-                alert(`OOps.. some error occured. Details: ${err}`)
-            })
+            this.setState({show:true})
+          alert('You Can Proceed to buy now')  
         }).catch(err=>{
             alert(`Oops... some error occured. Details : ${err}`)
         })
 
         
 
-    }
+    }   
+
+
+    // Handler for radio input selection
 
     radioHandler = (e, id) => {
         !this.state.id? this.setState({
@@ -87,9 +81,23 @@ export class SelectAddress extends Component {
         }) : this.setState({ id:id,checked:!this.state.checked })
     }
 
+    // Proceed to checkout handler for onClick event
     proceedCheckout = (e) => {
-
-
+        e.preventDefault();
+        const data=localStorage.getItem('cart') ? localStorage.getItem('cart'):[];
+            
+            const data1=data ? JSON.parse(data):[]
+            data1.push({flag:'checkout'})
+            const rest=addToCartApi(data1)
+            .then(result=>{
+                
+                localStorage.setItem('cart',[[]])
+                this.props.history.push('/thanksPage')
+                this.setState({show:true})
+            }).catch(err=>{
+                alert(`OOps.. some error occured. Details: ${err}`)
+            })
+        
     }
 
     render() {
@@ -135,17 +143,6 @@ export class SelectAddress extends Component {
                                     </div>
                                     <div className="row m-1">
                                         <div className="col-2">
-                                            {/* <input type="radio"  name="select" value={Math.random}>Select</input>
-                                            <option selected="selected">Select</option> */}
-                                            {/* <input type="radio" onClick={(e)=>this.radioHandler(el.address_id)} checked={this.state.checked} value="select" id={el.address_id} />
-                                            <label>Select</label> */}
-
-                                            {/* <FormControl>
-                                                <RadioGroup aria-label="gender" name="gender1" onChange={(e) => this.radioHandler(el.address_id)}>
-                                                    <FormControlLabel value="select" control={<Radio />} label="Select" />
-                                                </RadioGroup>
-                                            </FormControl> */}
-                                            
                                             <input type="checkbox" onChange={(e)=>this.selectAddress(el)}/>
                                         </div>
                                         <div className="col-10" >
@@ -161,7 +158,7 @@ export class SelectAddress extends Component {
                             </div>}
                         <div className="col-12 mt-3 mb-2">
                             <Link to="/addAddress" className="btn btn-light">Add Address</Link>
-                            <Link to="/thanksPage" className="btn btn-light" onClick={(e) => this.proceedCheckout(e)} >Proceed to buy</Link>
+                            <button className="btn" disabled={!this.state.show} onClick={(e)=>this.proceedCheckout(e)}>Proceed to buy</button>
                         </div>
                     </div>
 

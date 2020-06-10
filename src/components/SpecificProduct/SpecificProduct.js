@@ -13,7 +13,10 @@ import EmailIcon from '@material-ui/icons/Email';
 import Swal from 'sweetalert2';
 import { addToCart, cartCount } from '../../actions/CartActions';
 import { connect } from 'react-redux';
-
+import Rating from "@material-ui/lab/Rating";
+import { LinearScale } from '@material-ui/icons';
+import './ProductCard.css';
+import ReactImageMagnify from 'react-image-magnify';
 
 
 class SpecificProduct extends Component {
@@ -21,21 +24,23 @@ class SpecificProduct extends Component {
         super(props);
         this.state = {
             data: {},
-            cartCount:0
+            cartCount: 0,
+            showDetail:true
         }
     }
+
+    // For gettting product details on component mounting
     async componentDidMount() {
         const productId = localStorage.getItem('specificProductId');
-        console.log(('productId:-', productId));
 
         const specificProduct = await getSpecificProduct(productId);
         this.setState({
             data: specificProduct.data.product_details[0]
         })
-        console.log('specific product data:- ', this.state.data);
 
     }
 
+    // Add to cart handler
     addToCart = async (id, data) => {
         this.props.addToCart(id);
 
@@ -85,7 +90,6 @@ class SpecificProduct extends Component {
                 icon: "warning",
                 timer: 2000
             });
-            console.log(error);
         }
     };
 
@@ -98,15 +102,48 @@ class SpecificProduct extends Component {
                 <Header login={localStorage.getItem('loginUserData') ? 'true' : 'false'} />
                 {this.state.data ?
                     <div className="container mt-5 mb-5">
-                        {/* <div className="row">
-                            <div className="col-6"> */}
                         {this.state.data.product_image ?
                             <div className="container">
                                 <div className="row">
-                                    <div className="col-6 text-left">
-                                        <img src={`${URL}${productData.product_image}`} width="100%" />
+                                    <div className="col-6 text-left" onMouseEnter={()=>{this.setState({showDetail:false})}} onMouseLeave={()=>{this.setState({showDetail:true})}}>
+                                        <ReactImageMagnify
+                                            {...{
+                                                smallImage: {
+                                                    alt: "product",
+                                                    src: URL + productData.product_image,
+                                                    width: 450,
+                                                    height: 300
+                                                },
+                                                largeImage: {
+                                                    src: URL + productData.product_image,
+                                                    width: 2000,
+                                                    height: 4000,
+                                                },
+                                            }}
+                                        />
+                                        <div className="d-flex justify-content-around pt-2 pb-2">
+                                            {this.state.data.subImages_id.product_subImages.map((item) => {
+                                                return (
+                                                    <div>
+                                                        <img
+                                                            src={
+                                                                URL + item
+                                                            }
+                                                            alt="sofa"
+                                                            style={{ width: "80px", height: "50px" }}
+                                                            onClick={() =>
+                                                                this.setState({
+                                                                    mainImage: item,
+                                                                })
+                                                            }
+                                                        />
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
                                     </div>
-                                    <div className="col-6">
+
+                                    {this.state.showDetail===true ? <div className="col-6">
                                         <h1>{productData.product_name}</h1>
                                         <div>
                                             <StarRatingComponent
@@ -128,10 +165,51 @@ class SpecificProduct extends Component {
 
                                         <div className="row mt-3" >
                                             <div className="col-4"><button className="btn btn-info" onClick={() => this.addToCart(productData.product_id, productData)}>ADD TO CART</button></div>
-                                            <div className="col-7"><button className="btn btn-warning">RATE PRODUCT</button></div>
-
+                                            
+                                            <div className="col-7">
+                                                <button
+                                                    className="btn btn-warning m-1"
+                                                    disabled={localStorage.getItem("loginUserData") ? false : true}
+                                                    data-toggle="modal"
+                                                    data-target="#myModal"
+                                                >
+                                                    GIVE RATING
+                                             </button>
+                                            </div>
                                         </div>
-                                    </div>
+
+
+                                        
+                                        <div class="modal fade" id="myModal">
+                                            <div class="modal-dialog modal-sm modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Rating</h4>
+                                                        <button type="button" class="close" data-dismiss="modal">
+                                                            &times;
+                                                        </button>
+                                                    </div>
+
+                                                    <div class="modal-body">
+                                                        <Rating name="read-only" onChange={this.handleRating} />
+                                                    </div>
+
+                                                    <div class="modal-footer text-center">
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-primary"
+                                                            onClick={this.handleRatingSubmit}
+                                                            disabled={false}
+                                                            data-dismiss="modal"
+                                                        >
+                                                            Give Rating
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>:null}
                                 </div>
                             </div>
 
@@ -143,9 +221,7 @@ class SpecificProduct extends Component {
 
 
                             : <div className="container text-center mt-5 mb-5"><CircularProgress color="inherit" /></div>}
-                        {/* </div> */}
-
-                        {/* </div> */}
+                        
                     </div> : <div className=" container text-center m-5">
                         <CircularProgress color="inherit" />
                     </div>}

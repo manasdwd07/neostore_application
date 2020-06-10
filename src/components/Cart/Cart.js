@@ -31,7 +31,7 @@ export class Cart extends Component {
     }
 
     
-    async componentDidMount(){
+     componentDidMount(){
         try{
             this.getCartData();
         }catch(error){
@@ -135,29 +135,21 @@ export class Cart extends Component {
 
     //   -----------------
 
-    proceedToBuyHandler=()=>{
-        
-    }
-
-
-
-  
-
-    render() {
+      render() {
         const steps = ['Cart', 'Delivery Address'];    
         const data1 = localStorage.getItem('loginUserData');
 
 
         // ------------------------------------
         let orderTotal = 0
-        this.state.cartData ? orderTotal = this.state.cartData
+        this.state.cartData !== null ? orderTotal = this.state.cartData
         .map(val => {return (val.product_cost * val.quantity)})
         .reduce((sum, product_cost) => {return Number(sum) + Number(product_cost)}, 0) : orderTotal = 0;
         
         const gst = Math.round(orderTotal / 100 * 5);
         const total = Number(gst) + Number(orderTotal) 
 
-        // -----------------------------------------
+        // -------------------------------------
 
         return (
             <div><Header login={localStorage.getItem('loginUserData') ? 'true' : 'false'} />
@@ -232,7 +224,7 @@ export class Cart extends Component {
                                 </div>
                             </div>}
                         </div>
-                        {this.state.cartData ? 
+                        {Array.isArray(this.state.cartData) ? 
                             <div className="col-4 mb-3">
                             <div className="container">
                                 <div><h2>Review Order</h2></div>

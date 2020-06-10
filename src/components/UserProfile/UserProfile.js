@@ -20,11 +20,13 @@ export class OrderPage extends Component {
         this.state={
             userData:{}
         }
-    }
+    }   
 
-   componentDidMount(){
-        const profileData= getProfileData()
-        .then((res)=>{console.log(res.data.customer_proile);
+
+    // For getting user profile data on component mount
+   async componentDidMount(){
+        const profileData= await getProfileData()
+        .then((res)=>{
         
             this.setState({
                 userData:res.data.customer_proile

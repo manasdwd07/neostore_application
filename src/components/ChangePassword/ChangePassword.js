@@ -9,14 +9,10 @@ import userIcon from '../../assets/images/profile-placeholder.png';
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "@material-ui/core/Icon";
 import Header from '../Header/Header';
-// import Input from "@material-ui/core/Input";
-// import FilledInput from "@material-ui/core/FilledInput";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
-// import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
-// import TextField from "@material-ui/core/TextField";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import FormHelperText from '@material-ui/core/FormHelperText'
@@ -40,13 +36,14 @@ class ChangePassword extends Component {
     }
 
 
-    
+    // Handler for onChange events
     handleChange = (e) => {
         const { name, value } = e.target;
         this.setState({ [name]: value });
 
     }
 
+    // Handler for showing and hiding password from input boxes
     handleClickShowPassword = () => {
         this.setState({
             showPassword: !this.state.showPassword
@@ -58,7 +55,7 @@ class ChangePassword extends Component {
         })
     }
 
-
+    // For handling old password change and errors
     handleoldpassChange = (e) => {
         if (e.target.value == '') {
             this.setState({ oldpassError: 'Please enter Old password' })
@@ -68,7 +65,7 @@ class ChangePassword extends Component {
         }
     }
 
-
+    // For handling new password change and errors
     handleNewPassChange = (e) => {
         const passwordFormat = /^[A-Za-z]\w{7,11}$/;
         if (e.target.value == '') {
@@ -82,7 +79,7 @@ class ChangePassword extends Component {
         }
     }
 
-
+    // Handle confirm password change and errors
     handleCPassChange = (e) => {
 
         if (e.target.value == '') {
@@ -99,6 +96,7 @@ class ChangePassword extends Component {
         }
     }
 
+    // Handler for onClick event for changing password
     submitHandler=async ()=>{
         const data={
             "oldPass":`${this.state.oldPassword}`,

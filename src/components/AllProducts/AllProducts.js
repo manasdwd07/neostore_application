@@ -18,17 +18,17 @@ class AllProducts extends Component {
             cartCount: 0
         }
     }
-
-    componentDidMount=()=>{
-        const count=localStorage.getItem('cart')
-        if(count){
-            this.setState({cartCount:count.length})
+    // Getting Cart Count on Mounting
+    componentDidMount = () => {
+        const count = localStorage.getItem('cart')
+        if (count) {
+            this.setState({ cartCount: count.length })
         }
     }
 
-
+    // Below method for obtaining specific product details page
     specificProduct = (id) => {
-        console.log('productIdChipkaya:-', id);
+
         this.setState({
             id: id
         })
@@ -38,7 +38,8 @@ class AllProducts extends Component {
 
 
 
-    // ----------------------------------
+    
+    // Below method to add data to cart
     addToCart = async (id, data) => {
         this.props.addToCart(id);
 
@@ -94,7 +95,7 @@ class AllProducts extends Component {
                 icon: "warning",
                 timer: 2000
             });
-            console.log(error);
+            
         }
     };
     // -----------------------------------
@@ -104,7 +105,7 @@ class AllProducts extends Component {
 
     render() {
         const images = this.props.data
-        console.log('popproductsprops', this.props)
+        
 
         return (
             <div className="container">
@@ -115,10 +116,11 @@ class AllProducts extends Component {
 
                         return (
                             <div className="col-lg-4">
+
                                 <div className="card" style={{ marginBottom: "5%" }}>
                                     <div><img className="card-img-top" src={`${URL}${el.product_image}`} height="150px" /></div><br />
                                     <div className="card-body">
-                                        <div onClick={(id) => this.specificProduct(el._id)}><Link to="/specificProduct" style={{ fontSize: 'smaller' }}>{el.product_name}</Link></div><br />
+                                        <div onClick={(id) => this.specificProduct(el._id)}><Link to="/specificProduct" className="btn-light btn" style={{ fontSize: 'smaller' }}>{el.product_name}</Link></div><br />
                                         <div><i className="fa fa-rupee"></i>&nbsp;<span><b>{el.product_cost}</b></span></div><br />
                                         <div><button onClick={() => this.addToCart(el._id, el)} className="btn btn-danger">Add To Cart</button></div>
                                         <div>
@@ -144,12 +146,12 @@ class AllProducts extends Component {
     }
 }
 
-
+// Dispatching addToCart as an action
 const mapDispatchToProps = dispatch => {
     return {
         addToCart: (id) => {
             dispatch(addToCart(id));
-        }   
+        }
 
     };
 };

@@ -10,6 +10,7 @@ import sweetalert2 from 'sweetalert2';
 import Swal from 'sweetalert2';
 import { addToCart, searchProductId } from '../../actions/CartActions';
 import { connect } from 'react-redux';
+import { CircularProgress } from '@material-ui/core';
 
 
 class Homepage extends Component {
@@ -21,15 +22,16 @@ class Homepage extends Component {
         }
     }
 
+    // For getting carousel images on component mount
+
     async componentDidMount() {
         const images = await CarouselImages();
-        console.log("images..... ", images.data.category_details);
         this.setState({
             carouselImages: images.data.category_details
         })
 
 
-
+        // For getting popular products on homepage
         const data = await getPopularProducts();
         this.setState({
             products: data.data.product_details
@@ -46,7 +48,7 @@ class Homepage extends Component {
     }
 
 
-    // -----------------------------------------------------
+    
 
 
     render() {
@@ -57,10 +59,10 @@ class Homepage extends Component {
                 <Header login={localStorage.getItem('loginUserData') ? 'true' : 'false'} />
                 <br />
                 <br />
-                <CarouselSlider data={this.state.carouselImages} />
+                {this.state.carouselImages ? <CarouselSlider data={this.state.carouselImages} />:<CircularProgress color='primary'/>}
                 <br />
                 <br />
-                <PopularProducts data={this.state.products} />
+                {this.state.products ? <PopularProducts data={this.state.products} />:<CircularProgress color='primary'/>}
             </div>
         )
     }

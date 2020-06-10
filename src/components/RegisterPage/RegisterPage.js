@@ -49,9 +49,22 @@ export class RegisterPage extends Component {
     }
 
 
-
+    // Handler for onSubmit event on register form
     handleRegister = async (e) => {
         e.preventDefault();
+        if(this.state.first_name=='' || this.state.last_name == '' || this.state.email=='' || this.state.pass == '' || this.state.confirmPass=='' || this.state.gender=='' || this.state.phone_no=='' ){
+            this.setState({
+                firstNameErrorText:'Field cant be empty',
+                lastNameErrorText:'Field cant be empty',
+                emailErrorText:'Field cant be empty',
+                passwordErrorText:'Field cant be empty',
+                confirmPassErrorText:'Field cant be empty',
+                phoneNoErrorText:'Field cant be empty',
+                genderErrorText:'Please select gender'
+
+            })
+
+        }
         
         if(this.state.firstNameErrorText==""&&this.state.lastNameErrorText==""&&this.state.emailErrorText==""&&this.state.passwordErrorText==''&&this.state.confirmPassErrorText==''&&this.state.phoneNoErrorText==''&&this.state.genderErrorText==""){
         let userInfo = {
@@ -76,22 +89,23 @@ export class RegisterPage extends Component {
 
             }).catch((err) => {
                 sweetalert2.fire({
-                    "title": "OOPS... Some error occured",
-                    'text': `Please re-check the entries.. Details of error: ${err}`,
-                    'icon': 'warning'
+                    "title": "OOPS... Entries must be properly validated",
+                    'icon': 'error'
                 })
             })
         }
         else
         {
-            sweetalert2.fire({
+                        sweetalert2.fire({
                 "title": 'OOPS... Not a validated form',
                 'text': 'Please check the fields again',
                 "icon": 'error'
             })
+
         }
     }
 
+    // For handling onChange event in input fields
     handleChangeInput = (e) => {
         switch (e.target.name) {
             case 'first_name': this.setState({ first_name: e.target.value })
@@ -119,6 +133,7 @@ export class RegisterPage extends Component {
 
     }
 
+    // Below handlers for showing/hiding passwords in input field
     handleClickShowPassword = (e) => {
         this.setState({
             showPassword: !this.state.showPassword
@@ -130,6 +145,7 @@ export class RegisterPage extends Component {
         })
     }
 
+    // Handle first name error
     handleFirstNameError = (e) => {
         const nameformat = /[^a-zA-z]/gi;
         if (e.target.value=="") {
@@ -143,7 +159,8 @@ export class RegisterPage extends Component {
         }
     }
 
-    handleLastNameError = (e) => {
+    // Handle last name error
+    handleLastNameError = (e)   => {
         const nameformat = /[^a-zA-z]/gi;
         if (e.target.value == "") {
             this.setState({ lastNameErrorText: 'Please enter name' })
@@ -156,6 +173,7 @@ export class RegisterPage extends Component {
         }
     }
 
+    // Handle email error
     handleEmailError = (e) => {
             
         const mailformat = /^([a-zA-Z])+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -173,6 +191,7 @@ export class RegisterPage extends Component {
 
     }
 
+    // For handling password error
     handlePasswordError = (e) => {
         
         if (e.target.value == "") {
@@ -183,6 +202,7 @@ export class RegisterPage extends Component {
         }
     }
 
+    // For handling confirm password error
     handleConfirmPasswordError=(e)=>{
         const passwordFormat = /^[A-Za-z]\w{7,11}$/;
         if(this.state.pass=="" && e.target.value==""){
@@ -202,6 +222,7 @@ export class RegisterPage extends Component {
         }
     }
 
+    // For handling phone number errors
     handlePhoneNoError=(e)=>{
         const numberFormat = /[^0-9]/gi;
         if (e.target.value == "") {
@@ -219,11 +240,12 @@ export class RegisterPage extends Component {
         }
     }
 
-    handleGenderError=(e)=>{
-        if(e.target.value==''){
-            this.setState({genderErrorText:'Please select your gender'})
-        }
-    }
+    // Gender Selection error
+    // handleGenderError=(e)=>{
+    //     if(e.target.value==''){
+    //         this.setState({genderErrorText:'Please select your gender'})
+    //     }
+    // }
 
     render() {
         return (
@@ -233,6 +255,7 @@ export class RegisterPage extends Component {
                     <div className="col-lg-6 ">
                         <div className="btn mt-2 text-center" style={{marginLeft:"50%"}}>
                             <GoogleLogin
+                                render={props => <button className="btn-danger btn" onClick={props.onClick} style={{ width: '100%' }}>Sign Up With Google</button>}
                                 clientId="206257001886-huhdn3bomsbobi025n76vo8qf6gdn8tk.apps.googleusercontent.com"
                                  cookiePolicy={'single_host_origin'}
                             />,
@@ -240,7 +263,7 @@ export class RegisterPage extends Component {
                     </div>
                     <div className="col-lg-6 mt-3">
                         <div className="btn btn-primary">
-                            Sign in with Facebook
+                            Sign Up with Facebook
                         </div>
                     </div>
 
@@ -261,9 +284,6 @@ export class RegisterPage extends Component {
                                         type="text"
                                         name="first_name"
                                         autoComplete="off"
-
-                                        // value={this.state.password}
-
                                         endAdornment={
                                             <InputAdornment position="end">
                                                 <Icon
@@ -285,8 +305,6 @@ export class RegisterPage extends Component {
                                         type="text"
                                         name="last_name"
                                         autoComplete="off"
-                                        // value={this.state.password}
-
                                         endAdornment={
                                             <InputAdornment position="end">
                                                 <Icon
@@ -309,9 +327,6 @@ export class RegisterPage extends Component {
                                         type="text"
                                         name="email"
                                         onChange={this.handleChange}
-                                        
-                                        // value={this.state.password}
-
                                         endAdornment={
                                             <InputAdornment position="end">
                                                 <Icon
@@ -335,8 +350,6 @@ export class RegisterPage extends Component {
                                         name="password"
                                         type={this.state.showPassword ? 'text' : 'password'}
                                         onChange={this.handleChange}
-                                        // value={this.state.password}
-
                                         endAdornment={
                                             <InputAdornment position="end">
                                                 <Icon
@@ -361,8 +374,6 @@ export class RegisterPage extends Component {
                                         type={this.state.showPassword ? 'text' : 'password'}
                                         name="confirmPass"
                                         onChange={this.handleChange}
-                                        // value={this.state.password}
-
                                         endAdornment={
                                             <InputAdornment position="end">
                                                 <Icon
@@ -387,9 +398,6 @@ export class RegisterPage extends Component {
                                         type="text"
                                         name="mobile_no"
                                         onChange={this.handleChange}
-
-                                        // value={this.state.password}
-
                                         endAdornment={
                                             <InputAdornment position="end">
                                                 <Icon
@@ -423,7 +431,7 @@ export class RegisterPage extends Component {
                                 <Button color="primary" variant="contained" onClick={this.handleRegister}>Register</Button>
                                 
                             </FormControl>
-                            {/* </form> */}
+                            
                         </div>
 
 

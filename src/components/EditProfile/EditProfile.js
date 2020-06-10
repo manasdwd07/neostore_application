@@ -42,10 +42,11 @@ export class EditProfile extends Component {
         }
     }
 
+    // Getting user profile data on component mounting
     componentDidMount() {
         const profileData = getProfileData()
             .then((res) => {
-                console.log(res.data.customer_proile);
+                
 
                 this.setState({
                     userData: res.data.customer_proile
@@ -54,13 +55,15 @@ export class EditProfile extends Component {
 
     }
 
+    // Birthdate change handler
     birthdateHandler = (e) => {
         this.setState({
             birthdate: Date.parse(e.target.value)
         })
-        console.log('birthdate', this.state.birthdate)
+        
     }
 
+    // Image upload handler
     imgHandler = (e) => {
         let files = e.target.files;
         let reader = new FileReader();
@@ -82,6 +85,7 @@ export class EditProfile extends Component {
         
     }
 
+    // onClick Handler for edit Profile
     editHandler=async ()=>{
         
         const result=await editUserProfile(this.state.submitData)
@@ -135,7 +139,7 @@ export class EditProfile extends Component {
                                             defaultValue={this.state.userData.first_name}
 
                                             onChange={(e) => { this.setState({ first_name: e.target.value }) }}
-                                            // value={this.state.password}
+                                            
 
 
                                             labelWidth={70}
@@ -150,7 +154,7 @@ export class EditProfile extends Component {
                                             name="last_name"
                                             autoComplete="off"
                                             defaultValue={this.state.userData.last_name}
-                                            // value={this.state.password}
+                                            
 
                                             labelWidth={100}
                                         />
@@ -186,7 +190,7 @@ export class EditProfile extends Component {
                                             name="mobile_no"
                                             onChange={this.handleChange}
                                             defaultValue={this.state.userData.phone_no}
-                                            // value={this.state.password}
+                                            
 
 
                                             labelWidth={150}
@@ -203,10 +207,7 @@ export class EditProfile extends Component {
                                             type="text"
                                             name="email"
                                             onChange={this.handleChange}
-
-                                            // value={this.state.password}
                                             defaultValue={this.state.userData.email}
-
                                             labelWidth={100}
                                         />
                                         <FormHelperText id="component-error-text">{this.state.emailErrorText}</FormHelperText>
@@ -214,13 +215,7 @@ export class EditProfile extends Component {
                                         <input type='file' className="mb-2 mt-1" onChange={(e) => { this.imgHandler(e) }} id="img" name="profilePicture" accept="image/*" />
                                         <button className="btn btn-info mt-3" onClick={this.editHandler}>Edit</button>
                                     </FormControl>
-                                    
-
-
-
-
                                 </div>
-
                             </div>
                         </div> : <div className="row container text-center m-5"><CircularProgress color="inherit" /></div>}
                 </div>
