@@ -98,7 +98,7 @@ export class OrderPage extends Component {
                                                     <div className="row m-2">
                                                         {el.product_details.map((product)=>{
                                                             return(
-                                                                <div className="p-2"><img src={URL + product.product_details[0].product_image} alt={el.product_details[0].product_details[0].product_name} width="150px" height="100px" /></div>
+                                                                <div className="p-2" key={product}><img src={URL + product.product_details[0].product_image} alt={el.product_details[0].product_details[0].product_name} width="150px" height="100px" /></div>
                                                             )
                                                         })}
                                                         
