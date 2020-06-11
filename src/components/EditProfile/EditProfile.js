@@ -39,9 +39,9 @@ export class EditProfile extends Component {
     }
 
     // Getting user profile data on component mounting
-    componentDidMount() {
-        const profileData = getProfileData()
-        profileData.then((res) => {
+    async componentDidMount() {
+         await getProfileData()
+        .then((res) => {
 
 
             this.setState({
@@ -84,8 +84,8 @@ export class EditProfile extends Component {
     // onClick Handler for edit Profile
     editHandler = async () => {
 
-        const result = await editUserProfile(this.state.submitData)
-        result.then(res => {
+        await editUserProfile(this.state.submitData)
+        .then(res => {
             sweetalert2.fire({
                 'title': 'Profile edited successfully',
                 'icon': 'success'

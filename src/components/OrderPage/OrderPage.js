@@ -23,23 +23,23 @@ export class OrderPage extends Component {
 
     componentDidMount =  () => {
         
-            if(localStorage.getItem('loginUserData')){let result =  getOrderDetails()
-            result.then(res=>{
+            if(localStorage.getItem('loginUserData')){ getOrderDetails()
+            .then(res=>{
                 
                 this.setState({
                     orderDetails: res.data.product_details,
                 })
             }) 
         .catch (error=> {
-            this.setState({orderDetails:''})
+            console.log(error)
         })}
     }
 
     handleDownloadInvoice = async (data) => {
         
         
-            let result = await getInvoiceOfOrder(data)
-            result.then(res=>{
+            await getInvoiceOfOrder(data)
+            .then(res=>{
                 window.open(`${URL}${res.data.receipt}`,'_blank')
             }).catch(err=>{
                 alert('invoice error ',err);
@@ -86,7 +86,7 @@ export class OrderPage extends Component {
                                         </div> :
                                         <div><h1 className="text-center">ORDERS</h1>
                                             {this.state.orderDetails ? this.state.orderDetails.map(el =>
-                                                <div className="container card m-3">
+                                                <div className="container card m-3" key={el._id}>
                                                     
                                                     <div className="row m-2">
                                                         <span style={{ fontSize: "large", color: "orange" }}>TRANSIT</span><span>&nbsp;Order by: {el._id}</span>

@@ -123,7 +123,7 @@ class SpecificProduct extends Component {
                                         <div className="d-flex justify-content-around pt-2 pb-2">
                                             {this.state.data.subImages_id.product_subImages.map((item) => {
                                                 return (
-                                                    <div>
+                                                    <div key={item}>
                                                         <img
                                                             src={
                                                                 URL + item
@@ -146,7 +146,7 @@ class SpecificProduct extends Component {
                                         <h1>{productData.product_name}</h1>
                                         <div>
                                             <StarRatingComponent
-                                                value={productData.product_rating}
+                                                value={Number(productData.product_rating)}
                                                 editing={false}
                                                 starCount={5}
                                                 name='rating' />
@@ -158,7 +158,7 @@ class SpecificProduct extends Component {
 
                                         <FacebookIcon color="primary" />&nbsp;
                                         <EmailIcon color="secondary" />&nbsp;
-                                        <WhatsAppIcon color={"action "} />&nbsp;
+                                        <WhatsAppIcon />&nbsp;
                                         <TwitterIcon color="primary" />&nbsp;
                                         <InstagramIcon color={"error"} />&nbsp;
 
@@ -179,24 +179,24 @@ class SpecificProduct extends Component {
 
 
                                         
-                                        <div class="modal fade" id="myModal">
-                                            <div class="modal-dialog modal-sm modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title">Rating</h4>
-                                                        <button type="button" class="close" data-dismiss="modal">
+                                        <div className="modal fade" id="myModal">
+                                            <div className="modal-dialog modal-sm modal-dialog-centered">
+                                                <div className="modal-content">
+                                                    <div className="modal-header">
+                                                        <h4 className="modal-title">Rating</h4>
+                                                        <button type="button" className="close" data-dismiss="modal">
                                                             &times;
                                                         </button>
                                                     </div>
 
-                                                    <div class="modal-body">
+                                                    <div className="modal-body">
                                                         <Rating name="read-only" onChange={this.handleRating} />
                                                     </div>
 
-                                                    <div class="modal-footer text-center">
+                                                    <div className="modal-footer text-center">
                                                         <button
                                                             type="button"
-                                                            class="btn btn-primary"
+                                                            className="btn btn-primary"
                                                             onClick={this.handleRatingSubmit}
                                                             disabled={false}
                                                             data-dismiss="modal"

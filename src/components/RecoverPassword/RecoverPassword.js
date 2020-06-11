@@ -99,8 +99,8 @@ export class RecoverPassword extends Component {
                 'newPass': `${this.state.password}`,
                 'confirmPass': `${this.state.confirmPassword}`
             }
-            const result = await recoverPassword(data)
-                result.then(res => {
+            await recoverPassword(data)
+                .then(res => {
 
                     sweetalert2.fire({
                         'text': 'Password changed successfully, you can now login'

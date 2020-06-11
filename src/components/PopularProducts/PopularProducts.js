@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 
 
 
+
 class PopularProducts extends Component {
     constructor(props) {
         super(props);
@@ -106,6 +107,7 @@ class PopularProducts extends Component {
                                                 editing={false}
                                                 starCount={5}
                                                 name='rating' />
+
 
                                         </div>
 

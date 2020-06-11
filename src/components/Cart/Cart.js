@@ -31,6 +31,7 @@ export class Cart extends Component {
      componentDidMount(){
         try{
             this.getCartData();
+            
         }catch(error){
             alert('Error in getting data')
         }
@@ -42,7 +43,7 @@ export class Cart extends Component {
         try{
             let result=localStorage.getItem('cart')
             ? JSON.parse(localStorage.getItem('cart'))
-            : null ;
+            : [] ;
             this.setState({
                 cartData:result
             });
@@ -61,6 +62,7 @@ export class Cart extends Component {
             });
         }catch(error){
             // handle error here
+            
         }
     }
 
@@ -167,7 +169,7 @@ export class Cart extends Component {
 
                         
                         {this.state.cartData.length>0 ? this.state.cartData.map(el =>
-                            <div className="container mt-3 mb-2">
+                            <div className="container mt-3 mb-2" key={el._id}>
                                 {/* <img src={`${URL}${el.product_id.product_image}`}/>
                                     <p>{el.product_id.product_desc}</p> */}
                                 <div className="row">

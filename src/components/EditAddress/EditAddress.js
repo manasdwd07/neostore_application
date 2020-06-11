@@ -54,8 +54,8 @@ export class EditAddress extends Component {
                     'state': `${state}`,
                     'country': `${country}`
                 }
-                const result = await editCustomerAddress(userData)
-                    result.then(res => {
+                await editCustomerAddress(userData)
+                    .then(res => {
                         sweetalert2.fire({
                             "title": 'Address edited successfully',
                             'text': 'Congratulations, your address has been edited',

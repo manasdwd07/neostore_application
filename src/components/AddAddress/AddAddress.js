@@ -50,8 +50,8 @@ export class AddAddress extends Component {
                 'state':`${state}`,
                 'country':`${country}`
             }
-            const result=await addCustomerAddress(userData)
-            result.then(res=>{
+            await addCustomerAddress(userData)
+            .then(res=>{
                 sweetalert2.fire({
                     "title": 'Address added successfully',
                     'text': 'Congratulations, your address has been added',

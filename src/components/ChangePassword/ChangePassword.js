@@ -102,8 +102,8 @@ class ChangePassword extends Component {
             "newPass":`${this.state.newPassword}`,
             "confirmPass":`${this.state.confirmPassword}`
         }
-        const result=await resetPassword(data)
-        result.then(res=>{
+        await resetPassword(data)
+        .then(res=>{
             sweetalert2.fire({
                 "title": 'Successfull',
                 'text': 'Password changed successfully',

@@ -20,10 +20,11 @@ export class OrderPage extends Component {
 
         }
     }
-    componentDidMount() {
+    async componentDidMount() {
 
-        const result = getCustomerAddress()
-            result.then(res => {
+        if(localStorage.getItem('loginUserData').length){
+            await getCustomerAddress()
+            .then(res => {
                 res.data.customer_address ?
                     this.setState({
                         userAddress: res.data.customer_address,
@@ -40,10 +41,17 @@ export class OrderPage extends Component {
                 })
             })
 
+        }
+        else{
+            sweetalert2.fire({
+                text:'Hey Guest, you are not logged in.. Kindly do so to proceed to buy',
+                icon:'warning'
+            })
+        }
     }
 
-    componentDidUpdate(){
-        getCustomerAddress()
+    async componentDidUpdate(){
+        await getCustomerAddress()
         .then(res=>{
             this.setState({
                 userAddress:res.data.customer_address
@@ -57,15 +65,15 @@ export class OrderPage extends Component {
         getCustomerAddress()
             .then(async res => {
                 if (this.state.userAddress.length > 0) {
-                    const result = await deleteAddress(id)
-                        result.then(async res => {
+                    await deleteAddress(id)
+                        .then(async res => {
                             sweetalert2.fire({
                                 'title': 'Address deleted successfully',
                                 'icon': 'success'
                             })
 
-                            const address = await getCustomerAddress()
-                                address.then(res => {
+                            await getCustomerAddress()
+                            .then(res => {
 
                                     res.data.customer_address.length ? this.setState({ userAddress: res.data.customer_address }) : this.setState({ userAddress: [] })
                                 })
@@ -75,8 +83,8 @@ export class OrderPage extends Component {
                                 'text': `Details of error: ${err}`,
                                 'icon': 'warning'
                             })
-                            const address = getCustomerAddress()
-                                address.then(res => {
+                             getCustomerAddress()
+                                .then(res => {
 
                                     res.data.customer_address.length ? this.setState({ userAddress: res.data.customer_address }) : this.setState({ userAddress: [] })
                                 })

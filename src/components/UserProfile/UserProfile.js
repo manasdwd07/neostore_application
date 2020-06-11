@@ -24,8 +24,8 @@ export class OrderPage extends Component {
 
     // For getting user profile data on component mount
    async componentDidMount(){
-        const profileData= await getProfileData()
-        profileData.then((res)=>{
+         await getProfileData()
+        .then((res)=>{
         
             this.setState({
                 userData:res.data.customer_proile

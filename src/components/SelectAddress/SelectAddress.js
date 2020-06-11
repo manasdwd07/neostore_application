@@ -3,7 +3,7 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Header from '../Header/Header';
-import { getCustomerAddress,updateAddress, addToCartApi } from '../../api/api';
+import { getCustomerAddress, updateAddress, addToCartApi } from '../../api/api';
 import sweetalert2 from 'sweetalert2';
 import { Link } from 'react-router-dom';
 
@@ -15,15 +15,16 @@ export class SelectAddress extends Component {
             userAddress: [],
             checked: false,
             id: '',
-            show:false
+            show: false
         }
 
     }
 
     // For getting address details on component mount
-    componentDidMount() {
-        const result = getCustomerAddress()
-            result.then(res => {
+    async componentDidMount() {
+        if (localStorage.getItem('loginUserData')) {
+            await getCustomerAddress()
+            .then(res => {
                 res.data.customer_address ?
                     this.setState({
                         userAddress: res.data.customer_address,
@@ -39,59 +40,66 @@ export class SelectAddress extends Component {
                     'icon': 'warning'
                 })
             })
+        }else
+        {
+            sweetalert2.fire({
+                'text':'Hey guest, kindly login to proceed',
+                'icon':'warning'
+            })
+        }
     }
 
     // For handling select address from selected address
     selectAddress = (el) => {
-        const data={
-            'address':`${el.address}`,
-            'address_id':`${el.address_id}`,
-            'city':`${el.city}`,
-            'country':`${el.country}`,
-            'state':`${el.state}`,
-            'isDeliveryAddress':true,
-            'pincode':`${el.pincode}`,
+        const data = {
+            'address': `${el.address}`,
+            'address_id': `${el.address_id}`,
+            'city': `${el.city}`,
+            'country': `${el.country}`,
+            'state': `${el.state}`,
+            'isDeliveryAddress': true,
+            'pincode': `${el.pincode}`,
 
         }
-        const result=updateAddress(data)
-        result.then(res=>{
-            this.setState({show:true})
-          alert('You Can Proceed to buy now')  
-        }).catch(err=>{
+        updateAddress(data)
+        .then(res => {
+            this.setState({ show: true })
+            alert('You Can Proceed to buy now')
+        }).catch(err => {
             alert(`Oops... some error occured. Details : ${err}`)
         })
 
-        
 
-    }   
+
+    }
 
 
     // Handler for radio input selection
 
     radioHandler = (e, id) => {
-        !this.state.id? this.setState({
+        !this.state.id ? this.setState({
             checked: !this.state.checked,
             id: id
-        }) : this.setState({ id:id,checked:!this.state.checked })
+        }) : this.setState({ id: id, checked: !this.state.checked })
     }
 
     // Proceed to checkout handler for onClick event
-    proceedCheckout = (e) => {
+    proceedCheckout = async(e) => {
         e.preventDefault();
-        const data=localStorage.getItem('cart') ? localStorage.getItem('cart'):[];
-            
-            const data1=data ? JSON.parse(data):[]
-            data1.push({flag:'checkout'})
-            const rest=addToCartApi(data1)
-            rest.then(result=>{
-                
-                localStorage.setItem('cart',[[]])
-                this.props.history.push('/thanksPage')
-                this.setState({show:true})
-            }).catch(err=>{
-                alert(`OOps.. some error occured. Details: ${err}`)
-            })
-        
+        const data = localStorage.getItem('cart') ? localStorage.getItem('cart') : [];
+
+        const data1 = data ? JSON.parse(data) : []
+        data1.push({ flag: 'checkout' })
+        await addToCartApi(data1)
+        .then(result => {
+
+            localStorage.setItem('cart', [[]])
+            this.props.history.push('/thanksPage')
+            this.setState({ show: true })
+        }).catch(err => {
+            alert(`OOps.. some error occured. Details: ${err}`)
+        })
+
     }
 
     render() {
@@ -137,7 +145,7 @@ export class SelectAddress extends Component {
                                     </div>
                                     <div className="row m-1">
                                         <div className="col-2">
-                                            <input type="checkbox" onChange={(e)=>this.selectAddress(el)}/>
+                                            <input type="checkbox" onChange={(e) => this.selectAddress(el)} />
                                         </div>
                                         <div className="col-10" >
                                             <Link to="/editAddress" onClick={localStorage.setItem('editAddress', JSON.stringify(el))} className="btn btn-primary px-3">Edit</Link>
@@ -152,7 +160,7 @@ export class SelectAddress extends Component {
                             </div>}
                         <div className="col-12 mt-3 mb-2">
                             <Link to="/addAddress" className="btn btn-light">Add Address</Link>
-                            <button className="btn" disabled={!this.state.show} onClick={(e)=>this.proceedCheckout(e)}>Proceed to buy</button>
+                            <button className="btn" disabled={!this.state.show} onClick={(e) => this.proceedCheckout(e)}>Proceed to buy</button>
                         </div>
                     </div>
 

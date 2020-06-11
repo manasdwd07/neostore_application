@@ -38,8 +38,8 @@ export class ForgotPassword extends Component {
             const data = {
                 "email": `${this.state.email}`
             }
-            const result = await forgotPassword(data)
-                result.then(res => {
+             await forgotPassword(data)
+                .then(res => {
                     localStorage.setItem('token', res.data.token)
                     sweetalert2.fire({
                         'text': 'Code has been sent'

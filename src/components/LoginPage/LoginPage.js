@@ -14,7 +14,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import MailIcon from '@material-ui/icons/Mail';
 import Header from '../Header/Header';
 import { Link } from 'react-router-dom';
-import { GoogleLogin } from 'react-google-login';
+// import { GoogleLogin } from 'react-google-login';
 
 
 
@@ -50,8 +50,8 @@ export class LoginPage extends Component {
             'pass': `${this.state.password}`
         }
 
-        const result = await checkLogin(userInfo)
-        result.then((res) => {
+        await checkLogin(userInfo)
+        .then((res) => {
             localStorage.setItem('loginUserData', JSON.stringify(res.data))
             sweetalert2.fire({
                 "title": 'Login successful',
@@ -115,9 +115,9 @@ export class LoginPage extends Component {
                 <div className="m-5">
                     <div className="row">
                         <div className="col-6">
-                            <div className="row text-right">
-                                <div className="col-12 mb-2">
-                                    <button className="btn btn-primary" style={{ width: "80%" }}>Login With facebook</button>
+                            <div className="row text-center">
+                                <div className="col-12 m-2">
+                                    <button className="btn btn-primary" style={{ width: "70%" }}>Login With facebook</button>
                                     {/* <FacebookLogin
                                         appId="1088597931155576"
                                         autoLoad={false}
@@ -128,9 +128,9 @@ export class LoginPage extends Component {
                                  */}
 
                                 </div>
-                                <div className="col-12 mb-2">
-
-                                    <GoogleLogin
+                                <div className="col-12 m-2">
+                                <button className="btn-danger btn" style={{ width: '70%' }}>Login With Google</button>
+                                    {/* <GoogleLogin
                                         clientId="529407280120-4nd4q9ls6d0pdop5htrq2hpjvap2qop4.apps.googleusercontent.com"
                                         buttonText="Login"
                                         render={props => <button className="btn-danger btn" onClick={props.onClick} style={{ width: '80%' }}>Login With Google</button>}
@@ -138,12 +138,12 @@ export class LoginPage extends Component {
                                         onFailure={this.responseGoogle}
                                         cookiePolicy={'single_host_origin'}
 
-                                    />
+                                    /> */}
 
-                                    ,
+                                    
                                 </div>
-                                <div className="col-12 mb-2">
-                                    <button className="btn btn-info" style={{ width: "80%" }}>Login with Twitter</button>
+                                <div className="col-12 m-2">
+                                    <button className="btn btn-info" style={{ width: "70%" }}>Login with Twitter</button>
                                 </div>
                             </div>
                         </div>

@@ -60,8 +60,8 @@ class Header extends Component {
 
 
     clickHandler = async (id) => {
-        const result = await getSpecificProduct(id);
-        result.then(res => {
+         await getSpecificProduct(id)
+        .then(res => {
             localStorage.setItem('specificProduct', id)
             this.props.history.push('/specificProduct')
         })

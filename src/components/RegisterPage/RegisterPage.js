@@ -71,8 +71,8 @@ export class RegisterPage extends Component {
             'gender': `${this.state.gender}`
         }
 
-        const result = await registerUser(userInfo)
-            result.then((res) => {
+        await registerUser(userInfo)
+            .then((res) => {
                 sweetalert2.fire({
                     "title": 'Registration successful',
                     'text': 'You can now login',

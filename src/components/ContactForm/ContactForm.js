@@ -39,8 +39,8 @@ export class ContactForm extends Component {
                     'phone_no': `${this.state.phoneNo}`,
                     'message': `${this.state.message}`
                 }
-            const result = postContactForm(data)
-                result.then(res => {
+             postContactForm(data)
+                .then(res => {
                     alert('Thankyou for your details, we will get back to you soon')
                 }).catch(err => {
                     alert(`Some error occured : ${err}`)

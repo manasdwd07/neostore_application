@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { connect } from 'react-redux';
 import { addToCart} from '../../actions/CartActions';
+import { CircularProgress } from '@material-ui/core';
+
 
 
 
@@ -110,7 +112,7 @@ class AllProducts extends Component {
 
 
                 <div className="row">
-                    {images.map(el => {
+                    {images ? images.map(el => {
 
                         return (
                             <div className="col-lg-4" key={el._id}>
@@ -136,7 +138,7 @@ class AllProducts extends Component {
 
 
                         )
-                    })}
+                    }):<CircularProgress color='inherit'></CircularProgress>}
                 </div>
 
             </div>
