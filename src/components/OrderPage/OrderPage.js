@@ -9,6 +9,7 @@ import SyncAltIcon from '@material-ui/icons/SyncAlt';
 import Header from '../Header/Header';
 import { getOrderDetails } from '../../api/api';
 import { URL, getInvoiceOfOrder } from '../../api/api';
+import moment from 'moment';
 
 
 export class OrderPage extends Component {
@@ -90,12 +91,17 @@ export class OrderPage extends Component {
                                                     
                                                     <div className="row m-2">
                                                         <span style={{ fontSize: "large", color: "orange" }}>TRANSIT</span><span>&nbsp;Order by: {el._id}</span>
-                                                        <div className="col-12"> <small className="text-warning">Placed on :{el.product_details[0].createdAt}</small></div>
-                                                         <div className='col-12'><small className="text-success">Total cost :{el.product_details[0].total_cartCost}</small></div>
-                                                    </div>
+                                                        <div className="col-12"> <small className="text-warning">Placed on : {moment(el.product_details[0].createdAt).format('L')}</small></div>
+                                                         <div className='col-12'><small className="text-success">Total cost : <i className="fa fa-rupee"></i> {el.product_details[0].total_cartCost}</small></div>
+                                                    </div> 
                                                     <hr />
                                                     <div className="row m-2">
-                                                        <img src={URL + el.product_details[0].product_details[0].product_image} alt={el.product_details[0].product_details[0].product_name} width="50%" />
+                                                        {el.product_details.map((product)=>{
+                                                            return(
+                                                                <div className="p-2"><img src={URL + product.product_details[0].product_image} alt={el.product_details[0].product_details[0].product_name} width="150px" height="100px" /></div>
+                                                            )
+                                                        })}
+                                                        
                                                     </div>
                                                     <hr />
                                                     <div className="row m-2" >

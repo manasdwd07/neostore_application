@@ -27,8 +27,9 @@
 .top_header_cart_count{
     background-color: red;
     border:2px solid red;
-    border-radius: 25%;
+    border-radius:50%;
     font-size:15px;
+    color:white;
 }
 .top_header_userButton{
     background-color: #fff;

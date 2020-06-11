@@ -7,6 +7,7 @@ import TextField from "@material-ui/core/TextField";
 import { getProductBySearchText } from '../../api/api';
 import { getSpecificProduct } from '../../api/api';
 import { connect } from 'react-redux';
+import SearchBar from './SearchBar';
 
 
 class Header extends Component {
@@ -25,7 +26,8 @@ class Header extends Component {
     handleLogout = () => {
 
         localStorage.removeItem('loginUserData');
-        localStorage.removeItem('editAddress')
+        localStorage.removeItem('editAddress');
+        localStorage.removeItem('specificProductId');
         localStorage.setItem('cart', [[]])
 
         this.setState({ login: false })
@@ -135,8 +137,8 @@ class Header extends Component {
 
                         </div>
                         <form className="navbar-form navbar-left top_header_searchBox">
-                            <div className="input-group">
-                                <Autocomplete
+                            <div className="nav navbar">
+                                {/* <Autocomplete
                                     id="combo-box-demo"
                                     size="small"
                                     options={this.state.searchText}
@@ -145,12 +147,13 @@ class Header extends Component {
                                     renderOption={option => option.product_name}
                                     renderInput={(params) => <TextField {...params} onChange={e => this.handleSearchText(e)} onClick={(option) => this.clickHandler(option.product_id)} label="Search" variant="outlined" />}
 
-                                />
-                                <span className="input-group-btn top_header_searchIcon">
+                                /> */}
+                                <SearchBar/>
+                                {/* <span className="input-group-btn top_header_searchIcon">
                                     <button className="btn btn-default">
                                         <i className="fa fa-search" />
                                     </button>
-                                </span>
+                                </span> */}
                             </div>
                         </form>
                         <div className="nav navbar-nav">

@@ -24,7 +24,7 @@ class SpecificProduct extends Component {
         this.state = {
             data: {},
             cartCount: 0,
-            showDetail:true
+            showDetail: true
         }
     }
 
@@ -34,8 +34,24 @@ class SpecificProduct extends Component {
 
         const specificProduct = await getSpecificProduct(productId);
         this.setState({
+            data: specificProduct.data.product_details[0],
+            desc: specificProduct.data.product_details[0].product_desc,
+            dimension: specificProduct.data.product_details[0].product_dimension,
+            material: specificProduct.data.product_details[0].product_material
+        })
+
+
+
+    }
+
+    async componentDidUpdate() {
+        const productId = localStorage.getItem('specificProductId');
+
+        const specificProduct = await getSpecificProduct(productId);
+        this.setState({
             data: specificProduct.data.product_details[0]
         })
+
 
     }
 
@@ -104,22 +120,23 @@ class SpecificProduct extends Component {
                         {this.state.data.product_image ?
                             <div className="container">
                                 <div className="row">
-                                    <div className="col-6 text-left" onMouseEnter={()=>{this.setState({showDetail:false})}} onMouseLeave={()=>{this.setState({showDetail:true})}}>
-                                        <ReactImageMagnify
-                                            {...{
-                                                smallImage: {
-                                                    alt: "product",
-                                                    src: URL + productData.product_image,
-                                                    width: 450,
-                                                    height: 300
-                                                },
-                                                largeImage: {
-                                                    src: URL + productData.product_image,
-                                                    width: 2000,
-                                                    height: 4000,
-                                                },
-                                            }}
-                                        />
+                                    <div className="col-6 text-left">
+                                        <div onMouseEnter={() => { this.setState({ showDetail: false }) }} onMouseLeave={() => { this.setState({ showDetail: true }) }} >
+                                            <ReactImageMagnify
+                                                {...{
+                                                    smallImage: {
+                                                        alt: "product",
+                                                        src: URL + productData.product_image,
+                                                        width: 450,
+                                                        height: 300
+                                                    },
+                                                    largeImage: {
+                                                        src: URL + productData.product_image,
+                                                        width: 2000,
+                                                        height: 4000,
+                                                    },
+                                                }}
+                                            /></div>
                                         <div className="d-flex justify-content-around pt-2 pb-2">
                                             {this.state.data.subImages_id.product_subImages.map((item) => {
                                                 return (
@@ -141,8 +158,7 @@ class SpecificProduct extends Component {
                                             })}
                                         </div>
                                     </div>
-
-                                    {this.state.showDetail===true ? <div className="col-6">
+                                    {this.state.showDetail === true ? <div className="col-6">
                                         <h1>{productData.product_name}</h1>
                                         <div>
                                             <StarRatingComponent
@@ -164,7 +180,7 @@ class SpecificProduct extends Component {
 
                                         <div className="row mt-3" >
                                             <div className="col-4"><button className="btn btn-info" onClick={() => this.addToCart(productData.product_id, productData)}>ADD TO CART</button></div>
-                                            
+
                                             <div className="col-7">
                                                 <button
                                                     className="btn btn-warning m-1"
@@ -178,7 +194,7 @@ class SpecificProduct extends Component {
                                         </div>
 
 
-                                        
+
                                         <div className="modal fade" id="myModal">
                                             <div className="modal-dialog modal-sm modal-dialog-centered">
                                                 <div className="modal-content">
@@ -207,20 +223,98 @@ class SpecificProduct extends Component {
                                                 </div>
                                             </div>
                                         </div>
-                                        
-                                    </div>:null}
+
+
+                                    </div>
+                                        : null}
                                 </div>
+
+
+                                <div className="" style={{ fontFamily: 'Courier New' }}>
+                                    <ul className="nav nav-tabs" id="myTab" role="tablist">
+                                        <li className="nav-item">
+                                            <a
+                                                className="nav-link active myLink btn"
+                                                id="description-tab"
+                                                data-toggle="tab"
+                                                href="#description"
+                                                role="tab"
+                                                aria-controls="description"
+                                                aria-selected="true"
+                                                style={{ fontFamily: 'Courier New' }}
+                                            >
+                                                Description
+                                                    </a>
+                                        </li>
+                                        <li className="nav-item">
+                                            <a
+                                                className="nav-link myLink btn"
+                                                id="feature-tab"
+                                                data-toggle="tab"
+                                                href="#feature"
+                                                role="tab"
+                                                aria-controls="feature"
+                                                aria-selected="false"
+
+                                                style={{ fontFamily: 'Courier New' }}
+                                            >
+                                                Feature
+                                                </a>
+                                        </li>
+                                    </ul>
+                                    <div className="tab-content" id="myTabContent">
+                                        <div
+                                            className="tab-pane fade show active m-3"
+                                            id="description"
+                                            role="tabpanel"
+                                            aria-labelledby="description-tab"
+                                        >
+                                            {this.state.desc ? this.state.desc : null}
+                                        </div>
+                                        <div
+                                            className="tab-pane fade m-3"
+                                            id="feature"
+                                            role="tabpanel"
+                                            aria-labelledby="feature-tab"
+                                        >
+                                            <span>Product material: {this.state.material}</span><br />
+                                            <span>Product Dimension : {this.state.dimension}</span><br />
+                                            <span>Manufacturer : {this.state.data.product_producer}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                             </div>
 
-
-
-
-
-
-
-
                             : <div className="container text-center mt-5 mb-5"><CircularProgress color="inherit" /></div>}
-                        
+
                     </div> : <div className=" container text-center m-5">
                         <CircularProgress color="inherit" />
                     </div>}

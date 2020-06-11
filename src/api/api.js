@@ -177,3 +177,6 @@ export const getInvoiceOfOrder=(data)=>{
 export const getProductBySearchText=(text)=>{
     return axios.get(`${URL}getProductBySearchText/${text}`)
 }
+
+
+  
