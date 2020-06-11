@@ -5,24 +5,20 @@ import ReorderIcon from '@material-ui/icons/Reorder';
 import PersonIcon from '@material-ui/icons/Person';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import SyncAltIcon from '@material-ui/icons/SyncAlt';
-import UserProfile from '../UserProfile/UserProfile';
 import Header from '../Header/Header';
 import { getProfileData } from '../../api/api';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import EditIcon from '@material-ui/icons/Edit';
 import sweetalert2 from 'sweetalert2';
 import {
     Button,
     RadioGroup,
-    FormLabel,
     FormControl,
     FormControlLabel,
-    Radio,
-    OutlinedInput
+    Radio
 } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import FormHelperText from "@material-ui/core/FormHelperText";
-import {editUserProfile} from '../../api/api';
+import { editUserProfile } from '../../api/api';
 
 
 
@@ -38,20 +34,20 @@ export class EditProfile extends Component {
             dob: '',
             phone_no: '',
             email: '',
-            submitData:{}
+            submitData: {}
         }
     }
 
     // Getting user profile data on component mounting
     componentDidMount() {
         const profileData = getProfileData()
-            .then((res) => {
-                
+        profileData.then((res) => {
 
-                this.setState({
-                    userData: res.data.customer_proile
-                })
+
+            this.setState({
+                userData: res.data.customer_proile
             })
+        })
 
     }
 
@@ -60,7 +56,7 @@ export class EditProfile extends Component {
         this.setState({
             birthdate: Date.parse(e.target.value)
         })
-        
+
     }
 
     // Image upload handler
@@ -79,32 +75,30 @@ export class EditProfile extends Component {
                 'gender': this.state.userData.gender
             }
             this.setState({
-                submitData:formData
+                submitData: formData
             })
         }
-        
+
     }
 
     // onClick Handler for edit Profile
-    editHandler=async ()=>{
-        
-        const result=await editUserProfile(this.state.submitData)
-        .then(res=>{
+    editHandler = async () => {
+
+        const result = await editUserProfile(this.state.submitData)
+        result.then(res => {
             sweetalert2.fire({
-                'title':'Profile edited successfully',
-                'icon':'success'
+                'title': 'Profile edited successfully',
+                'icon': 'success'
             })
-        }).catch(err=>{
+        }).catch(err => {
             sweetalert2.fire({
-                'title':'OOps.. some error occured',
-                'text':`Error details: ${err}`
+                'title': 'OOps.. some error occured',
+                'text': `Error details: ${err}`
             })
         })
     }
 
     render() {
-
-
         return (
             <div><Header login={localStorage.getItem('loginUserData') ? 'true' : 'false'} />
                 <div className="container m-4">
@@ -139,7 +133,7 @@ export class EditProfile extends Component {
                                             defaultValue={this.state.userData.first_name}
 
                                             onChange={(e) => { this.setState({ first_name: e.target.value }) }}
-                                            
+
 
 
                                             labelWidth={70}
@@ -154,7 +148,7 @@ export class EditProfile extends Component {
                                             name="last_name"
                                             autoComplete="off"
                                             defaultValue={this.state.userData.last_name}
-                                            
+
 
                                             labelWidth={100}
                                         />
@@ -165,7 +159,7 @@ export class EditProfile extends Component {
                                         <label>Gender</label>
                                         <RadioGroup aria-label="gender" name="gender1" onChange={this.handleChangeInput} defaultValue={this.state.userData.gender}>
                                             <FormControlLabel value="female" defaultChecked={true} control={<Radio />} label="Female" />
-                                            <FormControlLabel value="male" defaultChecked={this.state.userData.gender = 'female' ? true : false} control={<Radio />} label="Male" />
+                                            <FormControlLabel value="male" defaultChecked={this.state.userData.gender === 'male' ? true : false} control={<Radio />} label="Male" />
                                         </RadioGroup>
 
                                     </FormControl>
@@ -190,7 +184,7 @@ export class EditProfile extends Component {
                                             name="mobile_no"
                                             onChange={this.handleChange}
                                             defaultValue={this.state.userData.phone_no}
-                                            
+
 
 
                                             labelWidth={150}

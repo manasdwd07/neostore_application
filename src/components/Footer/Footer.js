@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Link,BrowserRouter} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import axios from 'axios';
 import {URL} from '../../api/api';
 import { CircularProgress } from '@material-ui/core';
@@ -16,7 +16,7 @@ export class Footer extends Component {
     // Getting footer data on component mount
     componentDidMount(){
         const data=axios.get(`${URL}getData`)
-        .then(res=>{
+        data.then(res=>{
             this.setState({
                 footerData:res.data.company_details
             })
@@ -38,7 +38,7 @@ export class Footer extends Component {
     // Below Handler for opening terms and conditions in blank tab
     termsAndConditions=(e)=>{
         let result = axios.get(`${URL}getTermsAndConditions`)
-            .then(res=>{
+            result.then(res=>{
                 window.open(`${URL}${res.data.termsAndConditions_details[0].fileName}`,'_blank')
             }).catch(err=>{
                 alert('invoice error ',err);
@@ -49,7 +49,7 @@ export class Footer extends Component {
     // Below handler for opening guarentee details in blank tab
     guarentee=(e)=>{
         let result = axios.get(`${URL}getGuarantee`)
-            .then(res=>{
+            result.then(res=>{
                 window.open(`${URL}${res.data.guarantee_details[0].fileName}`,'_blank')
             }).catch(err=>{
                 alert('invoice error ',err);
@@ -77,8 +77,8 @@ export class Footer extends Component {
                             <button className="btn" onClick={e=>this.termsAndConditions(e)} style={{textDecoration:"none",color:"white"}}>Terms and conditions</button><br/>
                             <button className="btn" onClick={e=>this.guarentee(e)}  style={{textDecoration:"none",color:"white"}}>Guarantee and Return Policy</button><br/>
                             <Link to="/contactForm" style={{textDecoration:"none",color:"white"}}>Contact Us</Link><br/>
-                            <a href="#" style={{textDecoration:"none",color:"white"}}>Privacy Policy</a><br/>
-                            <a href="#" style={{textDecoration:"none",color:"white"}}>Locate Us</a>
+                            <button style={{textDecoration:"none",color:"white"}}>Privacy Policy</button><br/>
+                            <button style={{textDecoration:"none",color:"white"}}>Locate Us</button>
                         </div>
                         <div className="col-lg-4 text-center"style={{marginTop:"3%"}}>
                             <h4>NEWSLETTER</h4>

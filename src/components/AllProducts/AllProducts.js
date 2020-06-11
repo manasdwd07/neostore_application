@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { URL } from '../../api/api';
 import StarRatingComponent from 'react-star-rating-component';
-import { addToCartApi } from '../../api/api';
 import { Link } from 'react-router-dom';
-import sweetalert2 from 'sweetalert2';
 import Swal from 'sweetalert2';
 import { connect } from 'react-redux';
-import { addToCart, searchProductId } from '../../actions/CartActions';
+import { addToCart} from '../../actions/CartActions';
 
 
 
@@ -115,17 +113,17 @@ class AllProducts extends Component {
                     {images.map(el => {
 
                         return (
-                            <div className="col-lg-4">
+                            <div className="col-lg-4" key={el._id}>
 
                                 <div className="card" style={{ marginBottom: "5%" }}>
-                                    <div><img className="card-img-top" src={`${URL}${el.product_image}`} height="150px" /></div><br />
+                                    <div><img className="card-img-top" src={`${URL}${el.product_image}`} alt='Product_Image_Unavailable' height="150px" /></div><br />
                                     <div className="card-body">
                                         <div onClick={(id) => this.specificProduct(el._id)}><Link to="/specificProduct" className="btn-light btn" style={{ fontSize: 'smaller' }}>{el.product_name}</Link></div><br />
                                         <div><i className="fa fa-rupee"></i>&nbsp;<span><b>{el.product_cost}</b></span></div><br />
                                         <div><button onClick={() => this.addToCart(el._id, el)} className="btn btn-danger">Add To Cart</button></div>
                                         <div>
                                             <StarRatingComponent
-                                                value={el.product_rating}
+                                                value={Number(el.product_rating)}
                                                 editing={false}
                                                 starCount={5}
                                                 name='rating' />

@@ -6,9 +6,8 @@ import ReorderIcon from '@material-ui/icons/Reorder';
 import PersonIcon from '@material-ui/icons/Person';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import SyncAltIcon from '@material-ui/icons/SyncAlt';
-import UserProfile from '../UserProfile/UserProfile';
 import Header from '../Header/Header';
-import { addCustomerAddress, getCustomerAddress, editCustomerAddress } from '../../api/api';
+import {editCustomerAddress } from '../../api/api';
 import sweetalert2 from 'sweetalert2';
 
 export class EditAddress extends Component {
@@ -56,7 +55,7 @@ export class EditAddress extends Component {
                     'country': `${country}`
                 }
                 const result = await editCustomerAddress(userData)
-                    .then(res => {
+                    result.then(res => {
                         sweetalert2.fire({
                             "title": 'Address edited successfully',
                             'text': 'Congratulations, your address has been edited',

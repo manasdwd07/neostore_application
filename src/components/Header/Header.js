@@ -1,11 +1,10 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import './Header.css';
 import { Link } from 'react-router-dom';
 import { getAllProducts } from '../../api/api';
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import { getProductBySearchText } from '../../api/api';
-import { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import { getSpecificProduct } from '../../api/api';
 import { connect } from 'react-redux';
 
@@ -42,7 +41,7 @@ class Header extends Component {
 
 
 
-        if (this.props.login == 'true') {
+        if (this.props.login === 'true') {
             this.setState({
                 login: true
             })
@@ -81,7 +80,7 @@ class Header extends Component {
             
             let value = e.target.value;
             this.setState({ searchValue: value })
-            const filterValue=value.toUpperCase();
+            // const filterValue=value.toUpperCase();
 
             
             for(var i=0; i< array.length;i++){
@@ -107,16 +106,16 @@ class Header extends Component {
 
 
     render() {
-        const data1 = localStorage.getItem('loginUserData');
-        const userData = JSON.parse(data1);
-        const filterOptions = createFilterOptions({
-            matchFrom: 'start',
-            stringify: option => option.product_name,
-        });
+        // const data1 = localStorage.getItem('loginUserData');
+        // const userData = JSON.parse(data1);
+        // const filterOptions = createFilterOptions({
+        //     matchFrom: 'start',
+        //     stringify: option => option.product_name,
+        // });
 
-        let filteredArray = this.state.products ? this.state.products.filter(product => {
-            return product.product_name.indexOf(this.state.search) !== -1
-        }) : [];
+        // let filteredArray = this.state.products ? this.state.products.filter(product => {
+        //     return product.product_name.indexOf(this.state.search) !== -1
+        // }) : [];
 
         const localCartData = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem("cart")) : []
         const cartCount = localCartData.length;
@@ -125,7 +124,7 @@ class Header extends Component {
                 <nav className="navbar navbar-inverse" style={{ backgroundColor: "black" }}>
                     <div className="container-fluid">
                         <div className="navbar-header">
-                            <a className="navbar-brand" href="#"><span style={{ color: "white" }}>Neo</span><span className="top_header_store">STORE</span></a>
+                            <div className="navbar-brand" href="#"><span style={{ color: "white" }}>Neo</span><span className="top_header_store">STORE</span></div>
                         </div>
                         <div className="nav navbar-nav navbar-expand">
                             <ul className="navbar-nav">
@@ -166,7 +165,7 @@ class Header extends Component {
                                 <span><i className="fa fa-user"></i></span>&nbsp;
 
                             </button>
-                            {this.props.login == 'true' ? <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            {this.props.login === 'true' ? <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
                                 <Link className="dropdown-item" to="/profile">Profile</Link>
                                 <Link className="dropdown-item" to="/login" onClick={this.handleLogout}>Logout</Link>

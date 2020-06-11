@@ -7,7 +7,6 @@ import MenuBookIcon from '@material-ui/icons/MenuBook';
 import SyncAltIcon from '@material-ui/icons/SyncAlt';
 import userIcon from '../../assets/images/profile-placeholder.png';
 import IconButton from "@material-ui/core/IconButton";
-import Icon from "@material-ui/core/Icon";
 import Header from '../Header/Header';
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -57,7 +56,7 @@ class ChangePassword extends Component {
 
     // For handling old password change and errors
     handleoldpassChange = (e) => {
-        if (e.target.value == '') {
+        if (e.target.value === '') {
             this.setState({ oldpassError: 'Please enter Old password' })
         }
         else {
@@ -68,7 +67,7 @@ class ChangePassword extends Component {
     // For handling new password change and errors
     handleNewPassChange = (e) => {
         const passwordFormat = /^[A-Za-z]\w{7,11}$/;
-        if (e.target.value == '') {
+        if (e.target.value === '') {
             this.setState({ newPassError: 'Please enter new password ' })
         }
         else if (e.target.value.match(passwordFormat)) {
@@ -82,13 +81,13 @@ class ChangePassword extends Component {
     // Handle confirm password change and errors
     handleCPassChange = (e) => {
 
-        if (e.target.value == '') {
+        if (e.target.value ==='') {
             this.setState({ confirmPasswordError: 'Please enter confirm password ' })
         }
-        else if (this.state.newPassword != this.state.confirmPassword) {
+        else if (this.state.newPassword !== this.state.confirmPassword) {
             this.setState({ confirmPasswordError: 'Enter same as new password' })
         }
-        else if (this.state.newPassword == this.state.confirmPassword) {
+        else if (this.state.newPassword === this.state.confirmPassword) {
             this.setState({ confirmPasswordError: '' })
         }
         else {
@@ -104,7 +103,7 @@ class ChangePassword extends Component {
             "confirmPass":`${this.state.confirmPassword}`
         }
         const result=await resetPassword(data)
-        .then(res=>{
+        result.then(res=>{
             sweetalert2.fire({
                 "title": 'Successfull',
                 'text': 'Password changed successfully',

@@ -11,10 +11,9 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import EmailIcon from '@material-ui/icons/Email';
 import Swal from 'sweetalert2';
-import { addToCart, cartCount } from '../../actions/CartActions';
+import { addToCart } from '../../actions/CartActions';
 import { connect } from 'react-redux';
 import Rating from "@material-ui/lab/Rating";
-import { LinearScale } from '@material-ui/icons';
 import './ProductCard.css';
 import ReactImageMagnify from 'react-image-magnify';
 
@@ -94,7 +93,7 @@ class SpecificProduct extends Component {
     };
 
     render() {
-        const productId = localStorage.getItem('specificProductId');
+        // const productId = localStorage.getItem('specificProductId');
         const productData = this.state.data
         return (
 

@@ -6,7 +6,6 @@ import ReorderIcon from '@material-ui/icons/Reorder';
 import PersonIcon from '@material-ui/icons/Person';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import SyncAltIcon from '@material-ui/icons/SyncAlt';
-import UserProfile from '../UserProfile/UserProfile';
 import Header from '../Header/Header';
 import {getProfileData} from '../../api/api';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -26,7 +25,7 @@ export class OrderPage extends Component {
     // For getting user profile data on component mount
    async componentDidMount(){
         const profileData= await getProfileData()
-        .then((res)=>{
+        profileData.then((res)=>{
         
             this.setState({
                 userData:res.data.customer_proile

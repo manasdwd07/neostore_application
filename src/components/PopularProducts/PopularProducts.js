@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { URL, addToCartApi } from '../../api/api';
+import { URL } from '../../api/api';
 import StarRatingComponent from 'react-star-rating-component';
 import { Link } from 'react-router-dom';
-import { addToCart, searchProductId } from '../../actions/CartActions';
+import { addToCart} from '../../actions/CartActions';
 import { connect } from 'react-redux';
 import Swal from 'sweetalert2';
 
@@ -91,18 +91,18 @@ class PopularProducts extends Component {
 
                     {productData.map(el => {
                         return (
-                            <div className="col-lg-3 text-center" style={{ width: "20%", paddingBottom: "20px" }}>
+                            <div className="col-lg-3 text-center" key={el._id} style={{ width: "20%", paddingBottom: "20px" }}>
                                 <div className="card" >
-                                    <img className="card-img-top" src={`${URL}${el.DashboardProducts[0].product_image}`} alt="card image" height="150px" width="auto" />
+                                    <img className="card-img-top" src={`${URL}${el.DashboardProducts[0].product_image}`} alt="product_card_image" height="150px" width="auto" />
                                     <div className="card-body">
                                         <div onClick={(id) => this.specificProduct(el.DashboardProducts[0]._id)}><Link to='/specificProduct' className="card-title btn btn-light">{el.DashboardProducts[0].product_name}</Link></div>
                                         <br />
-                                        <div><i className="fa fa-rupee"></i>&nbsp;<span><b clasName="text-center">{el.DashboardProducts[0].product_cost}</b></span></div>
+                                        <div><i className="fa fa-rupee"></i>&nbsp;<span><b className="text-center">{el.DashboardProducts[0].product_cost}</b></span></div>
                                         <br />
                                         <button onClick={() => this.addToCart(el.DashboardProducts[0].product_id, el.DashboardProducts[0])} className="btn btn-danger">Add To Cart</button>
                                         <div>
                                             <StarRatingComponent
-                                                value={el.DashboardProducts[0].product_rating}
+                                                value={Number(el.DashboardProducts[0].product_rating)}
                                                 editing={false}
                                                 starCount={5}
                                                 name='rating' />

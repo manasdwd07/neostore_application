@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Header from '../Header/Header';
-import { Link, FormControl } from '@material-ui/core';
 import { forgotPassword } from '../../api/api';
 import sweetalert2 from 'sweetalert2';
 
@@ -24,9 +23,9 @@ export class ForgotPassword extends Component {
 
     // onSubmit Handler for forgot password
     submitHandler = async (e) => {
-        const mailformat = /^([a-zA-Z])+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        const mailformat = /^([a-zA-Z])+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/;
         e.preventDefault();
-        if(this.state.email==""){
+        if(this.state.email===""){
             this.setState({emailErr:"Please enter email Id"})
         }
         else if(this.state.email.match(mailformat)==null){
@@ -35,12 +34,12 @@ export class ForgotPassword extends Component {
         else{
             this.setState({emailErr:""})
         }
-        if (this.state.emailErr == '') {
+        if (this.state.emailErr === '') {
             const data = {
                 "email": `${this.state.email}`
             }
             const result = await forgotPassword(data)
-                .then(res => {
+                result.then(res => {
                     localStorage.setItem('token', res.data.token)
                     sweetalert2.fire({
                         'text': 'Code has been sent'

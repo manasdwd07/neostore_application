@@ -13,7 +13,7 @@ const CarouselSlider = props => {
             {props.data.map((item, i) => {
                 return (
                     
-                    <Carousel.Item>
+                    <Carousel.Item key={i}>
                         <img
                             className="d-block w-100"
                             src={URL + item.product_image}

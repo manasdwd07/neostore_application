@@ -5,13 +5,7 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Header from '../Header/Header';
 import { getCustomerAddress,updateAddress, addToCartApi } from '../../api/api';
 import sweetalert2 from 'sweetalert2';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { Link } from 'react-router-dom';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Radio from '@material-ui/core/Radio';
-import { RadioGroup,FormControl } from '@material-ui/core';
-import { addToCart } from '../../actions/CartActions';
-
 
 export class SelectAddress extends Component {
     constructor(props) {
@@ -29,7 +23,7 @@ export class SelectAddress extends Component {
     // For getting address details on component mount
     componentDidMount() {
         const result = getCustomerAddress()
-            .then(res => {
+            result.then(res => {
                 res.data.customer_address ?
                     this.setState({
                         userAddress: res.data.customer_address,
@@ -60,7 +54,7 @@ export class SelectAddress extends Component {
 
         }
         const result=updateAddress(data)
-        .then(res=>{
+        result.then(res=>{
             this.setState({show:true})
           alert('You Can Proceed to buy now')  
         }).catch(err=>{
@@ -89,7 +83,7 @@ export class SelectAddress extends Component {
             const data1=data ? JSON.parse(data):[]
             data1.push({flag:'checkout'})
             const rest=addToCartApi(data1)
-            .then(result=>{
+            rest.then(result=>{
                 
                 localStorage.setItem('cart',[[]])
                 this.props.history.push('/thanksPage')

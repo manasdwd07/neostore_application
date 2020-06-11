@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import TextField from '@material-ui/core/TextField';
 import { Button } from '@material-ui/core';
 import { checkLogin } from '../../api/api';
 import sweetalert2 from 'sweetalert2';
@@ -16,7 +15,7 @@ import MailIcon from '@material-ui/icons/Mail';
 import Header from '../Header/Header';
 import { Link } from 'react-router-dom';
 import { GoogleLogin } from 'react-google-login';
-import FacebookLogin from 'react-facebook-login';
+
 
 
 
@@ -38,45 +37,45 @@ export class LoginPage extends Component {
     handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (this.state.email == '') {
+        if (this.state.email === '') {
             this.setState({ emailError: 'Field cant be left blank' })
         }
-        if (this.state.password == '') {
+        if (this.state.password === '') {
             this.setState({ passwordError: 'Field cant be left blank' })
         }
 
-        
-            let userInfo = {
-                'email': `${this.state.email}`,
-                'pass': `${this.state.password}`
-            }
-    
-            const result = await checkLogin(userInfo)
-                .then((res) => {
-                    localStorage.setItem('loginUserData', JSON.stringify(res.data))
+
+        let userInfo = {
+            'email': `${this.state.email}`,
+            'pass': `${this.state.password}`
+        }
+
+        const result = await checkLogin(userInfo)
+        result.then((res) => {
+            localStorage.setItem('loginUserData', JSON.stringify(res.data))
+            sweetalert2.fire({
+                "title": 'Login successful',
+                'text': 'Enjoy NeoSTORE',
+                "icon": 'success'
+            })
+            this.setState({ login: true })
+            setTimeout(() => { this.props.history.push('/') }, 0)
+
+        }
+
+        )
+            .catch(
+                error => {
                     sweetalert2.fire({
-                        "title": 'Login successful',
-                        'text': 'Enjoy NeoSTORE',
-                        "icon": 'success'
+                        "title": "Invalid credentials... Please Check again",
+                        "text": "Oops.... I could'nt find you..",
+                        "icon": "warning"
                     })
-                    this.setState({ login: true })
-                    setTimeout(() => { this.props.history.push('/') }, 0)
-    
+
                 }
-    
-                )
-                .catch(
-                    error => {
-                        sweetalert2.fire({
-                            "title": "Invalid credentials... Please Check again",
-                            "text": "Oops.... I could'nt find you..",
-                            "icon": "warning"
-                        })
-    
-                    }
-                )
-        
-        
+            )
+
+
 
 
         // else {
@@ -154,10 +153,10 @@ export class LoginPage extends Component {
                                     <h2>Login to NeoSTORE</h2>
                                     <form noValidate autoComplete="off">
                                         <FormControl className="mb-3" variant="outlined" fullWidth onChange={(e) => {
-                                            {
-                                                this.setState({ email: e.target.value });
-                                                if (e.target.value !== '') { this.setState({ emailError: '' }) }
-                                            }
+
+                                            this.setState({ email: e.target.value });
+                                            if (e.target.value !== '') { this.setState({ emailError: '' }) }
+
                                         }}>
                                             <InputLabel>Email Address</InputLabel>
                                             <OutlinedInput
@@ -181,19 +180,18 @@ export class LoginPage extends Component {
                                         </FormControl>
 
                                         <FormControl className="mb-3" variant="outlined" fullWidth onChange={(e) => {
-                                            {
-                                                this.setState({ password: e.target.value });
-                                                if (e.target.value !== '') {
-                                                    this.setState({
-                                                        passwordError: ''
-                                                    })
-                                                }
+
+                                            this.setState({ password: e.target.value });
+                                            if (e.target.value !== '') {
+                                                this.setState({
+                                                    passwordError: ''
+                                                })
                                             }
+
                                         }}>
                                             <InputLabel>Password</InputLabel>
                                             <OutlinedInput
                                                 id="outlined-adornment-password"
-                                                type="text"
                                                 name="password"
                                                 onChange={this.handleChange}
                                                 type={this.state.showPassword ? 'text' : 'password'}

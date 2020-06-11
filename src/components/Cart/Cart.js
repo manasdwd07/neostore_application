@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
-import { Button } from '@material-ui/core';
 import cart from '../../assets/images/shoppingCart.png';
-import { height } from '@material-ui/system';
 import { Link } from 'react-router-dom';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Header from '../Header/Header';
-import { URL, getCartDataApi,updateCartQuantity, deleteCartData } from '../../api/api';
+import { URL} from '../../api/api';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import DeleteForeverSharpIcon from '@material-ui/icons/DeleteForeverSharp';
-import sweetalert2 from 'sweetalert2';
 import Swal from 'sweetalert2';
 import {connect} from 'react-redux';
 import {removeFromCart} from '../../actions/CartActions';
@@ -137,7 +134,7 @@ export class Cart extends Component {
 
       render() {
         const steps = ['Cart', 'Delivery Address'];    
-        const data1 = localStorage.getItem('loginUserData');
+        // const data1 = localStorage.getItem('loginUserData');
 
 
         // ------------------------------------
@@ -179,7 +176,7 @@ export class Cart extends Component {
                                             <div className="row card-body">
                                                 <div className="col-2">Product
                                                     <br/><br/>
-                                                    <img src={`${URL}${el.product_id.product_image}`} width="100%"/>
+                                                    <img src={`${URL}${el.product_id.product_image}`} alt='Product_Image_Not_Available' width="100%"/>
                                                 </div>
                                                 <div className="col-3">
                                                     <span style={{fontSize:"smaller"}}>{el.product_id.product_name}&nbsp;

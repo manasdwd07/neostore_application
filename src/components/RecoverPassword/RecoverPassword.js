@@ -54,7 +54,7 @@ export class RecoverPassword extends Component {
                 authCodeErr: 'Authentication code should be of 4 digits'
             })
         }
-        else if (this.state.authCode == 0) {
+        else if (this.state.authCode === 0) {
             this.setState({
                 authCodeErr: 'Please enter authentication code'
             })
@@ -65,7 +65,7 @@ export class RecoverPassword extends Component {
             })
         }
         const passwordFormat = /^[A-Za-z]\w{7,11}$/;
-        if (this.state.password == "") {
+        if (this.state.password === "") {
             this.setState({
                 passwordErr: `Please enter password`
             })
@@ -76,12 +76,12 @@ export class RecoverPassword extends Component {
             })
         }
 
-        if (this.state.confirmPassword == "") {
+        if (this.state.confirmPassword === "") {
             this.setState({
                 confirmPasswordErr: `Please enter password again`
             })
         }
-        else if (this.state.password != this.state.confirmPassword) {
+        else if (this.state.password !== this.state.confirmPassword) {
             this.setState({
                 confirmPasswordErr: `Passwords don't match`
             })
@@ -93,14 +93,14 @@ export class RecoverPassword extends Component {
         }
 
 
-        if (this.state.authCodeErr == '' && this.state.passwordErr == '' && this.state.confirmPasswordErr == '') {
+        if (this.state.authCodeErr === '' && this.state.passwordErr === '' && this.state.confirmPasswordErr === '') {
             const data = {
                 'otpCode': `${this.state.authCode}`,
                 'newPass': `${this.state.password}`,
                 'confirmPass': `${this.state.confirmPassword}`
             }
             const result = await recoverPassword(data)
-                .then(res => {
+                result.then(res => {
 
                     sweetalert2.fire({
                         'text': 'Password changed successfully, you can now login'
@@ -132,11 +132,10 @@ export class RecoverPassword extends Component {
                         </div>
                         <div className="card-body">
                             {/* <input type="text" className="form-control  " placeholder="Authentcation code" onChange={(e)=>{this.setState({authCode:e.target.value})}}/> */}
-                            <FormControl className="mb-3" variant="outlined" error={this.state.authCodeErr?true:false} onChange={(e) => { { this.setState({ authCode: e.target.value }) }}}>
+                            <FormControl className="mb-3" variant="outlined" error={this.state.authCodeErr?true:false} onChange={(e) => {  this.setState({ authCode: e.target.value }) }}>
                                 <InputLabel>Authentcation Code</InputLabel>
                                 <OutlinedInput
                                     id="outlined-adornment-password"
-                                    type="text"
                                     name="password"
                                     type="text"
                                     endAdornment={<InputAdornment position="end">
@@ -159,11 +158,10 @@ export class RecoverPassword extends Component {
                             </FormControl>
                             <br />
 
-                            <FormControl className="mb-3" variant="outlined" error={this.state.passwordErr?true:false} onChange={(e) => { { this.setState({ password: e.target.value }) } }}>
+                            <FormControl className="mb-3" variant="outlined" error={this.state.passwordErr?true:false} onChange={(e) => {  this.setState({ password: e.target.value })  }}>
                                 <InputLabel>Password</InputLabel>
                                 <OutlinedInput
                                     id="outlined-adornment-password"
-                                    type="text"
                                     name="password"
                                     type={this.state.showPassword ? 'text' : 'password'}
 
@@ -185,11 +183,10 @@ export class RecoverPassword extends Component {
 
                             </FormControl>
                             <br />
-                            <FormControl className="mb-3" variant="outlined" error={this.state.confirmPasswordErr?true:false} onChange={(e) => { { this.setState({ confirmPassword: e.target.value }) } }}>
+                            <FormControl className="mb-3" variant="outlined" error={this.state.confirmPasswordErr?true:false} onChange={(e) => {  this.setState({ confirmPassword: e.target.value })  }}>
                                 <InputLabel>Confirm Password</InputLabel>
                                 <OutlinedInput
                                     id="outlined-adornment-password"
-                                    type="text"
                                     name="password"
                                     type={this.state.showPassword ? 'text' : 'password'}
 

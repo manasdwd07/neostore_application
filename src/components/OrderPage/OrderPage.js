@@ -6,7 +6,6 @@ import ReorderIcon from '@material-ui/icons/Reorder';
 import PersonIcon from '@material-ui/icons/Person';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import SyncAltIcon from '@material-ui/icons/SyncAlt';
-import UserProfile from '../UserProfile/UserProfile';
 import Header from '../Header/Header';
 import { getOrderDetails } from '../../api/api';
 import { URL, getInvoiceOfOrder } from '../../api/api';
@@ -24,22 +23,23 @@ export class OrderPage extends Component {
 
     componentDidMount =  () => {
         
-            let result =  getOrderDetails().then(res=>{
+            if(localStorage.getItem('loginUserData')){let result =  getOrderDetails()
+            result.then(res=>{
                 
                 this.setState({
                     orderDetails: res.data.product_details,
                 })
             }) 
         .catch (error=> {
-            // alert('Error details : ',error)
-        })
+            this.setState({orderDetails:''})
+        })}
     }
 
     handleDownloadInvoice = async (data) => {
         
         
             let result = await getInvoiceOfOrder(data)
-            .then(res=>{
+            result.then(res=>{
                 window.open(`${URL}${res.data.receipt}`,'_blank')
             }).catch(err=>{
                 alert('invoice error ',err);
@@ -77,7 +77,7 @@ export class OrderPage extends Component {
 
                                 <div className="container">
 
-                                    {this.state.orderDetails.length== 0 ?
+                                    {this.state.orderDetails.length=== 0 ?
                                         <div>
                                             <div className="text-center">
                                                 <h1 className="font-weight-larger mb-5">No Orders Found</h1>

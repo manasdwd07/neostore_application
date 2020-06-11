@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import userIcon from '../../assets/images/profile-placeholder.png';
-import { Button, CircularProgress } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import ReorderIcon from '@material-ui/icons/Reorder';
 import PersonIcon from '@material-ui/icons/Person';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import SyncAltIcon from '@material-ui/icons/SyncAlt';
-import UserProfile from '../UserProfile/UserProfile';
 import Header from '../Header/Header';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { getCustomerAddress, deleteAddress } from '../../api/api';
@@ -24,7 +23,7 @@ export class OrderPage extends Component {
     componentDidMount() {
 
         const result = getCustomerAddress()
-            .then(res => {
+            result.then(res => {
                 res.data.customer_address ?
                     this.setState({
                         userAddress: res.data.customer_address,
@@ -59,14 +58,14 @@ export class OrderPage extends Component {
             .then(async res => {
                 if (this.state.userAddress.length > 0) {
                     const result = await deleteAddress(id)
-                        .then(async res => {
+                        result.then(async res => {
                             sweetalert2.fire({
                                 'title': 'Address deleted successfully',
                                 'icon': 'success'
                             })
 
                             const address = await getCustomerAddress()
-                                .then(res => {
+                                address.then(res => {
 
                                     res.data.customer_address.length ? this.setState({ userAddress: res.data.customer_address }) : this.setState({ userAddress: [] })
                                 })
@@ -77,7 +76,7 @@ export class OrderPage extends Component {
                                 'icon': 'warning'
                             })
                             const address = getCustomerAddress()
-                                .then(res => {
+                                address.then(res => {
 
                                     res.data.customer_address.length ? this.setState({ userAddress: res.data.customer_address }) : this.setState({ userAddress: [] })
                                 })
@@ -108,6 +107,7 @@ export class OrderPage extends Component {
                 <Header login={localStorage.getItem('loginUserData') ? 'true' : 'false'} />
                 {userData ?
                         
+                    
                     <div className="container m-4">
                         <div className="row">
                             <div className="col-12">

@@ -4,12 +4,10 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { Button } from '@material-ui/core/';
 import { getAllProducts } from '../../api/api';
 import AllProducts from '../AllProducts/AllProducts';
 import { getAllCategories } from '../../api/api';
-import { getAllColors, getSpecificProduct } from '../../api/api';
-import Pagination from "react-js-pagination";
+import { getAllColors } from '../../api/api';
 import { getProductByCategory, getProductByColor } from '../../api/api';
 import Header from '../Header/Header';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -129,7 +127,7 @@ export class ProductPage extends Component {
         let pageNumber = this.state.tempProducts.length / 10
         for (let i = 1; i <= pageNumber; i++) {
             table.push(
-                <li className="page-item">
+                <li className="page-item" key={i}>
                     <span className="page-link btn" onClick={() => this.handlePagination(i)}>{i}</span>
                 </li>
             );
@@ -158,7 +156,7 @@ export class ProductPage extends Component {
                             </ExpansionPanelSummary>
 
                         </ExpansionPanel>
-                        <br />
+                        
                         <ExpansionPanel>
                             <ExpansionPanelSummary
                                 expandIcon={<ExpandMoreIcon />}
@@ -168,19 +166,19 @@ export class ProductPage extends Component {
                                 <Typography>Categories</Typography>
                             </ExpansionPanelSummary>
                             <ExpansionPanelDetails>
-                                <Typography>
+                                {/* <Typography> */}
                                     <div className="row">
                                         {categories.map(el => {
                                             return (
 
-                                                <div className="col-12 btn" onClick={() => { this.handleClick(el.category_id, el.category_name) }}>{el.category_name}<hr /></div>
+                                                <div className="col-12 btn" key={el.category_id} onClick={() => { this.handleClick(el.category_id, el.category_name) }}>{el.category_name}</div>
                                             )
                                         })}
                                     </div>
-                                </Typography>
+                                {/* </Typography> */}
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
-                        <br />
+                        
                         <ExpansionPanel>
                             <ExpansionPanelSummary
                                 expandIcon={<ExpandMoreIcon />}
@@ -190,15 +188,15 @@ export class ProductPage extends Component {
                                 <Typography>Color</Typography>
                             </ExpansionPanelSummary>
                             <ExpansionPanelDetails>
-                                <Typography>
+                                {/* <Typography> */}
                                     <div className="row">
                                         {colors.map(el => {
                                             return (
-                                                <div className="col-4 mb-2"><button className="btn" onClick={() => this.colorClick(el)} style={{ border: "0.5px solid", borderRadius: "5px", backgroundColor: el.color_code, width: "70%", height: "100%" }}></button></div>
+                                                <div className="col-4 mb-2" key={el._id}><button className="btn" onClick={() => this.colorClick(el)} style={{ border: "0.5px solid", borderRadius: "5px", backgroundColor: el.color_code, width: "70%", height: "100%" }}></button></div>
                                             )
                                         })}
                                     </div>
-                                </Typography>
+                                {/* </Typography> */}
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
                     </div>
@@ -206,7 +204,7 @@ export class ProductPage extends Component {
 
                         {this.state.allProducts.length ? <div>
                             <div className="row mb-2" style={{ width: "100%" }}>
-                        <h2 style={{ float: "left" }}>{this.state.categoryName? this.state.categoryName:<h2>All Products</h2>}</h2>
+                        <h2 style={{ float: "left" }}>{this.state.categoryName? this.state.categoryName:'All Products'}</h2>
                                 <p style={{ marginLeft: "40%" }}>Sort by</p>
                                 <button className="btn btn-light"><StarIcon onClick={this.starRatingHandler} /></button>
                                 <button className="btn btn-light"><ArrowUpwardIcon onClick={this.highToLowHandler} /></button>

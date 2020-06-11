@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
 import Homepage from './components/Homepage/Homepage';
 import {BrowserRouter as Router} from 'react-router-dom';
@@ -6,7 +6,6 @@ import {Switch,Route} from 'react-router-dom';
 import ContactForm from './components/ContactForm/ContactForm';
 import RegisterPage from './components/RegisterPage/RegisterPage';
 import LoginPage from './components/LoginPage/LoginPage';
-import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import ProductPage from './components/ProductPage/ProductPage';
 import Cart from './components/Cart/Cart';

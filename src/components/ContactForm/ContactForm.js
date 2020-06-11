@@ -20,11 +20,11 @@ export class ContactForm extends Component {
     submitHandler = (e) => {
         e.preventDefault();
 
-        if (this.state.email == '' || this.state.name == '' || this.state.subject == '' || this.state.phoneNo == '' || this.state.message == '') {
+        if (this.state.email === '' || this.state.name === '' || this.state.subject === '' || this.state.phoneNo === '' || this.state.message === '') {
             alert('Please fill in the fields')
         }
         else {
-            const mailformat = /^([a-zA-Z])+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            const mailformat = /^([a-zA-Z])+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/;
 
             if (this.state.email.match(mailformat) !== null){
                 // const numberFormat = /[^0-9]/gi;
@@ -40,7 +40,7 @@ export class ContactForm extends Component {
                     'message': `${this.state.message}`
                 }
             const result = postContactForm(data)
-                .then(res => {
+                result.then(res => {
                     alert('Thankyou for your details, we will get back to you soon')
                 }).catch(err => {
                     alert(`Some error occured : ${err}`)
