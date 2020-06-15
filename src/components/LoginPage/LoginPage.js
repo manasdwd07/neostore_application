@@ -13,7 +13,8 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 import FormHelperText from "@material-ui/core/FormHelperText";
 import MailIcon from '@material-ui/icons/Mail';
 import Header from '../Header/Header';
-import { Link } from 'react-router-dom';
+import { Link ,Redirect} from 'react-router-dom';
+
 // import { GoogleLogin } from 'react-google-login';
 
 
@@ -109,6 +110,7 @@ export class LoginPage extends Component {
     }
 
     render() {
+        if(localStorage.getItem('loginUserData')) return <Redirect to='/'/>
         return (
 
             <div><Header login={localStorage.getItem('loginUserData') ? 'true' : 'false'} />

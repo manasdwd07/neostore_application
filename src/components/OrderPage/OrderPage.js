@@ -50,12 +50,14 @@ export class OrderPage extends Component {
     }
 
     render() {
+        
         const data1 = localStorage.getItem('loginUserData')
         const userData = JSON.parse(data1);
         return (
             <div>
-
+                
                 <Header login={localStorage.getItem('loginUserData') ? 'true' : 'false'} />
+                
                 {userData ?
                     <div className="container m-4">
                         <div className="row">

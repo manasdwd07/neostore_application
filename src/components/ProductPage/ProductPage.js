@@ -27,7 +27,8 @@ export class ProductPage extends Component {
             categories: [],
             colors: [],
             activePage: 1,
-            categoryName: ''
+            categoryName: '',
+            showPagination:true
 
 
         }
@@ -38,11 +39,26 @@ export class ProductPage extends Component {
     async componentDidMount() {
         const url = window.location.href;
         const categoryId = url.slice(31, url.length);
+        switch(categoryId){
+            case '5cfe3c5aea821930af69281e': this.setState({categoryName:'Sofa'})
+                                                break;
+            case '5cfe3c65ea821930af69281f': this.setState({categoryName:'Bed'})
+                                                break;
+            case '5cfe3c6fea821930af692820': this.setState({categoryName:'Chair'})
+                                                break;
+            case '5cfe3c79ea821930af692821': this.setState({categoryName:'Table'})
+                                                break;
+            case '5d14c15101ae103e6e94fbe0':this.setState({categoryName:'Almirah'})
+                                                break;
+            default : this.setState({categoryName:null})
+                                break;
+
+        }
         const result = categoryId === "" ? await getAllProducts() : await getProductByCategory(categoryId);
 
         let data = await getAllProducts()
         this.setState({
-            tempProducts: data.data.product_details,
+            tempProducts: result.data.product_details,
             allProducts: result.data.product_details.slice(0, 10)
         })
 
@@ -55,7 +71,18 @@ export class ProductPage extends Component {
         this.setState({
             colors: allColors.data.color_details
         })
+        
+        // --------------
+        
+        if(this.state.categoryName=='All Products'){
+            this.setState({showPagination:true})
+        }
+        else{
+            this.setState({showPagination:false})
+        }
     }
+
+    
 
     // For getting products by rating
     starRatingHandler = async () => {
@@ -90,6 +117,7 @@ export class ProductPage extends Component {
 
     // For getting products according to category selected
     handleClick = async (id, name) => {
+        this.props.history.push(`/products/${id}`)
         const categoryData = await getProductByCategory(id)
         this.setState({
             allProducts: categoryData.data.product_details,
@@ -108,6 +136,7 @@ export class ProductPage extends Component {
 
     // For getting all products
     handleAllProducts = async (el) => {
+        this.props.history.push('/products')
         const allImages = await getAllProducts();
         this.setState({ allProducts: allImages.data.product_details ,
         categoryName:'All Products'})
@@ -204,7 +233,7 @@ export class ProductPage extends Component {
 
                         {this.state.allProducts.length ? <div>
                             <div className="row mb-2" style={{ width: "100%" }}>
-                        <h2 style={{ float: "left" }}>{this.state.categoryName? this.state.categoryName:'All Products'}</h2>
+                        <h2 style={{ float: "left" }}>{this.state.categoryName? this.state.categoryName:'All Categories'}</h2>
                                 <p style={{ marginLeft: "40%" }}>Sort by</p>
                                 <button className="btn btn-light"><StarIcon onClick={this.starRatingHandler} /></button>
                                 <button className="btn btn-light"><ArrowUpwardIcon onClick={this.highToLowHandler} /></button>

@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import './Header.css';
 import { Link } from 'react-router-dom';
 import { getAllProducts } from '../../api/api';
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import TextField from "@material-ui/core/TextField";
+import DehazeIcon from '@material-ui/icons/Dehaze';
 import { getProductBySearchText } from '../../api/api';
 import { getSpecificProduct } from '../../api/api';
 import { connect } from 'react-redux';
@@ -62,11 +61,11 @@ class Header extends Component {
 
 
     clickHandler = async (id) => {
-         await getSpecificProduct(id)
-        .then(res => {
-            localStorage.setItem('specificProduct', id)
-            this.props.history.push('/specificProduct')
-        })
+        await getSpecificProduct(id)
+            .then(res => {
+                localStorage.setItem('specificProduct', id)
+                this.props.history.push('/specificProduct')
+            })
 
 
     }
@@ -79,18 +78,18 @@ class Header extends Component {
 
         try {
             // ------------------------------
-            
+
             let value = e.target.value;
             this.setState({ searchValue: value })
             // const filterValue=value.toUpperCase();
 
-            
-            for(var i=0; i< array.length;i++){
-                
-            }
-            
 
-            
+            for (var i = 0; i < array.length; i++) {
+
+            }
+
+
+
             // ---------------------------------
 
             let result = await getProductBySearchText(value);
@@ -108,82 +107,95 @@ class Header extends Component {
 
 
     render() {
-        // const data1 = localStorage.getItem('loginUserData');
-        // const userData = JSON.parse(data1);
-        // const filterOptions = createFilterOptions({
-        //     matchFrom: 'start',
-        //     stringify: option => option.product_name,
-        // });
-
-        // let filteredArray = this.state.products ? this.state.products.filter(product => {
-        //     return product.product_name.indexOf(this.state.search) !== -1
-        // }) : [];
 
         const localCartData = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem("cart")) : []
         const cartCount = localCartData.length;
         return (
+
             <header className="top_header">
-                <nav className="navbar navbar-inverse" style={{ backgroundColor: "black" }}>
-                    <div className="container-fluid">
+
+                <nav className="navbar nav" style={{ backgroundColor: "black" }}>
+                    <div className="container">
                         <div className="navbar-header">
                             <div className="navbar-brand" href="#"><span style={{ color: "white" }}>Neo</span><span className="top_header_store">STORE</span></div>
                         </div>
-                        <div className="nav navbar-nav navbar-expand">
-                            <ul className="navbar-nav">
-                                <Link to="/" className="btn top_header_buttons">Home</Link>
-                                <Link to="/products" className="btn top_header_buttons">Products</Link>
-                                <Link to="/order" className="btn top_header_buttons">Orders</Link>
-                            </ul>
+                        {/* <div className="nav navbar-nav navbar-expand"> */}
 
-                        </div>
-                        <form className="navbar-form navbar-left top_header_searchBox">
-                            <div className="nav navbar">
-                                {/* <Autocomplete
-                                    id="combo-box-demo"
-                                    size="small"
-                                    options={this.state.searchText}
-                                    getOptionLabel={option => option.product_name}
-                                    style={{ width: 300 }}
-                                    renderOption={option => option.product_name}
-                                    renderInput={(params) => <TextField {...params} onChange={e => this.handleSearchText(e)} onClick={(option) => this.clickHandler(option.product_id)} label="Search" variant="outlined" />}
+                            {/* ------------- */}
 
-                                /> */}
-                                <SearchBar/>
-                                {/* <span className="input-group-btn top_header_searchIcon">
-                                    <button className="btn btn-default">
-                                        <i className="fa fa-search" />
-                                    </button>
-                                </span> */}
+
+                            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent15"
+                            aria-controls="navbarSupportedContent15" aria-expanded="true" aria-label="Toggle navigation"><i className="navbar-toggler-icon">{DehazeIcon}</i></button>
+
+ 
+                            <div className="collapse navbar-collapse" id="navbarSupportedContent15">
+
+    
+                                <ul className="navbar-nav ">
+                                        <li className="nav-item active">
+                                            <Link to="/" className="btn top_header_buttons">Home</Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link to="/products" className="btn top_header_buttons">Products</Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link to="/order" className="btn top_header_buttons">Orders</Link>
+                                        </li>
+                                </ul>
+    
+
                             </div>
-                        </form>
-                        <div className="nav navbar-nav">
-                            <Link to="/cart" className="btn top_header_cartButton">
-                                <i className="fa fa-shopping-cart"></i>&nbsp;
-                                <span ><sup className="top_header_cart_count">{cartCount}</sup></span>
-                                <span>Cart</span>
-                            </Link>
-                        </div>
-                        <div className="dropdown nav top_header_right">
-                            <button className="btn top_header_userButton dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton">
-                                <span><i className="fa fa-user"></i></span>&nbsp;
+  
 
-                            </button>
-                            {this.props.login === 'true' ? <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-                                <Link className="dropdown-item" to="/profile">Profile</Link>
-                                <Link className="dropdown-item" to="/login" onClick={this.handleLogout}>Logout</Link>
-                            </div> :
-                                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-                                    <Link className="dropdown-item" to="/login">Login</Link>
-                                    <Link className="dropdown-item" to="/register">Register</Link>
+
+
+                                {/* <ul className="navbar-nav">
+                                    <Link to="/" className="btn top_header_buttons">Home</Link>
+                                    <Link to="/products" className="btn top_header_buttons">Products</Link>
+                                    <Link to="/order" className="btn top_header_buttons">Orders</Link>
+                                </ul> */}
+
+                            {/* </div> */}
+                            <form className="navbar-form navbar-left top_header_searchBox">
+                                <div className="nav navbar">
+
+                                    <SearchBar />
+
                                 </div>
-                            }
+                            </form>
+                            <div className="nav navbar-nav">
+                                <Link to="/cart" className="btn top_header_cartButton">
+                                    <i className="fa fa-shopping-cart"></i>&nbsp;
+                                <span ><sup className="top_header_cart_count">{cartCount}</sup></span>
+                                    <span>Cart</span>
+                                </Link>
+                            </div>
+                            <div className="dropdown nav top_header_right">
+                                <button className="btn top_header_userButton dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton">
+                                    <span><i className="fa fa-user"></i></span>&nbsp;
+    
+                            </button>
+                                {this.props.login === 'true' ? <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-                        </div>
+                                    <Link className="dropdown-item" to="/profile">Profile</Link>
+                                    <Link className="dropdown-item" to="/login" onClick={this.handleLogout}>Logout</Link>
+                                </div> :
+                                    <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+                                        <Link className="dropdown-item" to="/login">Login</Link>
+                                        <Link className="dropdown-item" to="/register">Register</Link>
+                                    </div>
+                                }
+
+                            </div>
+                        
                     </div>
                 </nav>
+
             </header>
+
         )
     }
 }

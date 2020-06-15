@@ -47,7 +47,7 @@ export class OrderPage extends Component {
 
 
                     </div><hr />
-                    {this.state.userData?
+                    {this.state.userData.first_name?
                     <div className="row">
                         <div className="col-6 text-center">
                             <img src={userIcon} alt="userIcon" height="30%" style={{ borderRadius: "100%" }} />
@@ -78,7 +78,7 @@ export class OrderPage extends Component {
                                             <p>{this.state.userData.first_name}</p>
                                             <p>{this.state.userData.last_name}</p>
                                             <p>{this.state.userData.gender}</p>
-                                            <p>{this.state.userData.dob}</p>
+                                            <p>{this.state.userData.dob ? this.state.userData.dob :'not yet added'}</p>
                                             <p>{this.state.userData.phone_no}</p>
                                             <p>{this.state.userData.email}</p>
                                             <hr/>
@@ -90,7 +90,7 @@ export class OrderPage extends Component {
                             </div>
 
                         </div>
-                    </div>:<div className="row container text-center m-5"><CircularProgress color="inherit"/></div>}
+                    </div>:<div className="row container text-center"><CircularProgress className="text-center" color="primary"/></div>}
                 </div>
             </div>
         )

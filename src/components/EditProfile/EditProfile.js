@@ -19,6 +19,7 @@ import {
 import TextField from '@material-ui/core/TextField';
 import FormHelperText from "@material-ui/core/FormHelperText";
 import { editUserProfile } from '../../api/api';
+import moment from 'moment';
 
 
 
@@ -34,7 +35,8 @@ export class EditProfile extends Component {
             dob: '',
             phone_no: '',
             email: '',
-            submitData: {}
+            submitData: {},
+            disabled:true
         }
     }
 
@@ -42,21 +44,19 @@ export class EditProfile extends Component {
     async componentDidMount() {
          await getProfileData()
         .then((res) => {
-
-
             this.setState({
                 userData: res.data.customer_proile
             })
         })
-
     }
 
     // Birthdate change handler
     birthdateHandler = (e) => {
+        console.log(moment(e.target.value).format())
         this.setState({
-            birthdate: Date.parse(e.target.value)
+            birthdate: moment(e.target.value).calendar(),
+            disabled:false
         })
-
     }
 
     // Image upload handler
@@ -70,7 +70,7 @@ export class EditProfile extends Component {
                 'first_name': this.state.userData.first_name,
                 'last_name': this.state.userData.last_name,
                 'email': this.state.userData.email,
-                'dob': this.state.userData.dob,
+                'dob': this.state.birthdate,
                 'phone_no': this.state.userData.phone_no,
                 'gender': this.state.userData.gender
             }
@@ -81,8 +81,17 @@ export class EditProfile extends Component {
 
     }
 
+    handleChangeInput=(e)=>{
+        this.setState({
+            [e.target.name]:[e.target.value]
+        })
+    }
+
     // onClick Handler for edit Profile
     editHandler = async () => {
+        
+
+
 
         await editUserProfile(this.state.submitData)
         .then(res => {
@@ -109,7 +118,7 @@ export class EditProfile extends Component {
 
 
                     </div><hr />
-                    {this.state.userData ?
+                    {this.state.userData.first_name ?
                         <div className="row">
                             <div className="col-6 text-center">
                                 <img src={userIcon} alt="userIcon" height="30%" style={{ borderRadius: "100%" }} />
@@ -123,7 +132,7 @@ export class EditProfile extends Component {
 
                                 <div className="container card ">
                                     <h3 className="mt-2">Edit Profile</h3>
-                                    <FormControl className="mb-3 mt-3" variant="outlined" error={this.state.firstNameErrorText ? true : false} fullWidth defaultValue={this.state.userData.first_name} onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
+                                    <FormControl className="mb-3 mt-3" variant="outlined" error={this.state.firstNameErrorText ? true : false} defaultValue={this.state.userData.first_name} onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
                                         <label>First Name</label>
                                         <input className="form-control"
                                             id="outlined-adornment-email"
@@ -131,11 +140,7 @@ export class EditProfile extends Component {
                                             name="first_name"
                                             autoComplete="off"
                                             defaultValue={this.state.userData.first_name}
-
                                             onChange={(e) => { this.setState({ first_name: e.target.value }) }}
-
-
-
                                             labelWidth={70}
                                         />
                                         <FormHelperText id="component-error-text">{this.state.firstNameErrorText}</FormHelperText>
@@ -148,8 +153,6 @@ export class EditProfile extends Component {
                                             name="last_name"
                                             autoComplete="off"
                                             defaultValue={this.state.userData.last_name}
-
-
                                             labelWidth={100}
                                         />
                                         <FormHelperText id="component-error-text">{this.state.lastNameErrorText}</FormHelperText>
@@ -157,7 +160,7 @@ export class EditProfile extends Component {
 
                                     <FormControl className="mb-3" error={this.state.genderErrorText ? true : false} onBlur={this.handleGenderError}>
                                         <label>Gender</label>
-                                        <RadioGroup aria-label="gender" name="gender1" onChange={this.handleChangeInput} defaultValue={this.state.userData.gender}>
+                                        <RadioGroup aria-label="gender" name="gender1" defaultValue={this.state.gender} onChange={this.handleChangeInput} defaultValue={this.state.userData.gender}>
                                             <FormControlLabel value="female" defaultChecked={true} control={<Radio />} label="Female" />
                                             <FormControlLabel value="male" defaultChecked={this.state.userData.gender === 'male' ? true : false} control={<Radio />} label="Male" />
                                         </RadioGroup>
@@ -184,12 +187,8 @@ export class EditProfile extends Component {
                                             name="mobile_no"
                                             onChange={this.handleChange}
                                             defaultValue={this.state.userData.phone_no}
-
-
-
                                             labelWidth={150}
                                         />
-
                                         <FormHelperText id="component-error-text">{this.state.phoneNoErrorText}</FormHelperText>
 
                                     </FormControl>
@@ -207,7 +206,7 @@ export class EditProfile extends Component {
                                         <FormHelperText id="component-error-text">{this.state.emailErrorText}</FormHelperText>
                                         <label className="mb-1 mt-2">Choose Profile picture to upload</label>
                                         <input type='file' className="mb-2 mt-1" onChange={(e) => { this.imgHandler(e) }} id="img" name="profilePicture" accept="image/*" />
-                                        <button className="btn btn-info mt-3" onClick={this.editHandler}>Edit</button>
+                                        <button className="btn btn-info mt-3" disabled={this.state.disabled} onClick={this.editHandler}>Edit</button>
                                     </FormControl>
                                 </div>
                             </div>

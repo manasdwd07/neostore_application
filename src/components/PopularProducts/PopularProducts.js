@@ -92,7 +92,7 @@ class PopularProducts extends Component {
 
                     {productData.map(el => {
                         return (
-                            <div className="col-lg-3 text-center" key={el._id} style={{ width: "20%", paddingBottom: "20px" }}>
+                            <div className="col-lg-3 col-sm-6 col-12 text-center" key={el._id} style={{ width: "20%", paddingBottom: "20px" }}>
                                 <div className="card" >
                                     <img className="card-img-top" src={`${URL}${el.DashboardProducts[0].product_image}`} alt="product_card_image" height="150px" width="auto" />
                                     <div className="card-body">
@@ -107,8 +107,6 @@ class PopularProducts extends Component {
                                                 editing={false}
                                                 starCount={5}
                                                 name='rating' />
-
-
                                         </div>
 
                                     </div>

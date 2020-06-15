@@ -24,7 +24,8 @@ class SpecificProduct extends Component {
         this.state = {
             data: {},
             cartCount: 0,
-            showDetail: true
+            showDetail: true,
+            mainImage:''
         }
     }
 
@@ -35,6 +36,7 @@ class SpecificProduct extends Component {
         const specificProduct = await getSpecificProduct(productId);
         this.setState({
             data: specificProduct.data.product_details[0],
+            mainImage:specificProduct.data.product_details[0].product_image,
             desc: specificProduct.data.product_details[0].product_desc,
             dimension: specificProduct.data.product_details[0].product_dimension,
             material: specificProduct.data.product_details[0].product_material
@@ -126,12 +128,12 @@ class SpecificProduct extends Component {
                                                 {...{
                                                     smallImage: {
                                                         alt: "product",
-                                                        src: URL + productData.product_image,
+                                                        src: URL + this.state.mainImage,
                                                         width: 450,
                                                         height: 300
                                                     },
                                                     largeImage: {
-                                                        src: URL + productData.product_image,
+                                                        src: URL + this.state.mainImage,
                                                         width: 2000,
                                                         height: 4000,
                                                     },

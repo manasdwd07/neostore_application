@@ -20,7 +20,8 @@ import EditAddress from './components/EditAddress/EditAddress';
 import SelectAddress from './components/SelectAddress/SelectAddress';
 import ThankYou from './components/ThankYou/ThankYou';
 import ForgotPassword from './components/ForgotPassword/ForgotPassword';
-import RecoverPassword from './components/RecoverPassword/RecoverPassword';
+import RecoverPassword from './components/RecoverPassword/RecoverPassword'
+import NoMatchPage from './components/NoMatchPage/NoMatchPage';
 
 function App() {
   const data1 = localStorage.getItem('loginUserData');
@@ -54,6 +55,7 @@ function App() {
           <Route path="/forgotPassword" component={ForgotPassword}/>
           <Route path="/recoverPassword" component={RecoverPassword}/>
           <Route path="/thanksPage" component={ThankYou}/>
+          <Route component={NoMatchPage}/>
         </Switch> 
         <Footer/>
       </Router>
