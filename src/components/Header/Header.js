@@ -114,8 +114,8 @@ class Header extends Component {
 
             <header className="top_header">
 
-                <nav className="navbar nav" style={{ backgroundColor: "black" }}>
-                    <div className="container">
+                <nav className="navbar navbar-inverse" style={{ backgroundColor: "black" }}>
+                    <div className="container-fluid">
                         <div className="navbar-header">
                             <div className="navbar-brand" href="#"><span style={{ color: "white" }}>Neo</span><span className="top_header_store">STORE</span></div>
                         </div>
@@ -124,7 +124,7 @@ class Header extends Component {
                             {/* ------------- */}
 
 
-                            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent15"
+                            {/* <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent15"
                             aria-controls="navbarSupportedContent15" aria-expanded="true" aria-label="Toggle navigation"><i className="navbar-toggler-icon">{DehazeIcon}</i></button>
 
  
@@ -144,18 +144,19 @@ class Header extends Component {
                                 </ul>
     
 
-                            </div>
+                            </div> */}
   
 
 
 
 
-
-                                {/* <ul className="navbar-nav">
+                            <div className="nav navbar-nav navbar-expand">
+                                <ul className="navbar-nav">
                                     <Link to="/" className="btn top_header_buttons">Home</Link>
                                     <Link to="/products" className="btn top_header_buttons">Products</Link>
                                     <Link to="/order" className="btn top_header_buttons">Orders</Link>
-                                </ul> */}
+                                </ul>
+                            </div>
 
                             {/* </div> */}
                             <form className="navbar-form navbar-left top_header_searchBox">
