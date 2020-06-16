@@ -34,11 +34,7 @@ export class OrderPage extends Component {
                     })
 
             }).catch(err => {
-                sweetalert2.fire({
-                    'title': 'Oops.. no address found',
-                    'text': `You did not add any address, please add one ${err}`,
-                    'icon': 'warning'
-                })
+                
             })
 
         }
@@ -50,19 +46,20 @@ export class OrderPage extends Component {
         }
     }
 
-    async componentDidUpdate(){
-        await getCustomerAddress()
-        .then(res=>{
-            this.setState({
-                userAddress:res.data.customer_address
-            })
-        })
+    // async componentDidUpdate(){
+    //     await getCustomerAddress()
+    //     .then(res=>{
+    //         this.setState({
+    //             userAddress:res.data.customer_address
+    //         })
+    //     })
         
-    }
+    // }
 
 
     deleteHandler = async (id) => {
-        getCustomerAddress()
+        // e.preventDefault();
+        await getCustomerAddress()
             .then(async res => {
                 if (this.state.userAddress.length > 0) {
                     await deleteAddress(id)

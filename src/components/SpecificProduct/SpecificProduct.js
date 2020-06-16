@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import Header from '../Header/Header';
-import { getSpecificProduct } from '../../api/api';
+import { getSpecificProduct, updateProductRating } from '../../api/api';
 import { CircularProgress } from '@material-ui/core';
 import { URL } from '../../api/api';
-import StarRatingComponent from 'react-star-rating-component';
 import ShareIcon from '@material-ui/icons/Share';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
@@ -16,6 +15,10 @@ import { connect } from 'react-redux';
 import Rating from "@material-ui/lab/Rating";
 import './ProductCard.css';
 import ReactImageMagnify from 'react-image-magnify';
+import Box from '@material-ui/core/Box';
+import ReactRating from 'react-rating';
+import sweetalert2 from 'sweetalert2';
+
 
 
 class SpecificProduct extends Component {
@@ -25,7 +28,8 @@ class SpecificProduct extends Component {
             data: {},
             cartCount: 0,
             showDetail: true,
-            mainImage:''
+            mainImage: '',
+            rating: ''
         }
     }
 
@@ -36,7 +40,7 @@ class SpecificProduct extends Component {
         const specificProduct = await getSpecificProduct(productId);
         this.setState({
             data: specificProduct.data.product_details[0],
-            mainImage:specificProduct.data.product_details[0].product_image,
+            mainImage: specificProduct.data.product_details[0].product_image,
             desc: specificProduct.data.product_details[0].product_desc,
             dimension: specificProduct.data.product_details[0].product_dimension,
             material: specificProduct.data.product_details[0].product_material
@@ -46,21 +50,10 @@ class SpecificProduct extends Component {
 
     }
 
-    async componentDidUpdate() {
-        const productId = localStorage.getItem('specificProductId');
-
-        const specificProduct = await getSpecificProduct(productId);
-        this.setState({
-            data: specificProduct.data.product_details[0]
-        })
-
-
-    }
 
     // Add to cart handler
     addToCart = async (id, data) => {
         this.props.addToCart(id);
-
         try {
             let finalData = {
                 _id: data._id,
@@ -107,6 +100,30 @@ class SpecificProduct extends Component {
                 icon: "warning",
                 timer: 2000
             });
+        }
+    };
+
+    handleRating = (value) => {
+        console.log(value);
+        this.setState({
+            rating: value,
+        });
+    };
+
+    handleRatingSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            let data = {
+                product_id: localStorage.getItem('specificProductId'),
+                product_rating: this.state.rating,
+            };
+            await updateProductRating(data).then(()=>{
+                sweetalert2.fire({
+                    'text':'Rating has been updated successfully'
+                })
+            })
+        } catch (error) { 
+            console.log(error)
         }
     };
 
@@ -163,11 +180,11 @@ class SpecificProduct extends Component {
                                     {this.state.showDetail === true ? <div className="col-6">
                                         <h1>{productData.product_name}</h1>
                                         <div>
-                                            <StarRatingComponent
-                                                value={Number(productData.product_rating)}
-                                                editing={false}
-                                                starCount={5}
-                                                name='rating' />
+                                            <Rating
+                                                name="read-only"
+                                                value={parseInt(productData.product_rating)}
+                                                readOnly
+                                            />
                                         </div>
                                         <hr />
                                         <h6>Price :-  {productData.product_cost}</h6>
@@ -208,7 +225,10 @@ class SpecificProduct extends Component {
                                                     </div>
 
                                                     <div className="modal-body">
-                                                        <Rating name="read-only" onChange={this.handleRating} />
+                                                        <Box component="fieldset" mb={3}>
+                                                            {/* <Rating name="pristine" onChange={this.handleRating} /> */}
+                                                            <ReactRating onChange={(value)=>{this.handleRating(value)}} placeholderRating={this.state.rating ? this.state.rating : 0}/>
+                                                        </Box>
                                                     </div>
 
                                                     <div className="modal-footer text-center">
@@ -285,32 +305,6 @@ class SpecificProduct extends Component {
                                         </div>
                                     </div>
                                 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                             </div>

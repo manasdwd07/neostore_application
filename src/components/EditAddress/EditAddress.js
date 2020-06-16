@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import userIcon from '../../assets/images/profile-placeholder.png';
-import { Button } from '@material-ui/core';
+import { Button,FormControl } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import ReorderIcon from '@material-ui/icons/Reorder';
 import PersonIcon from '@material-ui/icons/Person';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import SyncAltIcon from '@material-ui/icons/SyncAlt';
 import Header from '../Header/Header';
-import {editCustomerAddress } from '../../api/api';
+import { editCustomerAddress } from '../../api/api';
 import sweetalert2 from 'sweetalert2';
+import FormHelperText from "@material-ui/core/FormHelperText";
 
 export class EditAddress extends Component {
     constructor(props) {
@@ -26,7 +27,7 @@ export class EditAddress extends Component {
 
     // Handler for onClick for editing address
     editHandler = async (e) => {
-        
+
         e.preventDefault();
         const address1 = this.state.address;
         const pincode = this.state.pincode;
@@ -34,50 +35,54 @@ export class EditAddress extends Component {
         const state = this.state.state;
         const country = this.state.country;
 
-            if (pincode.length !== 6 || isNaN(pincode)) {
-                this.setState({
-                    pincodeErrorMessage: 'Pincode should be exact 6 numeric digits'
-                })
+        if (pincode.length !== 6 || isNaN(pincode)) {
+            this.setState({
+                pincodeErrorMessage: 'Pincode should be exact 6 numeric digits'
+            })
+        }
+
+        else {
+            this.setState({
+                pincodeErrorMessage: ''
+            })
+            const userAddress = localStorage.getItem('editAddress');
+            const address = JSON.parse(userAddress);
+            const userData = {
+                'address_id': `${address.address_id}`,
+                'address': `${address1 ? address1:address.address}`,
+                'pincode': `${pincode ? pincode:address.pincode}`,
+                'city': `${city?city:address.city}`,
+                'state': `${state?state:address.state}`,
+                'country': `${country?country:state.country}`
             }
-
-            else {
-                this.setState({
-                    pincodeErrorMessage: ''
-                })
-                const userAddress = localStorage.getItem('editAddress');
-                const address = JSON.parse(userAddress);
-                const userData = {
-                    'address_id': `${address.address_id}`,
-                    'address': `${address1}`,
-                    'pincode': `${pincode}`,
-                    'city': `${city}`,
-                    'state': `${state}`,
-                    'country': `${country}`
-                }
-                await editCustomerAddress(userData)
-                    .then(res => {
-                        sweetalert2.fire({
-                            "title": 'Address edited successfully',
-                            'text': 'Congratulations, your address has been edited',
-                            "icon": 'success'
-                        })
-                        this.props.history.push('/address');
-
-                    }).catch(err => {
-                        sweetalert2.fire({
-                            "title": 'OOPS, Error occured',
-                            'text': `Please check the Error :- ${err}`,
-                            "icon": 'error'
-                        })
+            await editCustomerAddress(userData)
+                .then(res => {
+                    sweetalert2.fire({
+                        "title": 'Address edited successfully',
+                        'text': 'Congratulations, your address has been edited',
+                        "icon": 'success'
                     })
-            }
-        }
+                    this.props.history.push('/address');
 
-        componentWillUnmount(){
-            localStorage.removeItem('editAddress')
+                }).catch(err => {
+                    sweetalert2.fire({
+                        "title": 'OOPS, Error occured',
+                        'text': `Please check the Error :- ${err}`,
+                        "icon": 'error'
+                    })
+                })
         }
-        
-    
+    }
+
+    componentWillUnmount() {
+        localStorage.removeItem('editAddress')
+    }
+
+    handleChangeInput=(e)=>{
+        this.setState({
+            [e.target.name]:e.target.value
+        })
+    }
     render() {
         const data1 = localStorage.getItem('loginUserData')
         const userData = JSON.parse(data1);
@@ -86,7 +91,7 @@ export class EditAddress extends Component {
         const userAddress = localStorage.getItem('editAddress');
         console.log('userAddress in editAddress', userAddress);
         const address = JSON.parse(userAddress);
-        
+
         return (
             <div>
 
@@ -116,7 +121,7 @@ export class EditAddress extends Component {
 
 
                                     <div>
-                                        <div className="container" style={{ border: "1px solid grey", borderRadius: "7%" }}>
+                                        {/* <div className="container" style={{ border: "1px solid grey", borderRadius: "7%" }}>
                                             <form>
                                                 <div className="form-group mt-3">
                                                     <label className="lead"> Enter Address</label>
@@ -143,7 +148,86 @@ export class EditAddress extends Component {
                                                     <button className="btn btn-primary" onClick={this.editHandler}>Edit</button>
                                                 </div>
                                             </form>
+                                        </div> */}
+
+                                        <div className="container card ">
+                                            <h3 className="mt-2">Edit Address</h3>
+                                            <FormControl className="mb-3 mt-3" variant="outlined" onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
+                                                <span>Address</span>
+                                                <textarea className="form-control"
+                                                    id="outlined-adornment-email"
+                                                    type="text"
+                                                    name="address"
+                                                    autoComplete="off"
+                                                    defaultValue={address.address}
+                                                    onChange={this.handleChangeInput}
+                                                    labelWidth={70}
+                                                />
+                                                <FormHelperText id="component-error-text">Max 100 characters</FormHelperText>
+                                            </FormControl>
+
+                                            <FormControl className="mb-3" variant="outlined" error={this.state.lastNameErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
+                                                <span>Pincode</span>
+                                                <input className="form-control"
+                                                    id="outlined-adornment-email"
+                                                    type="text"
+                                                    name="pincode"
+                                                    autoComplete="off"
+                                                    defaultValue={address.pincode}
+                                                    onChange={this.handleChangeInput}
+                                                    labelWidth={100}
+                                                />
+                                                <FormHelperText id="component-error-text">{this.state.pincodeErrorMessage}</FormHelperText>
+                                            </FormControl>
+
+
+                                            <FormControl className="mb-3" variant="outlined" error={this.state.phoneNoErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
+                                                <span>City</span>
+                                                <input className="form-control"
+                                                    id="outlined-adornment-password"
+                                                    type="text"
+                                                    name="city"
+                                                    defaultValue={address.city}
+                                                    onChange={this.handleChangeInput}
+                                                    labelWidth={150}
+                                                />
+                                                <FormHelperText id="component-error-text">{this.state.phoneNoErrorText}</FormHelperText>
+
+                                            </FormControl>
+
+                                            <FormControl className="mb-3" variant="outlined" error={this.state.emailErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
+                                                <span>State</span>
+                                                <input className="form-control"
+                                                    id="outlined-adornment-email"
+                                                    type="text"
+                                                    name="state"
+                                                    defaultValue={address.state}
+                                                    onChange={this.handleChangeInput}
+                                                    labelWidth={100}
+                                                />
+                                                <FormHelperText id="component-error-text">{this.state.emailErrorText}</FormHelperText>
+
+                                            </FormControl>
+
+
+                                            <FormControl className="mb-3" variant="outlined" error={this.state.phoneNoErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
+                                                <span>Country</span>
+                                                <input className="form-control"
+                                                    id="outlined-adornment-password"
+                                                    type="text"
+                                                    name="country"
+                                                    defaultValue={address.country}
+                                                    onChange={this.handleChangeInput}
+                                                    labelWidth={150}
+                                                />
+                                                <FormHelperText id="component-error-text">{this.state.phoneNoErrorText}</FormHelperText>
+                                                <button className="btn btn-info mt-3" disabled={this.state.disabled} onClick={this.editHandler}>Save</button>
+
+                                            </FormControl>
+
+
                                         </div>
+
                                     </div>
 
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import userIcon from '../../assets/images/profile-placeholder.png';
 import { Button } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link ,Redirect} from 'react-router-dom';
 import ReorderIcon from '@material-ui/icons/Reorder';
 import PersonIcon from '@material-ui/icons/Person';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
@@ -10,6 +10,7 @@ import Header from '../Header/Header';
 import {getProfileData} from '../../api/api';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import EditIcon from '@material-ui/icons/Edit';
+import moment from 'moment';
 
 
 
@@ -17,7 +18,8 @@ export class OrderPage extends Component {
     constructor(props){
         super(props);
         this.state={
-            userData:{}
+            userData:{},
+            profileImage:''
         }
     }   
 
@@ -28,14 +30,15 @@ export class OrderPage extends Component {
         .then((res)=>{
         
             this.setState({
-                userData:res.data.customer_proile
+                userData:res.data.customer_proile,
+                profileImage:res.data.customer_proile.profile_img
             })
         })
         
     }
 
     render() {
-        
+        if  (!localStorage.getItem('loginUserData')){return <Redirect to="/login"/>}
 
         return (
             <div><Header login={localStorage.getItem('loginUserData') ? 'true' : 'false'} />
@@ -78,7 +81,7 @@ export class OrderPage extends Component {
                                             <p>{this.state.userData.first_name}</p>
                                             <p>{this.state.userData.last_name}</p>
                                             <p>{this.state.userData.gender}</p>
-                                            <p>{this.state.userData.dob ? this.state.userData.dob :'not yet added'}</p>
+                                            <p>{this.state.userData.dob ? moment(this.state.userData.dob).subtract(10, 'days').calendar() :'not yet added'}</p>
                                             <p>{this.state.userData.phone_no}</p>
                                             <p>{this.state.userData.email}</p>
                                             <hr/>

@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { URL } from '../../api/api';
-import StarRatingComponent from 'react-star-rating-component';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { connect } from 'react-redux';
-import { addToCart} from '../../actions/CartActions';
-import { CircularProgress } from '@material-ui/core';
+import { addToCart } from '../../actions/CartActions';
+import Rating from "@material-ui/lab/Rating";
 
 
 
@@ -38,7 +37,7 @@ class AllProducts extends Component {
 
 
 
-    
+
     // Below method to add data to cart
     addToCart = async (id, data) => {
         this.props.addToCart(id);
@@ -95,7 +94,7 @@ class AllProducts extends Component {
                 icon: "warning",
                 timer: 2000
             });
-            
+
         }
     };
     // -----------------------------------
@@ -105,14 +104,14 @@ class AllProducts extends Component {
 
     render() {
         const images = this.props.data
-        
+
 
         return (
             <div className="container">
 
 
                 <div className="row">
-                    {images ? images.map(el => {
+                    {images.length>0 ? images.map(el => {
 
                         return (
                             <div className="col-lg-4" key={el._id}>
@@ -124,11 +123,16 @@ class AllProducts extends Component {
                                         <div><i className="fa fa-rupee"></i>&nbsp;<span><b>{el.product_cost}</b></span></div><br />
                                         <div><button onClick={() => this.addToCart(el._id, el)} className="btn btn-danger">Add To Cart</button></div>
                                         <div>
-                                            <StarRatingComponent
+                                            {/* <StarRatingComponent
                                                 value={Number(el.product_rating)}
                                                 editing={false}
                                                 starCount={5}
-                                                name='rating' />
+                                                name='rating' /> */}
+                                            <Rating
+                                                name="read-only"
+                                                value={parseInt(el.product_rating)}
+                                                readOnly
+                                            />
                                         </div>
                                     </div>
 
@@ -138,7 +142,7 @@ class AllProducts extends Component {
 
 
                         )
-                    }):<CircularProgress color='inherit'></CircularProgress>}
+                    }) : <div className="container card text-center mt-3" color='inherit'><h3>No Product found</h3></div>}
                 </div>
 
             </div>

@@ -64,7 +64,7 @@ export class ForgotPassword extends Component {
         return (
             <div>
                 <Header login={localStorage.getItem('loginUserData') ? 'true' : 'false'} />
-                <div className="card form-group m-5">
+                <div className="card form-group" style={{width:'40%',marginLeft:'30%',marginTop:'2%',marginBottom:'2%'}}>
                     <div className="card-header"><h1 className="text-center">Recover Password</h1></div>
                     <hr />
                     <div className="card-body">

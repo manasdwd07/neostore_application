@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button } from '@material-ui/core';
-import { checkLogin } from '../../api/api';
+import { checkLogin, getCartDataApi } from '../../api/api';
 import sweetalert2 from 'sweetalert2';
 import {
     FormControl,
@@ -13,7 +13,7 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 import FormHelperText from "@material-ui/core/FormHelperText";
 import MailIcon from '@material-ui/icons/Mail';
 import Header from '../Header/Header';
-import { Link ,Redirect} from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 // import { GoogleLogin } from 'react-google-login';
 
@@ -52,19 +52,56 @@ export class LoginPage extends Component {
         }
 
         await checkLogin(userInfo)
-        .then((res) => {
-            localStorage.setItem('loginUserData', JSON.stringify(res.data))
-            sweetalert2.fire({
-                "title": 'Login successful',
-                'text': 'Enjoy NeoSTORE',
-                "icon": 'success'
-            })
-            this.setState({ login: true })
-            setTimeout(() => { this.props.history.push('/') }, 0)
+            .then(async (res) => {
+              localStorage.setItem('loginUserData', JSON.stringify(res.data))
 
-        }
+               
+                    //get exisiting User Cart data
+                    sweetalert2.fire({
+                        "title": 'Login successful',
+                        'text': 'Enjoy NeoSTORE',
+                        "icon": 'success'
+                    })
+                    setTimeout(async() => { this.props.history.push('/');
+                    await getCartDataApi()
+                    .then((res)=>{
+                        let finalData = res.data.product_details ? res.data.product_details.map((item) => {
+                            item._id = item.product_id._id;
+                            return item
+                        }) : [];
+    
+    
+                        localStorage.setItem("cart", JSON.stringify(finalData));
+                        localStorage.setItem("cart_count", finalData.length);
+    
+                    })
 
-        )
+                    //Converting into common format of product details 
+                    
+                
+                
+                }, 0)
+                    // let cart = await getCartDataApi()
+
+
+                    // //Converting into common format of product details 
+                    // let finalData = cart.data.product_details ? cart.data.product_details.map((item) => {
+                    //     item._id = item.product_id._id;
+                    //     return item
+                    // }) : [];
+
+
+                    // localStorage.setItem("cart", JSON.stringify(finalData));
+                    // localStorage.setItem("cart_count", finalData.length);
+
+                    this.setState({ login: true })
+
+                    
+                }
+
+            
+
+            )
             .catch(
                 error => {
                     sweetalert2.fire({
@@ -76,15 +113,6 @@ export class LoginPage extends Component {
                 }
             )
 
-
-
-
-        // else {
-        //     this.setState({
-        //         emailError: 'Field cant be left blank',
-        //         passwordError: 'Field cant be left blank'
-        //     })
-        // }
     }
 
     // Below Handler for showing/hiding passwords in input field
@@ -110,7 +138,7 @@ export class LoginPage extends Component {
     }
 
     render() {
-        if(localStorage.getItem('loginUserData')) return <Redirect to='/'/>
+        if (localStorage.getItem('loginUserData')) return <Redirect to='/' />
         return (
 
             <div><Header login={localStorage.getItem('loginUserData') ? 'true' : 'false'} />
@@ -131,7 +159,7 @@ export class LoginPage extends Component {
 
                                 </div>
                                 <div className="col-12 m-2">
-                                <button className="btn-danger btn" style={{ width: '70%' }}>Login With Google</button>
+                                    <button className="btn-danger btn" style={{ width: '70%' }}>Login With Google</button>
                                     {/* <GoogleLogin
                                         clientId="529407280120-4nd4q9ls6d0pdop5htrq2hpjvap2qop4.apps.googleusercontent.com"
                                         buttonText="Login"
@@ -142,7 +170,7 @@ export class LoginPage extends Component {
 
                                     /> */}
 
-                                    
+
                                 </div>
                                 <div className="col-12 m-2">
                                     <button className="btn btn-info" style={{ width: "70%" }}>Login with Twitter</button>
@@ -176,7 +204,7 @@ export class LoginPage extends Component {
                                                         </Icon>
                                                     </InputAdornment>
                                                 }
-                                                labelWidth={100}
+                                                labelWidth={105}
                                             />
                                             <FormHelperText id="component-error-text" >{this.state.emailError}</FormHelperText>
                                         </FormControl>
@@ -210,7 +238,7 @@ export class LoginPage extends Component {
                                                         </Icon>
                                                     </InputAdornment>
                                                 }
-                                                labelWidth={100}
+                                                labelWidth={70}
                                             />
                                             <FormHelperText id="component-error-text">{this.state.passwordError}</FormHelperText>
                                         </FormControl> <br /><br />

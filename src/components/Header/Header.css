@@ -11,7 +11,10 @@
 .top_header_buttons{
     color: white;
     font-size: 20px;
+    margin-top:10px;
+    margin-right:10px;
     text-decoration: none;
+    margin-left:-10px
     
     
 }
@@ -45,6 +48,43 @@ a:hover{
     color:white
 }
 
+label{
+    font-size: 26px;
+    display: none;
+}
+
+#toggle{
+    display: none;
+    margin-left: -15px;
+    margin-top: 10px;
+}
+
+
+@media only screen and (max-width:633px){
+    label{
+        display:block;
+        cursor:pointer;
+        line-height: 70px;
+        margin-right:40px;
+        
+    }
+    .menu{
+        text-align: center;
+        width:100%;
+        display: none;
+    }
+    .top_header_buttons{
+        display: block;
+        border-bottom:grey;
+        margin:0;
+
+    }
+    
+    #toggle:checked + .menu{
+        display: block;
+    }
+}
+
 /* ----------------- */
 .fa-1x {
     font-size: 1.5rem;
@@ -64,3 +104,6 @@ a:hover{
     .dark-teal-text {
     color: #004d40;
     }
+
+
+    

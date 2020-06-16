@@ -64,7 +64,7 @@ export class SelectAddress extends Component {
         updateAddress(data)
         .then(res => {
             this.setState({ show: true })
-            alert('You Can Proceed to buy now')
+            sweetalert2.fire({text:'You Can Proceed to buy now'})
         }).catch(err => {
             alert(`Oops... some error occured. Details : ${err}`)
         })

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { URL } from '../../api/api';
-import StarRatingComponent from 'react-star-rating-component';
 import { Link } from 'react-router-dom';
-import { addToCart} from '../../actions/CartActions';
+import { addToCart } from '../../actions/CartActions';
 import { connect } from 'react-redux';
 import Swal from 'sweetalert2';
+import Rating from "@material-ui/lab/Rating";
 
 
 
@@ -102,11 +102,16 @@ class PopularProducts extends Component {
                                         <br />
                                         <button onClick={() => this.addToCart(el.DashboardProducts[0].product_id, el.DashboardProducts[0])} className="btn btn-danger">Add To Cart</button>
                                         <div>
-                                            <StarRatingComponent
+                                            {/* <StarRatingComponent
                                                 value={Number(el.DashboardProducts[0].product_rating)}
                                                 editing={false}
                                                 starCount={5}
-                                                name='rating' />
+                                                name='rating' /> */}
+                                            <Rating
+                                                name="read-only"
+                                                value={parseInt(el.DashboardProducts[0].product_rating)}
+                                                readOnly
+                                            />
                                         </div>
 
                                     </div>

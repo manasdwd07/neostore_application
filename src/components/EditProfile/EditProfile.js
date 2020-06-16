@@ -14,8 +14,14 @@ import {
     RadioGroup,
     FormControl,
     FormControlLabel,
-    Radio
+    Radio,
+    FormLabel,
+    InputLabel,
+    OutlinedInput,
+    InputAdornment,
+    Icon
 } from '@material-ui/core';
+import TextFieldsIcon from '@material-ui/icons/TextFields';
 import TextField from '@material-ui/core/TextField';
 import FormHelperText from "@material-ui/core/FormHelperText";
 import { editUserProfile } from '../../api/api';
@@ -32,30 +38,36 @@ export class EditProfile extends Component {
             first_name: '',
             last_name: '',
             gender: '',
-            dob: '',
             phone_no: '',
             email: '',
             submitData: {},
-            disabled:true
+            resetForm: false
         }
     }
 
     // Getting user profile data on component mounting
     async componentDidMount() {
-         await getProfileData()
-        .then((res) => {
-            this.setState({
-                userData: res.data.customer_proile
-            })
-        })
+        await getProfileData()
+            .then((res) => {
+                this.setState({
+                    userData: res.data.customer_proile,
+
+                })
+            }).then(this.setState({
+                first_name: this.state.userData.first_name,
+                last_name: this.state.userData.last_name,
+                gender: this.state.userData.gender,
+                dob: this.state.userData.dob,
+                email: this.state.userData.email,
+                phone_no: this.state.userData.phone_no
+            }), console.log(this.state))
     }
 
     // Birthdate change handler
     birthdateHandler = (e) => {
-        console.log(moment(e.target.value).format())
+        console.log(Date.parse(e.target.value))
         this.setState({
-            birthdate: moment(e.target.value).calendar(),
-            disabled:false
+            birthdate: Date.parse(e.target.value),
         })
     }
 
@@ -65,46 +77,69 @@ export class EditProfile extends Component {
         let reader = new FileReader();
         reader.readAsDataURL(files[0]);
         reader.onload = (e) => {
-            var formData = {
-                'profile_img': e.target.result,
-                'first_name': this.state.userData.first_name,
-                'last_name': this.state.userData.last_name,
-                'email': this.state.userData.email,
-                'dob': this.state.birthdate,
-                'phone_no': this.state.userData.phone_no,
-                'gender': this.state.userData.gender
-            }
-            this.setState({
-                submitData: formData
-            })
+            this.setState({ profile_img: e.target.result })
+
+            // this.setState({
+            //     submitData: formData,
+
+            // })
         }
 
     }
 
-    handleChangeInput=(e)=>{
+    resetForm = () => {
         this.setState({
-            [e.target.name]:[e.target.value]
+            resetForm: true
+        })
+    }
+
+    handleChangeInput = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
         })
     }
 
     // onClick Handler for edit Profile
-    editHandler = async () => {
-        
+    editHandler = async (e) => {
+
+        e.preventDefault();
+
+        if (this.state.profile_img) {
+
+            var formData = {
+                'profile_img': this.state.profile_img ? this.state.profile_img : null,
+                'first_name': this.state.first_name ? this.state.first_name : this.state.userData.first_name,
+                'last_name': this.state.last_name ? this.state.last_name : this.state.userData.last_name,
+                'email': this.state.email ? this.state.email : this.state.userData.email,
+                'dob': this.state.birthdate ? moment(this.state.birthdate).subtract(10, 'days').calendar() : moment(this.state.userData.birthdate).subtract(10, 'days').calendar(),
+                'phone_no': this.state.phone_no ? this.state.phone_no : this.state.userData.phone_no,
+                'gender': this.state.gender ? this.state.gender : this.state.userData.gender
+            }
 
 
 
-        await editUserProfile(this.state.submitData)
-        .then(res => {
+
+
+            await editUserProfile(formData)
+                .then(res => {
+                    sweetalert2.fire({
+                        'title': 'Profile edited successfully',
+                        'icon': 'success'
+                    })
+                    this.props.history.push('/profile')
+                }).catch(err => {
+                    sweetalert2.fire({
+                        'title': 'OOps.. some error occured',
+                        'text': `Error details: ${err}`
+                    })
+                })
+        } else {
             sweetalert2.fire({
-                'title': 'Profile edited successfully',
-                'icon': 'success'
+                text: 'Please select profile display picture',
+                icon: 'warning'
             })
-        }).catch(err => {
-            sweetalert2.fire({
-                'title': 'OOps.. some error occured',
-                'text': `Error details: ${err}`
-            })
-        })
+        }
+
     }
 
     render() {
@@ -133,36 +168,78 @@ export class EditProfile extends Component {
                                 <div className="container card ">
                                     <h3 className="mt-2">Edit Profile</h3>
                                     <FormControl className="mb-3 mt-3" variant="outlined" error={this.state.firstNameErrorText ? true : false} defaultValue={this.state.userData.first_name} onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
-                                        <label>First Name</label>
-                                        <input className="form-control"
+                                        <InputLabel>First Name</InputLabel>
+                                        {/* <input className="form-control"
                                             id="outlined-adornment-email"
                                             type="text"
                                             name="first_name"
                                             autoComplete="off"
                                             defaultValue={this.state.userData.first_name}
-                                            onChange={(e) => { this.setState({ first_name: e.target.value }) }}
+                                            onChange={this.handleChangeInput}
                                             labelWidth={70}
+                                        /> */}
+
+                                        <OutlinedInput
+                                            id="outlined-adornment-firstName"
+                                            type="text"
+                                            name="first_name"
+                                            defaultValue={this.state.userData.first_name}
+                                            autoComplete="off"
+                                            endAdornment={
+                                                <InputAdornment position="end">
+                                                    <Icon
+                                                        aria-label="toggle email visibility"
+
+                                                    >
+                                                        <TextFieldsIcon />
+                                                    </Icon>
+                                                </InputAdornment>
+                                            }
+                                            labelWidth={100}
                                         />
                                         <FormHelperText id="component-error-text">{this.state.firstNameErrorText}</FormHelperText>
                                     </FormControl>
                                     <FormControl className="mb-3" variant="outlined" error={this.state.lastNameErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
-                                        <label>Last Name</label>
+                                        {/* <label>Last Name</label>
                                         <input className="form-control"
                                             id="outlined-adornment-email"
                                             type="text"
                                             name="last_name"
                                             autoComplete="off"
                                             defaultValue={this.state.userData.last_name}
+                                            onChange={this.handleChangeInput}
+                                            labelWidth={100}
+                                        /> */}
+
+                                        <InputLabel>Last Name</InputLabel>
+                                        <OutlinedInput
+                                            id="outlined-adornment-firstName"
+                                            type="text"
+                                            name="last_name"
+                                            defaultValue={this.state.userData.last_name}
+                                            autoComplete="off"
+                                            endAdornment={
+                                                <InputAdornment position="end">
+                                                    <Icon
+                                                        aria-label="toggle email visibility"
+
+                                                    >
+                                                        <TextFieldsIcon />
+                                                    </Icon>
+                                                </InputAdornment>
+                                            }
                                             labelWidth={100}
                                         />
+
                                         <FormHelperText id="component-error-text">{this.state.lastNameErrorText}</FormHelperText>
                                     </FormControl>
 
                                     <FormControl className="mb-3" error={this.state.genderErrorText ? true : false} onBlur={this.handleGenderError}>
-                                        <label>Gender</label>
-                                        <RadioGroup aria-label="gender" name="gender1" defaultValue={this.state.gender} onChange={this.handleChangeInput} defaultValue={this.state.userData.gender}>
-                                            <FormControlLabel value="female" defaultChecked={true} control={<Radio />} label="Female" />
-                                            <FormControlLabel value="male" defaultChecked={this.state.userData.gender === 'male' ? true : false} control={<Radio />} label="Male" />
+                                        {/* <label>Gender</label> */}
+                                        <FormLabel component="legend">Gender</FormLabel>
+                                        <RadioGroup aria-label="gender" name="gender1" defaultValue={this.state.userData.gender} onChange={this.handleChangeInput} >
+                                            <span><FormControlLabel value="female" control={<Radio />} label="Female" />
+                                                <FormControlLabel value="male" control={<Radio />} label="Male" /></span>
                                         </RadioGroup>
 
                                     </FormControl>
@@ -180,33 +257,74 @@ export class EditProfile extends Component {
                                         />
                                     </FormControl>
                                     <FormControl className="mb-3" variant="outlined" error={this.state.phoneNoErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
-                                        <label>Mobile No</label>
+                                        {/* <label>Mobile No</label>
                                         <input className="form-control"
                                             id="outlined-adornment-password"
                                             type="text"
-                                            name="mobile_no"
-                                            onChange={this.handleChange}
+                                            name="phone_no"
+                                            onChange={this.handleChangeInput}
                                             defaultValue={this.state.userData.phone_no}
                                             labelWidth={150}
+                                        /> */}
+                                        <InputLabel>Mobile Number</InputLabel>
+                                        <OutlinedInput
+                                            id="outlined-adornment-firstName"
+                                            type="text"
+                                            name="phone_no"
+                                            defaultValue={this.state.userData.phone_no}
+                                            autoComplete="off"
+                                            endAdornment={
+                                                <InputAdornment position="end">
+                                                    <Icon
+                                                        aria-label="toggle email visibility"
+
+                                                    >
+                                                        <TextFieldsIcon />
+                                                    </Icon>
+                                                </InputAdornment>
+                                            }
+                                            labelWidth={130}
                                         />
+
                                         <FormHelperText id="component-error-text">{this.state.phoneNoErrorText}</FormHelperText>
 
                                     </FormControl>
 
                                     <FormControl className="mb-3" variant="outlined" error={this.state.emailErrorText ? true : false} fullWidth onChange={this.handleChangeInput} onBlur={this.handleChangeInput}>
-                                        <label>Email id</label>
+                                        {/* <label>Email id</label>
                                         <input className="form-control"
                                             id="outlined-adornment-email"
                                             type="text"
                                             name="email"
-                                            onChange={this.handleChange}
+                                            onChange={this.handleChangeInput}
                                             defaultValue={this.state.userData.email}
                                             labelWidth={100}
+                                        /> */}
+                                        <InputLabel>Email id</InputLabel>
+                                        <OutlinedInput
+                                            id="outlined-adornment-firstName"
+                                            type="text"
+                                            name="email"
+                                            defaultValue={this.state.userData.email}
+                                            autoComplete="off"
+                                            endAdornment={
+                                                <InputAdornment position="end">
+                                                    <Icon
+                                                        aria-label="toggle email visibility"
+
+                                                    >
+                                                        <TextFieldsIcon />
+                                                    </Icon>
+                                                </InputAdornment>
+                                            }
+                                            labelWidth={100}
                                         />
+                                        
                                         <FormHelperText id="component-error-text">{this.state.emailErrorText}</FormHelperText>
                                         <label className="mb-1 mt-2">Choose Profile picture to upload</label>
                                         <input type='file' className="mb-2 mt-1" onChange={(e) => { this.imgHandler(e) }} id="img" name="profilePicture" accept="image/*" />
                                         <button className="btn btn-info mt-3" disabled={this.state.disabled} onClick={this.editHandler}>Edit</button>
+                                        
                                     </FormControl>
                                 </div>
                             </div>

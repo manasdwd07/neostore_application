@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Header from '../Header/Header';
-import { CarouselImages } from '../../api/api';
+import { CarouselImages,getCartDataApi } from '../../api/api';
 import CarouselSlider from '../Carousel/CarouselSlider';
 import PopularProducts from '../PopularProducts/PopularProducts';
 import { getPopularProducts } from '../../api/api';
@@ -25,6 +25,21 @@ class Homepage extends Component {
         this.setState({
             carouselImages: images.data.category_details
         })
+        // if (localStorage.getItem('loginUserData')) {
+        //     let cart = await getCartDataApi()
+
+
+        //     //Converting into common format of product details 
+        //     let finalData = cart.data.product_details ? cart.data.product_details.map((item) => {
+        //         item._id = item.product_id._id;
+        //         return item
+        //     }) : [];
+
+
+        //     localStorage.setItem("cart", JSON.stringify(finalData));
+        //     localStorage.setItem("cart_count", finalData.length);
+        // }
+
 
 
         // For getting popular products on homepage
@@ -44,26 +59,26 @@ class Homepage extends Component {
         // }).catch(err=>{
         //     alert(err)
         // })
-        
+
 
     }
 
 
-    
+
 
 
     render() {
-        
+
 
         return (
             <div>
                 <Header login={localStorage.getItem('loginUserData') ? 'true' : 'false'} />
                 <br />
                 <br />
-                {this.state.carouselImages ? <CarouselSlider data={this.state.carouselImages} />:<CircularProgress color='primary'/>}
+                {this.state.carouselImages ? <CarouselSlider data={this.state.carouselImages} /> : <CircularProgress color='primary' />}
                 <br />
                 <br />
-                {this.state.products ? <PopularProducts data={this.state.products} />:<CircularProgress color='primary'/>}
+                {this.state.products ? <PopularProducts data={this.state.products} /> : <CircularProgress color='primary' />}
             </div>
         )
     }
@@ -74,7 +89,7 @@ const mapDispatchToProps = dispatch => {
         addToCart: (id) => {
             dispatch(addToCart(id));
         }
-        
+
     };
 };
 

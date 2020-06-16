@@ -313,7 +313,7 @@ export class RegisterPage extends Component {
                                             </Icon>
                                         </InputAdornment>
                                     }
-                                    labelWidth={70}
+                                    labelWidth={100}
                                 />
                                 <FormHelperText id="component-error-text">{this.state.firstNameErrorText}</FormHelperText>
                             </FormControl>
@@ -427,7 +427,7 @@ export class RegisterPage extends Component {
                                             </Icon>
                                         </InputAdornment>
                                     }
-                                    labelWidth={150}
+                                    labelWidth={130}
                                 />
                                 <FormHelperText id="component-error-text">{this.state.phoneNoErrorText}</FormHelperText>
                             </FormControl>

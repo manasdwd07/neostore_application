@@ -178,5 +178,19 @@ export const getProductBySearchText=(text)=>{
     return axios.get(`${URL}getProductBySearchText/${text}`)
 }
 
+// Common products updated api for all types of products
+export const getCommonProducts = (data) => {
+    return axios.get(URL + "commonProducts",{params:{"category_id":data.category_id,"color_id":data.color_id,"sortBy":data.sortBy,"sortIn":data.sortIn,"name":data.name,"pageNo":data.pageNo?data.pageNo:1,"perPage":data.perPage?data.perPage:100}});
+   
+};
+
+// For updating rating of customer
+export const updateProductRating = data => {
+    
+    return axios.put(URL + "updateProductRatingByCustomer", data, {
+      headers: { "Authorization":`Bearer ${token}` }
+    });
+  };
+  
 
   

@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import './Header.css';
 import { Link } from 'react-router-dom';
-import { getAllProducts } from '../../api/api';
-import DehazeIcon from '@material-ui/icons/Dehaze';
+import { getAllProducts, addToCartApi } from '../../api/api';
 import { getProductBySearchText } from '../../api/api';
 import { getSpecificProduct } from '../../api/api';
 import { connect } from 'react-redux';
@@ -22,9 +21,21 @@ class Header extends Component {
     }
 
     // Logout Handler
-    handleLogout = () => {
+    handleLogout = async () => {
 
+        let cartData = localStorage.getItem("cart")
+        ? JSON.parse(localStorage.getItem("cart"))
+        : null;
+      
+      if (cartData) {
+        cartData.push({ flag: "logout" });
+        await addToCartApi(cartData);
+      }
+        
+        
         localStorage.removeItem('loginUserData');
+        localStorage.removeItem('loginData');
+        localStorage.removeItem('token')
         localStorage.removeItem('editAddress');
         localStorage.removeItem('specificProductId');
         localStorage.setItem('cart', [[]])
@@ -119,53 +130,45 @@ class Header extends Component {
                         <div className="navbar-header">
                             <div className="navbar-brand" href="#"><span style={{ color: "white" }}>Neo</span><span className="top_header_store">STORE</span></div>
                         </div>
-                        {/* <div className="nav navbar-nav navbar-expand"> */}
-
-                            {/* ------------- */}
-
-
-                            {/* <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent15"
-                            aria-controls="navbarSupportedContent15" aria-expanded="true" aria-label="Toggle navigation"><i className="navbar-toggler-icon">{DehazeIcon}</i></button>
-
- 
-                            <div className="collapse navbar-collapse" id="navbarSupportedContent15">
-
-    
-                                <ul className="navbar-nav ">
-                                        <li className="nav-item active">
-                                            <Link to="/" className="btn top_header_buttons">Home</Link>
-                                        </li>
-                                        <li className="nav-item">
-                                            <Link to="/products" className="btn top_header_buttons">Products</Link>
-                                        </li>
-                                        <li className="nav-item">
-                                            <Link to="/order" className="btn top_header_buttons">Orders</Link>
-                                        </li>
-                                </ul>
-    
-
-                            </div> */}
-  
-
-
-
-
+                       
                             <div className="nav navbar-nav navbar-expand">
-                                <ul className="navbar-nav">
+                                
+                                <div className="nav">
+                                    <label for="toggle">&#9776;</label>
+                                    <input type="checkbox" id="toggle"/>
+                                    <div className="menu">
                                     <Link to="/" className="btn top_header_buttons">Home</Link>
                                     <Link to="/products" className="btn top_header_buttons">Products</Link>
                                     <Link to="/order" className="btn top_header_buttons">Orders</Link>
-                                </ul>
+                                    
+                                    
+                                
+                                    
+
+                                       
+                                    
+                                </div>
+                                <SearchBar />
+
+                                
+                            </div>
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                {/* <ul className="navbar-nav">
+                                    <Link to="/" className="btn top_header_buttons">Home</Link>
+                                    <Link to="/products" className="btn top_header_buttons">Products</Link>
+                                    <Link to="/order" className="btn top_header_buttons">Orders</Link>
+                                </ul> */}
                             </div>
 
                             {/* </div> */}
-                            <form className="navbar-form navbar-left top_header_searchBox">
-                                <div className="nav navbar">
-
-                                    <SearchBar />
-
-                                </div>
-                            </form>
+                            
                             <div className="nav navbar-nav">
                                 <Link to="/cart" className="btn top_header_cartButton">
                                     <i className="fa fa-shopping-cart"></i>&nbsp;
