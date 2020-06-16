@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Header from '../Header/Header';
-import { CarouselImages,getCartDataApi } from '../../api/api';
+import { CarouselImages } from '../../api/api';
 import CarouselSlider from '../Carousel/CarouselSlider';
 import PopularProducts from '../PopularProducts/PopularProducts';
 import { getPopularProducts } from '../../api/api';
