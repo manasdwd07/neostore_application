@@ -12,6 +12,7 @@ import DeleteForeverSharpIcon from '@material-ui/icons/DeleteForeverSharp';
 import Swal from 'sweetalert2';
 import {connect} from 'react-redux';
 import {removeFromCart} from '../../actions/CartActions';
+import {deleteItemFromCart} from '../../api/api';
 
 
 export class Cart extends Component {
@@ -44,6 +45,7 @@ export class Cart extends Component {
             let result=localStorage.getItem('cart')
             ? JSON.parse(localStorage.getItem('cart'))
             : [] ;
+            localStorage.setItem('cart_count',localStorage.getItem('cart').length)
             this.setState({
                 cartData:result
             });
@@ -90,7 +92,10 @@ export class Cart extends Component {
 
                 
                 localStorage.setItem('cart',JSON.stringify(cart));
+                localStorage.setItem('cart_count',localStorage.getItem('cart').length)
                 this.props.removeFromCart(id);
+                if(localStorage.getItem('loginUserData')){await deleteItemFromCart(id)}
+                
                 this.getCartData();
                 Swal.fire({
                     text:'Product has been deleted from cart'

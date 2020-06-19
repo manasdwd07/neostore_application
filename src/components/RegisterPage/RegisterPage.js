@@ -87,9 +87,9 @@ export class RegisterPage extends Component {
                     this.props.history.push('/login')
 
                 }).catch((err) => {
-                    console.log(err)
+                    // console.log(err.response.data.message)
                     sweetalert2.fire({
-                        "title": "OOPS... Entries must be properly validated",
+                        "text": `${err.response.data.message}`,
                         'icon': 'error'
                     })
                 })

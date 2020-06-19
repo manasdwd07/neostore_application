@@ -62,6 +62,9 @@ const token=  userData ? userData.token:null;
 
 // For adding data to cart
 export const addToCartApi=(data)=>{
+    const data1 = localStorage.getItem('loginUserData');
+    const userData = JSON.parse(data1);
+    const token=  userData ? userData.token:null;
     return axios.post(`${URL}addProductToCartCheckout`,data,{ headers: {"Authorization" : `Bearer ${token}`} })
 }
 
@@ -87,6 +90,9 @@ export const getSpecificProduct=(id)=>{
 
 // For getting cart data
 export const getCartDataApi=()=>{
+    const data1 = localStorage.getItem('loginUserData');
+    const userData = JSON.parse(data1);
+    const token=  userData ? userData.token:null;
     return axios.get(`${URL}getCartData`,{headers:{"Authorization":`Bearer ${token}`}})
 }
 
@@ -99,11 +105,15 @@ export const getProfileData=    ()=>{
 // For getting customer address
 export const getCustomerAddress=()=>{
     // return axios.get(`${URL}getCustAddress`)
+    const data1 = localStorage.getItem('loginUserData');
+    const userData = JSON.parse(data1);
+    const token=  userData ? userData.token:null;
     return axios.get(`${URL}getCustAddress`,{headers:{"Authorization":`Bearer ${token}`}})
 }
 
 // For adding address
 export const addCustomerAddress=(data)=>{
+    const token=localStorage.getItem('loginUserData').token
     return axios.post(`${URL}address`,data,{headers:{"Authorization":`Bearer ${token}`}})
 }
 
@@ -192,5 +202,8 @@ export const updateProductRating = data => {
     });
   };
   
+export const deleteItemFromCart=id=>{
+    return axios.delete(URL+`deleteCustomerCart/${id}`,{headers:{"Authorization":`Bearer ${token}`}})
+}
 
   

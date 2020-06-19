@@ -58,6 +58,7 @@ class AllProducts extends Component {
                 tempData.push(finalData);
                 localStorage.setItem("cart", JSON.stringify(tempData));
                 localStorage.getItem('cart'.length)
+                localStorage.setItem('cart_count',localStorage.getItem('cart').length)
 
 
                 Swal.fire({
@@ -76,6 +77,7 @@ class AllProducts extends Component {
                     cartData.push(finalData);
                     localStorage.setItem("cart", JSON.stringify(cartData));
                     localStorage.getItem('cart'.length)
+                    localStorage.setItem('cart_count',localStorage.getItem('cart').length)
                     this.setState({ cartCount: 1 });
                     Swal.fire({
                         'title': 'Product added to cart successfully',

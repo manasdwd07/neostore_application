@@ -140,7 +140,7 @@ class SpecificProduct extends Component {
                             <div className="container">
                                 <div className="row">
                                     <div className="col-6 text-left">
-                                        <div onMouseEnter={() => { this.setState({ showDetail: false }) }} onMouseLeave={() => { this.setState({ showDetail: true }) }} >
+                                        <div onMouseEnter={() => { this.setState({ showDetail: false}) }} onMouseLeave={() => { this.setState({ showDetail: true }) }} >
                                             <ReactImageMagnify
                                                 {...{
                                                     smallImage: {
@@ -226,7 +226,7 @@ class SpecificProduct extends Component {
 
                                                     <div className="modal-body">
                                                         <Box component="fieldset" mb={3}>
-                                                            {/* <Rating name="pristine" onChange={this.handleRating} /> */}
+                                                            {/* <Rating name="read-only" readOnly onChange={this.handleRating} /> */}
                                                             <ReactRating onChange={(value)=>{this.handleRating(value)}} placeholderRating={this.state.rating ? this.state.rating : 0}/>
                                                         </Box>
                                                     </div>

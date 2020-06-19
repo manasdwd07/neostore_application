@@ -36,6 +36,7 @@ class PopularProducts extends Component {
                 let tempData = [];
                 tempData.push(finalData);
                 localStorage.setItem("cart", JSON.stringify(tempData));
+                localStorage.setItem('cart_count',localStorage.getItem('cart').length)
                 Swal.fire({
                     'title': 'Product added to cart successfully',
                     "icon": 'success'
@@ -50,6 +51,7 @@ class PopularProducts extends Component {
                 } else {
                     cartData.push(finalData);
                     localStorage.setItem("cart", JSON.stringify(cartData));
+                    localStorage.setItem('cart_count',localStorage.getItem('cart').length)
                     Swal.fire({
                         'title': 'Data added successfully',
                         "icon": 'success'

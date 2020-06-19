@@ -14,7 +14,8 @@ class Homepage extends Component {
         super(props);
         this.state = {
             carouselImages: [],
-            products: []
+            products: [],
+            count:0
         }
     }
 
@@ -41,7 +42,8 @@ class Homepage extends Component {
         // }
 
 
-
+        const count=localStorage.getItem('cart').length
+        this.setState({count:count})        
         // For getting popular products on homepage
         const data = await getPopularProducts();
         this.setState({
@@ -63,13 +65,19 @@ class Homepage extends Component {
 
     }
 
+    componentDidUpdate(){
+        
+    }
+
+    
+
+    
 
 
 
+    
 
     render() {
-
-
         return (
             <div>
                 <Header login={localStorage.getItem('loginUserData') ? 'true' : 'false'} />

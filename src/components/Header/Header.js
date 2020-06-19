@@ -6,6 +6,7 @@ import { getProductBySearchText } from '../../api/api';
 import { getSpecificProduct } from '../../api/api';
 import { connect } from 'react-redux';
 import SearchBar from './SearchBar';
+import sweetalert2 from 'sweetalert2';
 
 
 class Header extends Component {
@@ -23,24 +24,86 @@ class Header extends Component {
     // Logout Handler
     handleLogout = async () => {
 
-        let cartData = localStorage.getItem("cart")
+        let cartData = localStorage.getItem("cart").length>0
         ? JSON.parse(localStorage.getItem("cart"))
-        : null;
-      
-      if (cartData) {
-        cartData.push({ flag: "logout" });
-        await addToCartApi(cartData);
-      }
+        : [];
+        console.log(cartData)
+        let finalData=cartData.map(el=>{
+            return el.product_id
+        })
         
+        
+        // let quant=cartData.map(el=>{
+        //     return finalData.map(data=>{
+        //         data.quantity=el.quantity
+        //     })
+        // })
+        
+        // let array=[];
+        // for(var i=0;i<finalData.length-1;i++){
+        //     return array.push( finalData[i]['quantity']=quantity[i])
+        // }
+        // console.log(array)
+
+        const quantArray=cartData.map(el=>{
+            return {'quantity':el.quantity}
+        })
+        
+        for(let i=0;i<finalData.length;i++){
+            Object.assign(finalData[i],quantArray[i])
+        }
+        
+        // console.log(quantArray)
+
+        console.log(finalData)
+      if (finalData!==null) {
+        finalData.push({ flag: "logout" });
+        await addToCartApi(finalData).then(()=>{
+        localStorage.removeItem('loginUserData');
+        localStorage.removeItem('loginData');
+        localStorage.removeItem('token');
+        localStorage.removeItem('editAddress');
+        localStorage.removeItem('specificProductId');
+        localStorage.setItem('cart_count',0);
+        localStorage.setItem('cart', [[]]);
+        this.setState({ login: false })
+        // this.props.history.push('/login')
+
+        sweetalert2.fire({
+            text:'User logged out successfully'
+        })
+        
+        })
+      }else
+      { 
         
         localStorage.removeItem('loginUserData');
         localStorage.removeItem('loginData');
-        localStorage.removeItem('token')
+        localStorage.removeItem('token');
         localStorage.removeItem('editAddress');
         localStorage.removeItem('specificProductId');
-        localStorage.setItem('cart', [[]])
-
+        localStorage.setItem('cart_count',0);
+        localStorage.setItem('cart', [[]]);
         this.setState({ login: false })
+        // this.props.history.push('/login')
+
+        sweetalert2.fire({
+            text:'User logged out successfully'
+        })
+      }
+        
+    
+        // localStorage.removeItem('loginUserData');
+        // localStorage.removeItem('loginData');
+        // localStorage.removeItem('token');
+        // localStorage.removeItem('editAddress');
+        // localStorage.removeItem('specificProductId');
+        // localStorage.setItem('cart_count',0);
+        // localStorage.setItem('cart', [[]]);
+
+        
+        
+        // this.props.history.push('/login')
 
 
     }
@@ -51,7 +114,7 @@ class Header extends Component {
         this.setState({ products: originalArray ? originalArray.data.product_details : [] })
 
 
-
+        
 
         if (this.props.login === 'true') {
             this.setState({
@@ -69,6 +132,7 @@ class Header extends Component {
 
 
     }
+    
 
 
     clickHandler = async (id) => {
@@ -115,12 +179,18 @@ class Header extends Component {
         }
     };
 
+    componentDidUpdate(){
+        localStorage.setItem('cart_count',localStorage.getItem('cart').length)
+    }
+
 
 
     render() {
 
         const localCartData = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem("cart")) : []
         const cartCount = localCartData.length;
+        // const cartCount=localStorage.getItem('cart_count')
+        // const cartCount=this.props.count        
         return (
 
             <header className="top_header">
@@ -181,7 +251,7 @@ class Header extends Component {
                                     <span><i className="fa fa-user"></i></span>&nbsp;
     
                             </button>
-                                {this.props.login === 'true' ? <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                {localStorage.getItem('loginUserData')? <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
                                     <Link className="dropdown-item" to="/profile">Profile</Link>
                                     <Link className="dropdown-item" to="/login" onClick={this.handleLogout}>Logout</Link>
